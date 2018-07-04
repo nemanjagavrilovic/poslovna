@@ -1,0 +1,2 @@
+# poslovna
+Poslovna informatika 
