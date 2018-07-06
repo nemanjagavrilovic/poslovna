@@ -1,11 +1,16 @@
 package poslovna.informatika.poslovna.model;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class RobnaKartica {
@@ -42,8 +47,57 @@ public class RobnaKartica {
 	@Column
 	protected float ukupnaVr;
 
+	
+	@ManyToOne
+	protected Magacin magacin;
+	
+	@ManyToOne
+	protected Roba roba;
+	
+	@OneToMany
+	protected List<AnalitikaMagKartice> analitike;
+	
+	
+	
 	@ManyToOne
 	protected PoslovnaGodina poslovnaGodina;
+	
+	public Magacin getMagacin() {
+		return magacin;
+	}
+
+	public void setMagacin(Magacin magacin) {
+		this.magacin = magacin;
+	}
+	
+	public Roba getRoba() {
+		return roba;
+	}
+
+	public void setRoba(Roba roba) {
+		this.roba = roba;
+	}
+	@JsonIgnore
+	
+	public List<AnalitikaMagKartice> getAnalitike() {
+		return analitike;
+	}
+
+	public void setAnalitike(List<AnalitikaMagKartice> analitike) {
+		this.analitike = analitike;
+	}
+
+
+	@JsonIgnore
+	public PoslovnaGodina getPoslovnaGodina() {
+		return poslovnaGodina;
+	}
+
+	public void setPoslovnaGodina(PoslovnaGodina poslovnaGodina) {
+		this.poslovnaGodina = poslovnaGodina;
+	}
+
+
 	public Long getId() {
 		return id;
 	}

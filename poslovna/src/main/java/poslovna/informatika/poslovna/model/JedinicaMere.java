@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class JedinicaMere {
 
@@ -39,7 +41,7 @@ public class JedinicaMere {
 	public void setNaziv(String naziv) {
 		this.naziv = naziv;
 	}
-
+	@JsonIgnore
 	public List<Roba> getRobe() {
 		return robe;
 	}
