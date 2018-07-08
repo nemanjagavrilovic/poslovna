@@ -76,7 +76,7 @@ public class Roba implements Serializable {
 	public void setNaziv(String naziv) {
 		this.naziv = naziv;
 	}
-	@JsonIgnore
+	
 	public GrupaRoba getGrupa() {
 		return grupa;
 	}
@@ -84,4 +84,6 @@ public class Roba implements Serializable {
 	public void setGrupa(GrupaRoba grupa) {
 		this.grupa = grupa;
 	}
+	
+	
 }

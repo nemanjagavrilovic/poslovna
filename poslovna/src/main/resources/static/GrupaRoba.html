@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="scripts/jquery-3.2.1.min.js"></script>
+<script src="scripts/tether.min.js"></script>
+<script src="scripts/bootstrap.min.js"></script>
+<script src="scripts/functions.js"></script>
+<link rel="stylesheet" type="text/css" href="stylesheets/design.css">
+<link rel="stylesheet" href="stylesheets/bootstrap.min.css">
+<meta charset="UTF-8">
+<title>Grupa roba</title>
+<script>
+	$(document).ready(
+			function() {
+				$.ajax({
+					url : "http://localhost:8080/api/grupaRoba/getGrupaRoba"
+				}).then(
+						function(data) {
+							for (i = 0; i < data.length; i++) {
+								newRow = 
+									"<tr>"
+										+ "<td class=\"name\">" + data[i].naziv + "</td>"
+										+ "<td><a class=\"edit\" href='/api/grupaRoba/" + data[i].id + "'>" 
+										+ "<img src='images/edit.gif'/></a></td>"
+										+ "<td><a class=\"remove\" href='/api/grupaRoba/" + data[i].id + "'>" 
+										+ "<img src='images/remove.gif'/></a></td>"
+									+ "</tr>"
+								$("#dataTable").append(newRow)
+								
+								newOption = "<option value=\"" + data[i].id + "\">"
+								+ data[i].naziv + "</option>" 
+								$("#drzavaSelect").append(newOption)
+							}
+						});
+				
+				$.ajax({
+					url : "http://localhost:8080/api/jedinicaMere/getJedinicaMere"
+				}).then(
+						function(data) {								
+								newOption = "<option value=\"" + data[i].id + "\">"
+								+ data[i].naziv + "</option>" 
+								$("#mereSelect").append(newOption)
+						});
+				
+				$("#first").click(function(){
+					goFirst()
+				 });
+				
+				$("#next").click(function(){
+					goNext()
+				 });
+				
+				$("#last").click(function(){
+					goLast()
+				});
+				
+				$("#prev").click(function(){
+					goPrev()
+				});
+				
+				$("#add").click(function(){
+					//pripremamo JSON koji cemo poslati
+					formData = JSON.stringify({
+    	                naziv:$("#inputForm [name='name']").val(),
+    	            });
+					$.ajax({
+						url: "/api/grupaRoba",
+						type: "POST",
+						data: formData,
+						//saljemo json i ocekujemo json nazad
+						contentType: "application/json",
+						datatype: 'json',
+						success: function(data) {
+							newRow = 
+									"<tr>"
+										+ "<td class=\"name\">" + data.naziv + "</td>"
+										+ "<td><a class=\"edit\" href='/api/grupaRoba/" + data.id + "'>" 
+										+ "<img src='images/edit.gif'/></a></td>"
+										+ "<td><a class=\"remove\" href='/api/grupaRoba/" + data.id + "'>" 
+										+ "<img src='images/remove.gif'/></a></td>"
+									+ "</tr>"
+							$("#dataTable").append(newRow)
+						  }
+						});
+					$('#inputModal').modal('toggle');
+				});
+				
+				$("#search").click(function(){
+					//pripremamo JSON koji cemo poslati
+					
+					formData = JSON.stringify({
+    	                naziv:$("#searchForm [name='nameSearch']").val(),
+    	            });
+					
+					$("#dataTable").find("tr:not(:first)").remove();
+					$.ajax({
+						url: "/api/grupaRoba/search",
+						type: "POST",
+						data: formData,
+						//saljemo json i ocekujemo json nazad
+						contentType: "application/json",
+						datatype: 'json',
+						success: function(data) {
+							console.log("usaoo");
+							for(i = 0; i < data.length; i++){
+							newRow = 
+									"<tr>"
+										+ "<td class=\"name\">" + data[i].naziv + "</td>"
+										+ "<td><a class=\"edit\" href='/api/grupaRoba/" + data[i].id + "'>"
+										+ "<img src='images/edit.gif'/></a></td>"
+										+ "<td><a class=\"remove\" href='/api/grupaRoba/" + data[i].id + "'>" 
+										+ "<img src='images/remove.gif'/></a></td>"
+									+ "</tr>"
+							$("#dataTable").append(newRow)
+						  }
+						}
+						});
+					$('#searchModal').modal('toggle');
+				});
+				
+				$("#edit").click(function(){
+					//pripremamo JSON koji cemo poslati
+					formData = JSON.stringify({
+    	                naziv:$("#editForm [name='nameEdit']").val(),
+    	                id:$("#editForm [name='idEdit']").val(),
+    	            });
+					
+					$("#dataTable").find("tr:not(:first)").remove();
+					$.ajax({
+						url: "/api/grupaRoba/edit",
+						type: "POST",
+						data: formData,
+						//saljemo json i ocekujemo json nazad
+						contentType: "application/json",
+						datatype: 'json',
+						success: function(data) {
+
+							for(i = 0; i < data.length; i++){
+							newRow = 
+									"<tr>"
+										+ "<td class=\"name\">" + data[i].naziv + "</td>"
+										+ "<td><a class=\"edit\" href='/api/grupaRoba/" + data[i].id + "'>"
+										+ "<img src='images/edit.gif'/></a></td>"
+										+ "<td><a class=\"remove\" href='/api/grupaRoba/" + data[i].id + "'>" 
+										+ "<img src='images/remove.gif'/></a></td>"
+									+ "</tr>"
+							$("#dataTable").append(newRow)
+						  }
+						}
+						});
+					$('#editModal').modal('toggle');
+				});
+				
+				$("#nextForm").click(function(){
+					//pripremamo JSON koji cemo poslati
+	 				naziv = $(".highlighted").find(".name").html()
+	  				id = $(".highlighted").find(".idCell").html()
+	  				console.log(id);
+					formData = JSON.stringify({
+						id:$(".highlighted").find(".idCell").html(),
+			            naziv:$(".highlighted").find(".name").html(),
+			        });
+
+					$.ajax({
+						url: "/api/roba/getRobuOdGrupeRobe",
+						type: "POST",
+						data: formData,
+						//saljemo json i ocekujemo json nazad
+						contentType: "application/json",
+						datatype: 'json',
+						success: function(data) {
+							$("#zoomTable").find("tr:not(:first)").remove();
+							for(i = 0; i < data.length; i++){
+								console.log(data[i]);
+								newRow = 
+										"<tr>"
+										+ "<td class=\"name\">" + data[i].naziv + "</td>"
+										+ "<td class=\"country\">" + data[i].grupa.naziv + "</td>"
+										+ "<td class=\"mere\">" + data[i].jedinicaMere.naziv + "</td>"
+										+ "</tr>"
+								$("#zoomTable").append(newRow)
+							  }
+						  }
+						});
+					$('#nextformModal').modal('toggle');
+				});
+				
+				$("#addCity").click(function(){
+					//pripremamo JSON koji cemo poslati
+					var grupa1 = { id: $("#nextformForm [name='drzava']").val(), naziv:$("#nextformForm [name='drzava'] option:selected").text()};    	             
+					var mere = { id: $("#nextformForm [name='mere']").val(), naziv:$("#nextformForm [name='mere'] option:selected").text()};    	             
+
+					formData = JSON.stringify({
+			            naziv:$("#nextformModal [name='namenextform']").val(),
+			            grupa: grupa1,
+			            jedinicaMere:mere
+			        });
+
+					$.ajax({
+						url: "/api/roba",
+						type: "POST",
+						data: formData,
+						//saljemo json i ocekujemo json nazad
+						contentType: "application/json",
+						datatype: 'json',
+						success: function(data) {
+							for(i = 0; i < data.length; i++){
+								console.log(data[i]);
+								newRow = 
+										+ "<td class=\"name\">" + data[i].naziv + "</td>"
+										+ "<td class=\"country\">" + data[i].grupa.naziv + "</td>"
+										+ "<td class=\"mere\">" + data[i].jedinicaMere.naziv + "</td>"
+										+ "</tr>"
+								$("#zoomTable").append(newRow)
+							  }
+						  }
+						});
+					$('#nextformModal').modal('toggle');
+				});
+
+				
+			});
+	
+	$(document).on("click", "tr", function(event) {
+		highlightRow(this)
+	});
+	
+	$(document).on("click", ".remove", function(event){
+		//ne salji get zahtev
+		event.preventDefault(); 
+		
+		var confirmed = confirm("Da li ste sigurni da zelite da obrišete?");
+		if(confirmed){
+			var url = $(this).attr("href")
+			//red koji se treba izbrisati ako je brisanje na serveru bilo uspesno
+			tr_parent = $(this).closest("tr")
+			$.ajax({
+	        	url: url,
+	        	type: "DELETE",
+	        	success: function(){
+	        		//ukloni i na strani 
+					tr_parent.remove()
+		        }
+			});
+		}
+	});
+	
+	$(document).on("click", ".edit", function(event){
+		//ne salji get zahtev
+		event.preventDefault(); 
+		
+			
+			var url = $(this).attr("href")
+			
+			$.ajax({
+	        	url: url,
+	        	type: "GET",
+	        	success: function(data){
+	        		$("#idEdit").val(data.id);
+	        		$("#nazivEdit").val(data.naziv);
+	        		$('#editModal').modal('toggle');
+	        		
+		        }
+			});
+		
+	});
+	
+		
+	function sync(item){
+		oznaka = item.find(".code").html()
+	    naziv = item.find(".name").html()
+	    id = item.find(".idCell").html()
+	    $("#oznaka").val(oznaka);
+	    $("#naziv").val(naziv);
+	    $("#id").val(id);
+	}
+</script>
+
+</head>
+<body>
+	<div class="formContainer">
+		<ul>
+			<li class="group-start"><a href="searchModal" data-toggle="modal" data-target="#searchModal"><img src="images/search.gif" /></a></li>
+			<li><a href="#" id="refresh"><img src="images/refresh.gif" /></a></li>
+			<li class="group-start"><a href="#" id="help"><img src="images/help.gif" /></a></li>
+			<li class="group-start"><a id="first"><img src="images/first.gif" /></a></li>
+			<li><a id="prev"><img src="images/prev.gif" /></a></li>
+			<li><a id="next"><img src="images/next.gif" /></a></li>
+			<li><a id="last"><img src="images/last.gif" /></a></li>
+			<li class="group-start"><a href="#inputModal" data-toggle="modal" data-target="#inputModal"><img src="images/add.gif" /></a></li>
+			<li><a id="nextForm"><img src="images/nextform.gif" /></a></li>
+		</ul>
+
+		<h1>Države</h1>
+		<table id="dataTable" class="table">
+			<tr class="header">
+				<th>Naziv</th>
+				<th width=20px></th>
+				<th width=20px></th>
+			</tr>
+		</table>
+
+		<div class="panel">
+			<p>
+				<form>
+					<input type="hidden" name="id" id="id" />
+					<p>
+						<label for="naziv">Naziv</label> <input size="50" type="text" name="name"
+							id="naziv" disabled/>
+					</p>
+				</form>
+			</p>
+		</div>
+
+		<div class="modal fade" id="inputModal" tabindex="-1" role="dialog">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="exampleModalLabel">Nova država</h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <form id="inputForm">
+		      <div class="modal-body">
+					<input type="hidden" name="idAdd" id="idAdd" />
+				<p>
+					<label for="naziv">Naziv</label> <input type="text" name="name"
+						id="naziv" />
+				</p>		
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+		        <button type="button" class="btn btn-primary" id="add">Potvrda</button>
+		      </div>
+		      </form>
+		    </div>
+		  </div>
+		</div>
+		
+		<div class="modal fade" id="searchModal" tabindex="-1" role="dialog">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="exampleModalLabel">Pretraga država</h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <form id="searchForm">
+		      <div class="modal-body">
+					<input type="hidden" name="idSearch" id="idSearch" />
+				<p>
+					<label for="naziv">Naziv</label> <input type="text" name="nameSearch"
+						id="nazivSearch" />
+				</p>		
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+		        <button type="button" class="btn btn-primary" id="search">Pretrazi</button>
+		      </div>
+		      </form>
+		    </div>
+		  </div>
+		</div>
+		
+		<div class="modal fade" id="editModal" tabindex="-1" role="dialog">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="exampleModalLabel">Izmena države</h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <form id="editForm">
+		      <div class="modal-body">
+					<input type="hidden" name="idEdit" id="idEdit" />
+				<p>
+					<label for="naziv">Naziv</label> <input type="text" name="nameEdit"
+						id="nazivEdit" />
+				</p>		
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+		        <button type="button" class="btn btn-primary" id="edit">Izmeni</button>
+		      </div>
+		      </form>
+		    </div>
+		  </div>
+		</div>
+		
+		<div class="modal fade" id="nextformModal" tabindex="-1" role="dialog">
+		 <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="exampleModalLabel">Nova roba</h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      
+		      <div class="modal-dialog">
+		      <!-- Modal content-->
+		      <div class="modal-content">
+		      <div class="modal-header">
+		      	Roba
+		      </div>
+		      <div class="modal-body">
+			    <table style = "padding:2em" id = "zoomTable">
+				<tr class = "header">
+					<th>Naziv</th>
+					<th>Grupa roba</th>
+					<th>Jedinica mere</th>
+				</tr>
+		
+				</table>
+			</div>
+	      </div>
+	    </div>
+		      
+		      <form id="nextformForm">
+		      <div class="modal-body">
+					<input type="hidden" name="id" id="id" />
+				<p>
+					<label for="naziv">Naziv</label> <input type="text" name="namenextform"
+						id="nazivnextform" />
+				</p>
+				<p>
+					<label for="naziv">Grupa roba</label> 
+					<select name="drzava" id="drzavaSelect">
+					</select>
+				</p>	
+				<p>
+					<label for="naziv">Jedinica mere</label> 
+					<select name="mere" id="mereSelect">
+					</select>
+				</p>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+		        <button type="button" class="btn btn-primary" id="addCity">Potvrda</button>
+		      </div>
+		      </form>
+		    </div>
+		  </div>
+		</div>
+		
+</body>
+</html>
