@@ -1,4 +1,4 @@
-package poslovna.informatika.poslovna.impl;
+package poslovna.informatika.poslovna.service;
 
 import java.util.List;
 
@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import poslovna.informatika.poslovna.model.GrupaRoba;
-import poslovna.informatika.poslovna.repozitorijum.GrupaRobaRepozitorijum;
-import poslovna.informatika.poslovna.servisi.GrupaRobaServis;
+import poslovna.informatika.poslovna.repository.GrupaRobaRepozitorijum;
+import poslovna.informatika.poslovna.service.GrupaRobaServis;
 
 @Transactional
 @Service

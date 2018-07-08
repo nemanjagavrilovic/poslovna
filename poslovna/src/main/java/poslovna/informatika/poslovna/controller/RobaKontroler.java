@@ -1,4 +1,4 @@
-package poslovna.informatika.poslovna.kontroler;
+package poslovna.informatika.poslovna.controller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import poslovna.informatika.poslovna.model.GrupaRoba;
 import poslovna.informatika.poslovna.model.JedinicaMere;
 import poslovna.informatika.poslovna.model.Roba;
-import poslovna.informatika.poslovna.servisi.GrupaRobaServis;
-import poslovna.informatika.poslovna.servisi.JedinicaMereServis;
-import poslovna.informatika.poslovna.servisi.RobaServis;
+import poslovna.informatika.poslovna.service.GrupaRobaServis;
+import poslovna.informatika.poslovna.service.JedinicaMereServis;
+import poslovna.informatika.poslovna.service.RobaServis;
 
 @RestController
 @RequestMapping(value = "/api/roba")
@@ -80,14 +80,16 @@ public class RobaKontroler {
 	
 	@RequestMapping(value="getRobuOdGrupeRobe", method = RequestMethod.POST, consumes="application/json")
 	public ResponseEntity<List<Roba>> getRobuOdGrupeRobe(@RequestBody GrupaRoba grupaRoba) {
-		List<GrupaRoba> get = grupaRobaServis.findByNazivContainingIgnoreCase(grupaRoba.getNaziv());
 		List<Roba> pop = robaServis.findAll();
 		List<Roba> find = new ArrayList<Roba>();
-		for(int i = 0; i < pop.size(); i++){
-			if(pop.get(i).getGrupa().getNaziv().equals(grupaRoba.getNaziv())){
+		for (int i = 0; i < pop.size(); i++) {
+			System.out.println(pop.get(i).getGrupa().getNaziv());
+			System.out.println(grupaRoba.getNaziv());
+			if (pop.get(i).getGrupa().getNaziv().equals(grupaRoba.getNaziv())) {
 				find.add(pop.get(i));
 			}
 		}
+
 		return new ResponseEntity<>(find, HttpStatus.OK);
 	}
 	

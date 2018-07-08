@@ -1,4 +1,4 @@
-package poslovna.informatika.poslovna.repozitorijum;
+package poslovna.informatika.poslovna.repository;
 
 import java.util.List;
 

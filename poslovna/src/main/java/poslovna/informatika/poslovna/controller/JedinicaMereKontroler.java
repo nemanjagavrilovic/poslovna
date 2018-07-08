@@ -1,4 +1,4 @@
-package poslovna.informatika.poslovna.kontroler;
+package poslovna.informatika.poslovna.controller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import poslovna.informatika.poslovna.model.GrupaRoba;
 import poslovna.informatika.poslovna.model.JedinicaMere;
-import poslovna.informatika.poslovna.servisi.JedinicaMereServis;
+import poslovna.informatika.poslovna.service.JedinicaMereServis;
 
 @RestController
 @RequestMapping(value = "/api/jedinicaMere")

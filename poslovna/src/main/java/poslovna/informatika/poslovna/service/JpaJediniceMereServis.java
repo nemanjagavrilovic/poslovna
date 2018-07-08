@@ -1,4 +1,4 @@
-package poslovna.informatika.poslovna.impl;
+package poslovna.informatika.poslovna.service;
 
 import java.util.List;
 
@@ -6,10 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import poslovna.informatika.poslovna.model.GrupaRoba;
 import poslovna.informatika.poslovna.model.JedinicaMere;
-import poslovna.informatika.poslovna.repozitorijum.JedinicaMereRepozitorijum;
-import poslovna.informatika.poslovna.servisi.JedinicaMereServis;
+import poslovna.informatika.poslovna.repository.JedinicaMereRepozitorijum;
+import poslovna.informatika.poslovna.service.JedinicaMereServis;
 
 @Transactional
 @Service

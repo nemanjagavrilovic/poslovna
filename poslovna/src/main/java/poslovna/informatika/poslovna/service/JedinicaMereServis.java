@@ -1,4 +1,4 @@
-package poslovna.informatika.poslovna.servisi;
+package poslovna.informatika.poslovna.service;
 
 import java.util.List;
 

@@ -47,7 +47,7 @@ public class JedinicaMere implements Serializable{
 	public void setNaziv(String naziv) {
 		this.naziv = naziv;
 	}
-	@JsonIgnore
+	
 	public List<Roba> getRobe() {
 		return robe;
 	}

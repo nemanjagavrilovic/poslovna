@@ -76,29 +76,13 @@ public class Roba implements Serializable {
 	public void setNaziv(String naziv) {
 		this.naziv = naziv;
 	}
-	@JsonIgnore
+	
 	public GrupaRoba getGrupa() {
 		return grupa;
 	}
 
 	public void setGrupa(GrupaRoba grupa) {
 		this.grupa = grupa;
-	}
-
-	public JedinicaMere getJedinicaMere() {
-		return jedinicaMere;
-	}
-
-	public void setJedinicaMere(JedinicaMere jedinicaMere) {
-		this.jedinicaMere = jedinicaMere;
-	}
-
-	public List<StavkaPopisa> getStavkaPopisa() {
-		return stavkaPopisa;
-	}
-
-	public void setStavkaPopisa(List<StavkaPopisa> stavkaPopisa) {
-		this.stavkaPopisa = stavkaPopisa;
 	}
 	
 	

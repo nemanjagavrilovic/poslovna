@@ -1,4 +1,4 @@
-package poslovna.informatika.poslovna.kontroler;
+package poslovna.informatika.poslovna.controller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import poslovna.informatika.poslovna.model.GrupaRoba;
-import poslovna.informatika.poslovna.servisi.GrupaRobaServis;
+import poslovna.informatika.poslovna.service.GrupaRobaServis;
 
 
 @RestController
