@@ -23,7 +23,19 @@
 		<li class="group-start" onclick="find()"id="novi"><a href="#inputModal" data-toggle="modal" data-target="#inputModal">Novi dokument</a></li>
 		
 	</ul>
-		
+		<table id="dokumenti" border="1">
+			<thead>
+			<tr>
+				<th>R.br.</th>
+				<th>Vrsta</th>
+				<th>Status</th>
+				<th>Datum formiranja</th>
+				<th>Datum knjizenja</th>
+				<th>Poslovni partner</th>
+			</tr>
+			</thead>
+			<tbody></tbody>
+		</table>
 	
 	</div>
 	<div class="modal"  id="inputModal"  role="dialog">
@@ -64,24 +76,16 @@
 							<option>MM</option>
 						</select>
 				</p>
-					<p>
-					<label for="Smer">Smer</label> <select name="smer" id="smer" >
-							<option>U</option>
-							<option>I</option>
-						</select>
-				</p>
-				<p>
-					
-					
-				</p>		
 				<fieldset>
 					<legend>Stavke dokumenta</legend>
 					<table border="1"  id="stavke" style="display:none;">
 						<thead>
 							<tr>
+								<th>Sifra</th>
 								<th>Roba</th>
-								<th>Kolicina</th>
+								<th>Jedinica mere</th>
 								<th>Cena</th>
+								<th>Kolicina</th>
 								<th>Vrednost</th>
 							</tr>
 						</thead>
@@ -89,8 +93,8 @@
 						</tbody>
 					</table>
 					<label for="roba">Roba</label> <select id="roba" name="roba"></select>
+					Kolicina:<input type="text" id="kolicina">
 						<button id="addR">Add</button>
-						<button id="deleteR">Delete</button>
 			
 					<a  href="#choose" data-toggle="modal" data-target="#choose" onclick="draw()">...</a>
 			

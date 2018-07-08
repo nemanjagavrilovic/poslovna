@@ -10,7 +10,7 @@ function highlightRow(row){
   		//dodajemo na novi selektovani
     	$(row).addClass("highlighted");
     	//pozivamo sinhronizaciju, prosledjujemo dati red
-    	sync($(row));
+    	//sync($(row));
     }
 }
 

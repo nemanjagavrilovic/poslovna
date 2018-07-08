@@ -1,15 +1,18 @@
 package poslovna.informatika.poslovna.converters;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Component;
 
 import poslovna.informatika.poslovna.dto.PrometniDokumentDTO;
 import poslovna.informatika.poslovna.model.PrometniDokument;
-import poslovna.informatika.poslovna.model.StatusDokumenta;
+import poslovna.informatika.poslovna.model.StavkaDokumenta;
 import poslovna.informatika.poslovna.model.VrstaPrDokumenta;
 import poslovna.informatika.poslovna.service.PoslovniPartnerService;
 import poslovna.informatika.poslovna.service.StavkaDokumentaService;
-
+@Component
 public class PrometniDokumentDTOtoPrometniDokument implements Converter<PrometniDokumentDTO,PrometniDokument>{
 
 	@Autowired
@@ -23,21 +26,17 @@ public class PrometniDokumentDTOtoPrometniDokument implements Converter<Prometni
 		if(source==null)
 			return null;
 		PrometniDokument prometniDokument=new PrometniDokument();
-		if(source.getVrsta().equals(VrstaPrDokumenta.MM)){
+		prometniDokument.setStavkeDokumenta(new ArrayList<StavkaDokumenta>());
+		if(source.getVrsta().equals("MM")){
 			prometniDokument.setVrsta(VrstaPrDokumenta.MM);
-		}else if(source.getVrsta().equals(VrstaPrDokumenta.OT)){
+		}else if(source.getVrsta().equals("OT")){
 			prometniDokument.setVrsta(VrstaPrDokumenta.OT);
-		}else if(source.getVrsta().equals(VrstaPrDokumenta.PR)){
+		}else if(source.getVrsta().equals("PR")){
 			prometniDokument.setVrsta(VrstaPrDokumenta.PR);
 		}
 		
-		if(source.getStatus().equals(StatusDokumenta.F)){
-			prometniDokument.setStatus(StatusDokumenta.F);
-		}else if(source.getStatus().equals(StatusDokumenta.S)){
-				prometniDokument.setStatus(StatusDokumenta.S);
-		}else if(source.getStatus().equals(StatusDokumenta.P)){
-				prometniDokument.setStatus(StatusDokumenta.P);
-		}
+	
+		
 		if(source.getPoslovniPartner()!=null){
 			prometniDokument.setPoslovniPartenr(poslovniPartnerSerivce.findById(source.getPoslovniPartner()));
 		}

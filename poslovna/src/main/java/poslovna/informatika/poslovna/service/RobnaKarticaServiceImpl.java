@@ -19,5 +19,10 @@ public class RobnaKarticaServiceImpl implements RobnaKarticaService {
 		// TODO Auto-generated method stub
 		return robnaKarticaRepository.findByMagacinId(id);
 	}
+	@Override
+	public RobnaKartica findById(Long id) {
+		// TODO Auto-generated method stub
+		return robnaKarticaRepository.findOne(id);
+	}
 
 }
