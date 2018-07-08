@@ -30,13 +30,13 @@ public class StavkaDokumenta {
 	protected Roba roba;
 	
 	@OneToMany
-	protected List<AnalitikaMagKaritce> analitike;
+	protected List<AnalitikaMagKartice> analitike;
 	
-	public List<AnalitikaMagKaritce> getAnalitike() {
+	public List<AnalitikaMagKartice> getAnalitike() {
 		return analitike;
 	}
 
-	public void setAnalitike(List<AnalitikaMagKaritce> analitike) {
+	public void setAnalitike(List<AnalitikaMagKartice> analitike) {
 		this.analitike = analitike;
 	}
 

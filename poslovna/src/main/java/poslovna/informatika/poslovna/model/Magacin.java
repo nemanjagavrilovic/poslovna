@@ -26,15 +26,69 @@ public class Magacin {
 	@ManyToOne
 	protected Preduzece preduzece;
 	
-	@OneToMany
-	protected List<RobnaKartica> kartice;
 	
-	@ManyToOne
-	protected Radnik radnik;
+	@OneToMany
+	protected List<Radnik> radnici;
 	
 	@OneToMany
 	protected List<PrometniDokument> prometniDokumenti;
 	
 	@OneToMany
-	protected List<RobnaKartica> robneKartice;	
+	protected List<RobnaKartica> robneKartice;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getNaziv() {
+		return naziv;
+	}
+
+	public void setNaziv(String naziv) {
+		this.naziv = naziv;
+	}
+
+	public List<PopisniDokument> getDokumenti() {
+		return dokumenti;
+	}
+
+	public void setDokumenti(List<PopisniDokument> dokumenti) {
+		this.dokumenti = dokumenti;
+	}
+
+	public Preduzece getPreduzece() {
+		return preduzece;
+	}
+
+	public void setPreduzece(Preduzece preduzece) {
+		this.preduzece = preduzece;
+	}
+
+	public List<Radnik> getRadnici() {
+		return radnici;
+	}
+
+	public void setRadnici(List<Radnik> radnici) {
+		this.radnici = radnici;
+	}
+
+	public List<PrometniDokument> getPrometniDokumenti() {
+		return prometniDokumenti;
+	}
+
+	public void setPrometniDokumenti(List<PrometniDokument> prometniDokumenti) {
+		this.prometniDokumenti = prometniDokumenti;
+	}
+
+	public List<RobnaKartica> getRobneKartice() {
+		return robneKartice;
+	}
+
+	public void setRobneKartice(List<RobnaKartica> robneKartice) {
+		this.robneKartice = robneKartice;
+	}	
 }

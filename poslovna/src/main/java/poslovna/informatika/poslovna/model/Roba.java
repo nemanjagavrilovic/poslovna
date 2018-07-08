@@ -13,6 +13,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Roba implements Serializable {
 
@@ -32,6 +34,33 @@ public class Roba implements Serializable {
 	
 	@OneToMany
 	protected List<StavkaPopisa> stavkaPopisa;
+	
+	@OneToMany 
+	protected List<RobnaKartica> robneKartice;
+	public JedinicaMere getJedinicaMere() {
+		return jedinicaMere;
+	}
+
+	public void setJedinicaMere(JedinicaMere jedinicaMere) {
+		this.jedinicaMere = jedinicaMere;
+	}
+	@JsonIgnore
+	public List<StavkaPopisa> getStavkaPopisa() {
+		return stavkaPopisa;
+	}
+
+	public void setStavkaPopisa(List<StavkaPopisa> stavkaPopisa) {
+		this.stavkaPopisa = stavkaPopisa;
+	}
+	@JsonIgnore
+	public List<RobnaKartica> getRobneKartice() {
+		return robneKartice;
+	}
+
+	public void setRobneKartice(List<RobnaKartica> robneKartice) {
+		this.robneKartice = robneKartice;
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -47,7 +76,7 @@ public class Roba implements Serializable {
 	public void setNaziv(String naziv) {
 		this.naziv = naziv;
 	}
-
+	@JsonIgnore
 	public GrupaRoba getGrupa() {
 		return grupa;
 	}
