@@ -1,17 +1,22 @@
 package poslovna.informatika.poslovna.model;
 
+import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
-public class JedinicaMere {
+public class JedinicaMere implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,7 +26,10 @@ public class JedinicaMere {
 	@Size(max=30)
 	protected String naziv;
 	
-	@OneToMany
+	@OneToMany(cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            mappedBy = "jedinicaMere")
+	@JsonIgnore
 	protected List<Roba> robe;
 
 	public Long getId() {

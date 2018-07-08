@@ -1,18 +1,26 @@
 package poslovna.informatika.poslovna.model;
 
+import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
-public class GrupaRoba {
+public class GrupaRoba implements Serializable {
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	protected Long id;
 	
 	@Size(max=40)
@@ -23,7 +31,10 @@ public class GrupaRoba {
 	@ManyToOne
 	protected Preduzece preduzece;
 	
-	@OneToMany
+	@OneToMany(cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            mappedBy = "grupa")
+	@JsonIgnore
 	protected List<Roba> robe;
 
 	public Long getId() {
