@@ -16,9 +16,13 @@ public class Mesto {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	protected Long id;
+
 	@Size(max=30)
 	@Column(nullable=false)
 	protected String naziv;
+	
+	@Column(nullable=false)
+	protected int ptt;
 	
 	@OneToMany
 	protected List<PoslovniPartner> partneri;
@@ -47,6 +51,12 @@ public class Mesto {
 	}
 
 
-	
+	public int getPtt() {
+		return ptt;
+	}
+
+	public void setPtt(int ptt) {
+		this.ptt = ptt;
+	}
 	
 }

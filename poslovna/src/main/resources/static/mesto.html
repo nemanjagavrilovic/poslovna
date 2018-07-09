@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="scripts/jquery-3.2.1.min.js"></script>
+<script src="scripts/tether.min.js"></script>
+<script src="scripts/bootstrap.min.js"></script>
+<script src="scripts/functions.js"></script>
+<link rel="stylesheet" type="text/css" href="stylesheets/design.css">
+<link rel="stylesheet" href="stylesheets/bootstrap.min.css">
+<meta charset="UTF-8">
+<title>Mesto</title>
+
+<script>
+	$(document).ready(
+			function() {
+				$.ajax({
+					url : "http://localhost:8080/api/mesto/getMesto"
+				}).then(
+						function(data) {
+							for (i = 0; i < data.length; i++) {
+								newRow = "<tr>"
+										+ "<td class=\"name\">" + data[i].naziv + "</td>"
+										+ "<td class=\"name\">" + data[i].ptt + "</td>"
+									
+										+ "<td><a class=\"edit\" href='/api/mesto/" + data[i].id + "'>" 
+										+ "<img src='images/edit.gif'/></a></td>"
+										+ "<td><a class=\"remove\" href='/api/mesto/" + data[i].id + "'>" 
+										+ "<img src='images/remove.gif'/></a></td>"
+										+ "</tr>"
+								$("#dataTable").append(newRow)
+							}
+						});
+				$("#first").click(function(){
+					goFirst()
+				 });
+				
+				$("#next").click(function(){
+					goNext()
+				 });
+				
+				$("#last").click(function(){
+					goLast()
+				});
+				
+				$("#prev").click(function(){
+					goPrev()
+				});
+				
+				$("#add").click(function(){
+					//pripremamo JSON koji cemo poslati
+    	            
+					formData = JSON.stringify({
+    	                naziv:$("#inputForm [name='name']").val(),
+    	                ptt:$("#inputForm [name='ptt']").val()
+
+    	            });
+
+					$.ajax({
+						url: "/api/mesto",
+						type: "POST",
+						data: formData,
+						//saljemo json i ocekujemo json nazad
+						contentType: "application/json",
+						datatype: 'json',
+						success: function(data) {
+							newRow = "<tr>"
+							+ "<td class=\"name\">" + data.naziv + "</td>"
+							+ "<td class=\"name\">" + data.ptt + "</td>"	
+							+ "<td><a class=\"edit\" href='/api/mesto/" + data.id + "'>" 
+							+ "<img src='images/edit.gif'/></a></td>"
+							+ "<td><a class=\"remove\" href='/api/mesto/" + data.id + "'>" 
+							+ "<img src='images/remove.gif'/></a></td>"
+							+ "</tr>"
+							$("#dataTable").append(newRow)
+						  }
+						});
+					$('#inputModal').modal('toggle');
+				});
+			
+				$("#edit").click(function(){
+					//pripremamo JSON koji cemo poslati
+				formData = JSON.stringify({
+						id:$("#editModal [name='idEdit']").val(),
+    	                naziv:$("#editModal [name='nameEdit']").val(),
+    	                ptt:$("#editModal [name='pttEdit']").val()
+
+    	            });
+					
+					$("#dataTable").find("tr:not(:first)").remove();
+					$.ajax({
+						url: "/api/mesto/edit",
+						type: "POST",
+						data: formData,
+						//saljemo json i ocekujemo json nazad
+						contentType: "application/json",
+						datatype: 'json',
+						success: function(data) {
+
+							for (i = 0; i < data.length; i++) {
+								newRow = "<tr>"
+										+ "<td class=\"name\">" + data[i].naziv + "</td>"
+										+ "<td class=\"name\">" + data[i].ptt + "</td>"
+										+ "<td><a class=\"edit\" href='/api/roba/" + data[i].id + "'>" 
+										+ "<img src='images/edit.gif'/></a></td>"
+										+ "<td><a class=\"remove\" href='/api/roba/" + data[i].id + "'>" 
+										+ "<img src='images/remove.gif'/></a></td>"
+										+ "</tr>"
+								$("#dataTable").append(newRow)
+							}
+						}
+						});
+					$('#editModal').modal('toggle');
+				});
+				
+				$("#search").click(function(){
+					//pripremamo JSON koji cemo poslati
+					formData = JSON.stringify({
+    	                naziv:$("#searchModal [name='nameSearch']").val(),
+    	                ptt:$("#searchModal [name='pttSearch']").val()
+    	            });
+					
+					$("#dataTable").find("tr:not(:first)").remove();
+					$.ajax({
+						url: "/api/mesto/search",
+						type: "POST",
+						data: formData,
+						//saljemo json i ocekujemo json nazad
+						contentType: "application/json",
+						datatype: 'json',
+						success: function(data) {
+
+							for (i = 0; i < data.length; i++) {
+								newRow = "<tr>"
+										+ "<td class=\"name\">" + data[i].naziv + "</td>"
+										+ "<td class=\"name\">" + data[i].ptt + "</td>"
+										+ "<td><a class=\"edit\" href='/api/roba/" + data[i].id + "'>" 
+										+ "<img src='images/edit.gif'/></a></td>"
+										+ "<td><a class=\"remove\" href='/api/roba/" + data[i].id + "'>" 
+										+ "<img src='images/remove.gif'/></a></td>"
+										+ "</tr>"
+								$("#dataTable").append(newRow)
+							}
+						}
+						});
+					$('#searchModal').modal('toggle');
+				});
+				
+				$(document).on("click", ".remove", function(event){
+					//ne salji get zahtev
+					event.preventDefault(); 
+					
+					var confirmed = confirm("Da li ste sigurni da zelite da obrišete?");
+					if(confirmed){
+						var url = $(this).attr("href")
+						//red koji se treba izbrisati ako je brisanje na serveru bilo uspesno
+						tr_parent = $(this).closest("tr")
+						$.ajax({
+				        	url: url,
+				        	type: "DELETE",
+				        	success: function(){
+				        		//ukloni i na strani 
+								tr_parent.remove()
+					        }
+						});
+					}
+				});
+			
+				$(document).on("click", ".edit", function(event){
+					//ne salji get zahtev
+					event.preventDefault(); 
+					
+						
+						var url = $(this).attr("href")
+						$.ajax({
+				        	url: url,
+				        	type: "GET",
+				        	success: function(data){
+				        		$("#idEdit").val(data.id);
+				        		$("#nazivEdit").val(data.naziv);
+				        		$("#pttEdit").val(data.ptt);
+				        		$('#editModal').modal('toggle');
+				        		
+					        }
+						});
+				});
+		/*		
+				$("#drzavaPickup").click(function(){
+					id = $(".zoomHighlighted").find(".idCell").html();
+					$("#drzavaSelect").val(id);
+					$('#drzaveModal').modal('toggle');
+				});		
+				
+				$("#drzavaPickupEdit").click(function(){
+					id = $(".zoomHighlighted").find(".idCell").html();
+					$("#drzavaSelectEdit").val(id);
+					$('#drzaveModalEdit').modal('toggle');
+				});	
+				*/
+			/*	$("#merePickup").click(function(){
+					id = $(".zoomHighlighted").find(".idCell").html();
+					$("#mereSelect").val(id);
+					$('#mereModal').modal('toggle');
+				});		
+				
+				$("#merePickupEdit").click(function(){
+					id = $(".zoomHighlighted").find(".idCell").html();
+					$("#mereSelectEdit").val(id);
+					$('#mereModalEdit').modal('toggle');
+				});	*/
+			});
+	
+	$(document).on("click", '#dataTable tr', function(event) {
+		highlightRow(this)
+	});
+	/*
+	$(document).on("click", '#zoomTable tr', function(event) {
+		 if(!$(this).hasClass("header")){
+		 	$(".zoomHighlighted").removeClass("zoomHighlighted");
+		 	$(this).addClass("zoomHighlighted");
+		  }
+	});
+	
+	$(document).on("click", '#zoomTableEdit tr', function(event) {
+		 if(!$(this).hasClass("header")){
+		 	$(".zoomHighlighted").removeClass("zoomHighlighted");
+		 	$(this).addClass("zoomHighlighted");
+		  }
+	});
+	
+	$(document).on("click", '#zoomTableMere tr', function(event) {
+		 if(!$(this).hasClass("header")){
+		 	$(".zoomHighlighted").removeClass("zoomHighlighted");
+		 	$(this).addClass("zoomHighlighted");
+		  }
+	});
+	
+	$(document).on("click", '#zoomTableMereEdit tr', function(event) {
+		 if(!$(this).hasClass("header")){
+		 	$(".zoomHighlighted").removeClass("zoomHighlighted");
+		 	$(this).addClass("zoomHighlighted");
+		  }
+	});
+	*/
+	function sync(item){
+	    naziv = item.find(".name").html()
+	    ptt=item.find(".ptt").html()
+	//    drzava = item.find(".partner").html()
+	//    mere = item.find(".mera").html()
+	    $("#naziv").val(naziv);
+	    $("#ptt").val(ptt);
+	 //   $("#partner").val(partner);
+	//    $("#mere").val(mere);
+	}
+				
+</script>
+</head>
+<body>
+
+<div class="formContainer">
+			<ul>
+				<li class="group-start"><a href="searchModal" data-toggle="modal" data-target="#searchModal"><img src="images/search.gif" /></a></li>
+				<li><a href="#" id="refresh"><img src="images/refresh.gif" /></a></li>
+				<li><a href="#" id="help"><img src="images/help.gif" /></a></li>
+				<li class="group-start"><a id="first"><img src="images/first.gif" /></a></li>
+				<li><a id="prev"><img src="images/prev.gif" /></a></li>
+				<li><a id="next"><img src="images/next.gif" /></a></li>
+				<li><a id="last"><img src="images/last.gif" /></a></li>
+				<li class="group-start"><a href="#inputModal" data-toggle="modal" data-target="#inputModal"><img src="images/add.gif" /></a></li>
+				<li class="group-start"><a href="#" id="nextform"><img src="images/nextform.gif" /></a></li>
+			</ul>
+
+		<h1>Mesto</h1>
+		<table id="dataTable" class="table">
+			<tr class="header">
+				<th>Naziv</th>
+				<th>PTT</th>
+				<th></th>
+				<th></th>
+			</tr>
+		</table>
+
+		<div class="panel">
+			<p>
+				<form>
+					<input type="hidden" name="id" id="id" />
+					<p>
+						<label for="naziv">Naziv</label> <input type="text" name="naziv"
+							id="naziv" disabled />
+					</p>
+					<p>
+						<label>PTT</label> <input type="text" name="ptt"
+							id="ptt" disabled />
+					</p>
+				</form>
+			</p>
+		</div>
+		
+		<div class="modal fade" id="inputModal" tabindex="-1" role="dialog">
+		 <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="exampleModalLabel">Novo mesto</h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <form id="inputForm">
+		      <div class="modal-body">
+					<input type="hidden" name="id" id="id" />
+				<p>
+					<label for="naziv">Naziv</label> <input type="text" name="name"
+						id="naziv" />
+				</p>
+				<p>
+					<label>PTT</label> 
+					<input type="text" name="ptt" id="ptt" />
+				</p>	
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+		        <button type="button" class="btn btn-primary" id="add">Potvrda</button>
+		      </div>
+		      </form>
+		    </div>
+		  </div>
+		</div>
+		
+		<div class="modal fade" id="editModal" tabindex="-1" role="dialog">
+		 <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="exampleModalLabel">Izmeni mesto</h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <form id="editForm">
+		      <div class="modal-body">
+					<input type="hidden" name="idEdit" id="idEdit" />
+				<p>
+					<label for="naziv">Naziv</label> <input type="text" name="nameEdit"
+						id="nazivEdit" />
+				</p>
+				<p>
+					<label>PTT</label> <input type="text" name="pttEdit"
+						id="pttEdit" />
+					
+				</p>	
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+		        <button type="button" class="btn btn-primary" id="edit">Izmeni</button>
+		      </div>
+		      </form>
+		    </div>
+		  </div>
+		</div>
+		
+		<div class="modal fade" id="searchModal" tabindex="-1" role="dialog">
+		 <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="exampleModalLabel">Pretraga mesta</h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <form id="editForm">
+		      <div class="modal-body">
+					<input type="hidden" name="idSearch" id="idSearch" />
+				<p>
+					<label for="naziv">Naziv</label> <input type="text" name="nameSearch"
+						id="nazivSearch" />
+				</p>
+				<p>
+					<label>PTT</label> <input type="text" name="pttSearch"
+						id="pttSearch" />
+				</p>	
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+		        <button type="button" class="btn btn-primary" id="search">Pretrazi</button>
+		      </div>
+		      </form>
+		    </div>
+		  </div>
+		</div>
+</div>
+
+</body>
+</html>
