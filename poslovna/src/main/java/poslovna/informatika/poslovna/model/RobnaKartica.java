@@ -1,3 +1,4 @@
+
 package poslovna.informatika.poslovna.model;
 
 import java.io.Serializable;
@@ -50,8 +51,6 @@ public class RobnaKartica implements Serializable {
 
 	
 	@ManyToOne
-	@JsonIgnore
-	
 	protected Magacin magacin;
 	
 	@ManyToOne
@@ -63,15 +62,12 @@ public class RobnaKartica implements Serializable {
 	
 	
 	@ManyToOne
-	@JsonIgnore
 	protected PoslovnaGodina poslovnaGodina;
 	
-	@JsonIgnore
 	public Magacin getMagacin() {
 		return magacin;
 	}
-	@JsonIgnore
-	
+
 	public void setMagacin(Magacin magacin) {
 		this.magacin = magacin;
 	}
@@ -186,3 +182,4 @@ public class RobnaKartica implements Serializable {
 	
 	
 }
+
