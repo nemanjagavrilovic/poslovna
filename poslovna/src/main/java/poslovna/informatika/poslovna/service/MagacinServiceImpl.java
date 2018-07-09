@@ -43,5 +43,9 @@ public class MagacinServiceImpl implements MagacinService {
 		// TODO Auto-generated method stub
 		magacinRepository.delete(magacin);
 	}
-
+	@Override
+	public Magacin findById(Long id) {
+		// TODO Auto-generated method stub
+		return magacinRepository.findOne(id);
+	}
 }

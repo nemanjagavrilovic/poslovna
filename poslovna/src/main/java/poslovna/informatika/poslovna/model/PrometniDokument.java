@@ -1,3 +1,4 @@
+
 package poslovna.informatika.poslovna.model;
 
 import java.io.Serializable;
@@ -124,4 +125,5 @@ public class PrometniDokument implements Serializable{
 		this.stavkeDokumenta = stavkeDokumenta;
 	}
 }
+
 

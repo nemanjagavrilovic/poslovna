@@ -12,4 +12,7 @@ public interface MagacinService {
 	public int update(String naziv,Long id);
 	public List<Magacin> findByNaziv(String naziv);
 	public void delete(Magacin magacin);
+	public Magacin findById(Long id);
+
 } 
+

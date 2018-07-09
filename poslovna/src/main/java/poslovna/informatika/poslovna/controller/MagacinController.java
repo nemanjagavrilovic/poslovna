@@ -1,5 +1,6 @@
 package poslovna.informatika.poslovna.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +18,8 @@ import poslovna.informatika.poslovna.converters.MagacinDTOtoMagacin;
 import poslovna.informatika.poslovna.dto.MagacinDTO;
 import poslovna.informatika.poslovna.model.Magacin;
 import poslovna.informatika.poslovna.model.Radnik;
+import poslovna.informatika.poslovna.model.Roba;
+import poslovna.informatika.poslovna.model.RobnaKartica;
 import poslovna.informatika.poslovna.service.MagacinService;
 import poslovna.informatika.poslovna.service.RadniciService;
 
@@ -83,6 +86,18 @@ public class MagacinController {
 		
 		List<Magacin> magacini= magacinService.findAll();
 		return new ResponseEntity<List<Magacin>>(magacini,HttpStatus.OK);
+	}
+	@RequestMapping(value="/getRoba/{id}",method=RequestMethod.GET)
+	public ResponseEntity<List<Roba>> getRoba(@PathVariable("id") Long id){
+	
+		List<Roba> roba = new ArrayList<Roba>();
+		Magacin magacin = magacinService.findById(id);
+		
+		for(RobnaKartica rk : magacin.getRobneKartice()) {
+			roba.add(rk.getRoba());
+		}
+		
+		return new ResponseEntity<List<Roba>>(roba,HttpStatus.OK);
 	}
 
 }

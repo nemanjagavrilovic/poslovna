@@ -29,3 +29,4 @@ public class RadniciController {
 		return new ResponseEntity<List<Radnik>>(radniciService.findByMagacin(null),HttpStatus.OK);
 	}
 }
+

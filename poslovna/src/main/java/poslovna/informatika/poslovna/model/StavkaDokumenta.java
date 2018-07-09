@@ -95,3 +95,4 @@ public class StavkaDokumenta implements Serializable{
 	}
 	
 }
+
