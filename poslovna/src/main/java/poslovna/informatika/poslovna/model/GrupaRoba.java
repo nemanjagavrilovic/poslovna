@@ -29,11 +29,13 @@ public class GrupaRoba implements Serializable {
 	
 	
 	@ManyToOne
+	@JsonIgnore
 	protected Preduzece preduzece;
 	
 	@OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
             mappedBy = "grupa")
+	
 	@JsonIgnore
 	protected List<Roba> robe;
 

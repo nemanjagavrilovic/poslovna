@@ -16,5 +16,10 @@ public class MagacinServiceImpl implements MagacinService {
 		// TODO Auto-generated method stub
 		return magacinRepository.save(magacin);
 	}
+	@Override
+	public Magacin findById(Long id) {
+		// TODO Auto-generated method stub
+		return magacinRepository.findOne(id);
+	}
 
 }

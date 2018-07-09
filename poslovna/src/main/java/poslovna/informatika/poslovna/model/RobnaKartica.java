@@ -1,5 +1,6 @@
 package poslovna.informatika.poslovna.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -13,7 +14,7 @@ import javax.persistence.OneToMany;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-public class RobnaKartica {
+public class RobnaKartica implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -49,6 +50,8 @@ public class RobnaKartica {
 
 	
 	@ManyToOne
+	@JsonIgnore
+	
 	protected Magacin magacin;
 	
 	@ManyToOne
@@ -60,12 +63,15 @@ public class RobnaKartica {
 	
 	
 	@ManyToOne
+	@JsonIgnore
 	protected PoslovnaGodina poslovnaGodina;
 	
+	@JsonIgnore
 	public Magacin getMagacin() {
 		return magacin;
 	}
-
+	@JsonIgnore
+	
 	public void setMagacin(Magacin magacin) {
 		this.magacin = magacin;
 	}

@@ -17,6 +17,7 @@ public class RadniciController {
 
 	@Autowired
 	private RadniciService radniciService;
+	
 	@RequestMapping("/all")
 	public ResponseEntity<List<Radnik>> radnici(){
 		

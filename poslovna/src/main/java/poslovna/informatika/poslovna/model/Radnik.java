@@ -8,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Radnik implements Serializable{
 
@@ -28,9 +30,11 @@ public class Radnik implements Serializable{
 	
 	
 	@ManyToOne
+	@JsonIgnore
 	protected Preduzece preduzece;
 	
 	@ManyToOne
+	@JsonIgnore
 	protected Magacin magacin;
 
 	public Long getId() {
@@ -64,7 +68,7 @@ public class Radnik implements Serializable{
 	public void setAdresa(String adresa) {
 		this.adresa = adresa;
 	}
-
+	@JsonIgnore
 	public Preduzece getPreduzece() {
 		return preduzece;
 	}
@@ -73,10 +77,12 @@ public class Radnik implements Serializable{
 		this.preduzece = preduzece;
 	}
 
+	@JsonIgnore
 	public Magacin getMagacin() {
 		return magacin;
 	}
-
+	@JsonIgnore
+	
 	public void setMagacin(Magacin magacin) {
 		this.magacin = magacin;
 	}
