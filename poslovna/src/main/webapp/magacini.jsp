@@ -22,11 +22,47 @@
 
 	<div>
 	<ul>
-		<li class="group-start" onclick="find()"id="novi"><a href="#inputModal" data-toggle="modal" data-target="#inputModal">Novi magacin</a></li>
+			<ul>
+				<li class="group-start"><a href="searchModal" id="search" data-toggle="modal" data-target="#inputModal"><img src="../images/search.gif" /></a></li>
+				<li><a href="#" id="refresh"><img src="../images/refresh.gif" /></a></li>
+				<li><a href="#" id="help"><img src="../images/help.gif" /></a></li>
+				<li class="group-start"><a id="first"><img src="../images/first.gif" /></a></li>
+				<li><a id="prev"><img src="../images/prev.gif" /></a></li>
+				<li><a id="next"><img src="../images/next.gif" /></a></li>
+				<li><a id="last"><img src="../images/last.gif" /></a></li>
+				<li class="group-start" onclick="find()"id="novi"><a href="#inputModal" data-toggle="modal" data-target="#inputModal"><img src="../images/add.gif" /></a></li>
+				<li class="group-start"><a  href="../prometniDokument/all" id="nextform"><img src="../images/nextform.gif" /></a></li>
+		</ul>
 		
 	</ul>
-		
-	
+		<table id="magacini" class="table">
+			<tr class="header">
+				<th>Naziv</th>
+				<th width=20px></th>
+				<th width=20px></th>
+			</tr>
+			
+				<c:forEach items="${magacini}" var="magacin">
+					<tr>
+						<td class="idCell">${magacin.id }</td>
+						<td class="naziv">${magacin.naziv }</td>
+						<td ><a class="edit" href="../magacin/${magacin.id}">Edit</a></td>
+						<td ><a class="delete"href="../magacin/delete/${magacin.id}">Delete</a></td>
+						<td><a href="../prometniDokument/all/${magacin.id}">Dokumenti</a></td>
+					</tr>
+				</c:forEach>
+				
+		</table>
+		<div class="panel">
+			<p>
+				
+					<input type="hidden" name="id" id="id" />
+					<p>
+						<label for="naziv">Naziv</label> <input type="text" name="naziv"
+							id="naziv" disabled />
+					</p>
+					
+			</p>
 	</div>
 	
 	<div class="modal"  id="inputModal"  role="dialog">

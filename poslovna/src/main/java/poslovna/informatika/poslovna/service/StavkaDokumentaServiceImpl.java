@@ -1,5 +1,7 @@
 package poslovna.informatika.poslovna.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +28,11 @@ public class StavkaDokumentaServiceImpl implements StavkaDokumentaService{
 	public int update(PrometniDokument dokument, Long stavka) {
 		// TODO Auto-generated method stub
 		return stavkaDokumentaRepository.update(dokument, stavka);
+	}
+	@Override
+	public List<StavkaDokumenta> findByDokument(PrometniDokument dokument) {
+		// TODO Auto-generated method stub
+		return stavkaDokumentaRepository.findByDokument(dokument);
 	}
 
 }

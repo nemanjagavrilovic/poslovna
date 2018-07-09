@@ -19,30 +19,97 @@
 </head>
 <body>
 	<div>
-	<ul>
-		<li class="group-start" onclick="find()"id="novi"><a href="#inputModal" data-toggle="modal" data-target="#inputModal">Novi dokument</a></li>
+		<ul>
+				<li class="group-start"><a href="searchModal" data-toggle="modal" data-target="#searchModal"><img src="../../images/search.gif" /></a></li>
+				<li><a href="#" id="refresh"><img src="../../images/refresh.gif" /></a></li>
+				<li><a href="#" id="help"><img src="../../images/help.gif" /></a></li>
+				<li class="group-start"><a id="first"><img src="../../images/first.gif" /></a></li>
+				<li><a id="prev"><img src="../../images/prev.gif" /></a></li>
+				<li><a id="next"><img src="../../images/next.gif" /></a></li>
+				<li><a id="last"><img src="../../images/last.gif" /></a></li>
+				<li class="group-start" onclick="find()"id="novi"><a href="#inputModal" data-toggle="modal" data-target="#inputModal"><img src="../../images/add.gif" /></a></li>
+				<li class="group-start"><a href="#" id="nextform"><img src="../../images/nextform.gif" /></a></li>
+		</ul>
 		
-	</ul>
 		<table id="dokumenti" border="1">
-			<thead>
-			<tr>
+			
+			<tr class="header">
 				<th>R.br.</th>
-				<th>Vrsta</th>
-				<th>Status</th>
 				<th>Datum formiranja</th>
 				<th>Datum knjizenja</th>
 				<th>Poslovni partner</th>
+				<th>Magacin</th>
+				<th>Vrsta</th>
+				<th>Status</th>
 			</tr>
-			</thead>
-			<tbody></tbody>
+			
+			<tbody>
+				<c:forEach items="${prometniDokumenti}" var="dokument">
+					<tr>
+						<td class="rbr">${dokument.redniBr}</td>
+						<td class="datumFormiranja">${dokument.datumFormiranja}</td>
+						<td class="datumKnjizenja">${dokument.datumKnjizenja}</td>
+						<td class="partner">${dokument.poslovniPartner.naziv}</td>
+						<td class="magacin">${dokument.magacin.naziv }</td>
+						<td class="vrsta">${dokument.vrsta}</td>
+						<td class="status">${dokument.status}<td>
+						<td><a href="../../stavkaDokumenta/${dokument.id}">Stavke</a></td>
+						<c:choose>
+						    <c:when test="${dokument.datumKnjizenja eq null}">
+						  		<td><a href="../../knjizenje/${dokument.id}">Proknjizi</a></td>
+						
+						    </c:when>
+						    <c:otherwise>
+								<td>Proknjizen</td>
+						    </c:otherwise>
+						</c:choose>
+					</tr>
+				</c:forEach>
+			</tbody>
 		</table>
-	
+		<div class="panel">
+			<p>
+				<form>
+					<input type="hidden" name="id" id="id" />
+					<p>
+						<label for="rbr">R.br</label> <input type="text" name="rbr"
+							id="rbr" disabled />
+					</p>
+					<p>
+						<label for="magacin">Magacin</label> <input type="text" name="magacinV"
+							id="magacinV" disabled />
+					</p>
+					
+					<p>
+						<label for="datumFormiranja">Datum formiranja</label> <input type="text" name="datumFormiranja"
+							id="datumFormiranjaV" disabled />
+					</p>
+					<p>
+						<label for="datumKnjizenja">Datum knjizenja</label> <input type="text" name="datumKnjizenja"
+							id="datumKnjizenjaV" disabled />
+					</p>
+					<p>
+						<label for="poslovniPartner">Poslovni partner</label> <input type="text" name="poslovniPartner"
+							id="poslovniPartnerV" disabled />
+					</p>
+					<p>
+						<label for="vrsta">Vrsta</label> <input type="text" name="vrsta"
+							id="vrstaV" disabled />
+					</p>
+					<p>
+						<label for="status">Status</label> <input type="text" name="status"
+							id="statusV" disabled />
+					</p>
+					
+				</form>
+			</p>
+		</div>
 	</div>
 	<div class="modal"  id="inputModal"  role="dialog">
 		  <div class="modal-dialog" role="document">
 		    <div class="modal-content">
 		      <div class="modal-header">
-		        <h5 class="modal-title" id="exampleModalLabel">Dodaj magacin</h5>
+		        <h5 class="modal-title" id="exampleModalLabel">Dodaj dokument</h5>
 		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 		          <span aria-hidden="true">&times;</span>
 		        </button>
@@ -64,11 +131,32 @@
 					</table>
 					<button id="select"> Izaberi</button>
 				</div> 
+				  <div id="poslovniPartnerSelection" style="display:none;">
+					<table id="partnerT" border=1>
+						<thead>
+						<tr>
+							
+							<th>Naziv</th>
+							<th>Tip</th>
+							<th>PIB</th>
+	
+						</tr>
+						</thead>
+						<tbody>
+						
+						</tbody>
+					</table>
+					<button id="selectPartner"> Izaberi</button>
+				</div> 
 			<div id="form">
 				      <form id="inputForm" style="display:block;">
 		      <div class="modal-body">
 					<input type="hidden" name="id" id="idD" />
-				
+				<p>
+					<label for="magacin">Magacin:</label><select name="magacin" id="magacin">
+					<option selected disabled id="${magacin.id}">${magacin.naziv}</option>
+					</select>
+				</p>
 				<p>
 					<label for="Vrsta">Vrsta</label> <select name="vrsta"id="vrsta" >
 							<option>PR</option>
@@ -92,12 +180,15 @@
 						<tbody>
 						</tbody>
 					</table>
+					
 					<label for="roba">Roba</label> <select id="roba" name="roba"></select>
 					Kolicina:<input type="text" id="kolicina">
 						<button id="addR">Add</button>
-			
-					<a  href="#choose" data-toggle="modal" data-target="#choose" onclick="draw()">...</a>
-			
+					
+					<a  href="#choose" data-toggle="modal" data-target="#choose" onclick="draw()">...</a><br>
+					<label for="partner">Poslovni partner</label><select id="partner"></select>
+					<a  href="#choose" data-toggle="modal" data-target="#choose" onclick="drawPartners()">...</a>
+		
 				</fieldset>
 		      </div>
 		      <div class="modal-footer">

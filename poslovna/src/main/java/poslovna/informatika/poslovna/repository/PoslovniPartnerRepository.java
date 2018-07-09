@@ -8,4 +8,5 @@ import poslovna.informatika.poslovna.model.PoslovniPartner;
 @Repository
 public interface PoslovniPartnerRepository extends PagingAndSortingRepository<PoslovniPartner,Long> {
 
+	public PoslovniPartner findByPib(int pib);
 }

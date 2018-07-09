@@ -9,4 +9,6 @@ public interface PrometniDokumentService {
 
 	public PrometniDokument save(PrometniDokument dokument);
 	public List<PrometniDokument> findAll(Magacin magacin);
+	public PrometniDokument findById(Long id);
+	public List<PrometniDokument> findAll();
 }

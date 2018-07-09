@@ -10,6 +10,7 @@ import poslovna.informatika.poslovna.dto.PrometniDokumentDTO;
 import poslovna.informatika.poslovna.model.PrometniDokument;
 import poslovna.informatika.poslovna.model.StavkaDokumenta;
 import poslovna.informatika.poslovna.model.VrstaPrDokumenta;
+import poslovna.informatika.poslovna.service.MagacinService;
 import poslovna.informatika.poslovna.service.PoslovniPartnerService;
 import poslovna.informatika.poslovna.service.StavkaDokumentaService;
 @Component
@@ -20,6 +21,9 @@ public class PrometniDokumentDTOtoPrometniDokument implements Converter<Prometni
 
 	@Autowired
 	private StavkaDokumentaService stavkaDokumentaService;
+	
+	@Autowired
+	private MagacinService magacinService;
 	@Override
 	public PrometniDokument convert(PrometniDokumentDTO source) {
 		// TODO Auto-generated method stub
@@ -35,10 +39,13 @@ public class PrometniDokumentDTOtoPrometniDokument implements Converter<Prometni
 			prometniDokument.setVrsta(VrstaPrDokumenta.PR);
 		}
 		
+		if(source.getMagacin()!=null){
+			prometniDokument.setMagacin(magacinService.findOne(source.getMagacin()));
+		}
 	
 		
-		if(source.getPoslovniPartner()!=null){
-			prometniDokument.setPoslovniPartenr(poslovniPartnerSerivce.findById(source.getPoslovniPartner()));
+		if(source.getPoslovniPartner()!=-1){
+			prometniDokument.setPoslovniPartenr(poslovniPartnerSerivce.findByPib(source.getPoslovniPartner()));
 		}
 		if(source.getStavke().size()!=0){
 			for(Long id:source.getStavke()){

@@ -6,13 +6,13 @@ import org.springframework.stereotype.Component;
 
 import poslovna.informatika.poslovna.dto.StavkaDokumentaDTO;
 import poslovna.informatika.poslovna.model.StavkaDokumenta;
-import poslovna.informatika.poslovna.service.RobaService;
+import poslovna.informatika.poslovna.service.JpaRobaServis;
 
 @Component
 public class StavkaDokumentaDTOtoStavkaDokumenta implements Converter<StavkaDokumentaDTO,StavkaDokumenta> {
 
 	@Autowired
-	private RobaService robaService;
+	private JpaRobaServis robaService;
 	@Override
 	public StavkaDokumenta convert(StavkaDokumentaDTO source) {
 		// TODO Auto-generated method stub
@@ -22,7 +22,7 @@ public class StavkaDokumentaDTOtoStavkaDokumenta implements Converter<StavkaDoku
 		stavka.setCena(source.getCena());
 		stavka.setKolicina(source.getKolicina());
 		stavka.setVrednost(source.getVrednost());
-		stavka.setRoba(robaService.findById(source.getRoba()));
+		stavka.setRoba(robaService.findOne(source.getRoba()));
 		return stavka;
 	}
 

@@ -23,4 +23,9 @@ public class RadniciController {
 		return new ResponseEntity<List<Radnik>>(radniciService.findAll(),HttpStatus.OK);
 	}
 	
+	@RequestMapping("/unemployed")
+	public ResponseEntity<List<Radnik>> unemployed(){
+		
+		return new ResponseEntity<List<Radnik>>(radniciService.findByMagacin(null),HttpStatus.OK);
+	}
 }

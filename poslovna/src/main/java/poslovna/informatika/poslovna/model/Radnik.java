@@ -8,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Radnik implements Serializable{
 
@@ -31,6 +33,7 @@ public class Radnik implements Serializable{
 	protected Preduzece preduzece;
 	
 	@ManyToOne
+	@JsonIgnore
 	protected Magacin magacin;
 
 	public Long getId() {

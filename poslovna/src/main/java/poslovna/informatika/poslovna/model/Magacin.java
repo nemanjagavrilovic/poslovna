@@ -2,6 +2,7 @@ package poslovna.informatika.poslovna.model;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,20 +21,20 @@ public class Magacin {
 	@Column(nullable=false)
 	protected String naziv;
 	
-	@OneToMany
+	@OneToMany(cascade=CascadeType.ALL)
 	protected List<PopisniDokument> dokumenti;
 	
 	@ManyToOne
 	protected Preduzece preduzece;
 	
 	
-	@OneToMany
+	@OneToMany(cascade=CascadeType.ALL)
 	protected List<Radnik> radnici;
 	
-	@OneToMany
+	@OneToMany(cascade=CascadeType.ALL)
 	protected List<PrometniDokument> prometniDokumenti;
 	
-	@OneToMany
+	@OneToMany(cascade=CascadeType.ALL)
 	protected List<RobnaKartica> robneKartice;
 
 	public Long getId() {

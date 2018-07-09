@@ -23,5 +23,15 @@ public class PrometniDokumentServiceImpl implements PrometniDokumentService{
 		// TODO Auto-generated method stub
 		return (List<PrometniDokument>) prometniDokumentRepository.findByMagacin(magacin);
 	}
+	@Override
+	public PrometniDokument findById(Long id) {
+		// TODO Auto-generated method stub
+		return prometniDokumentRepository.findOne(id);
+	}
+	@Override
+	public List<PrometniDokument> findAll() {
+		// TODO Auto-generated method stub
+		return (List<PrometniDokument>) prometniDokumentRepository.findAll();
+	}
 
 }

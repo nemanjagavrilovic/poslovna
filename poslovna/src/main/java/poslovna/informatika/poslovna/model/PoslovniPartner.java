@@ -26,7 +26,7 @@ public class PoslovniPartner {
 	protected String naziv;
 	
 	@Column(nullable=false)
-	protected int PIB;
+	protected int pib;
 	
 	@Size(max=40)
 	@Column(nullable=false)
@@ -81,11 +81,11 @@ public class PoslovniPartner {
 	}
 
 	public int getPIB() {
-		return PIB;
+		return pib;
 	}
 
-	public void setPIB(int pIB) {
-		PIB = pIB;
+	public void setPIB(int pib) {
+		this.pib = pib;
 	}
 
 	public String getAdresa() {
