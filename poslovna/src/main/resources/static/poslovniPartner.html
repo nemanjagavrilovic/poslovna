@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="scripts/jquery-3.2.1.min.js"></script>
+<script src="scripts/tether.min.js"></script>
+<script src="scripts/bootstrap.min.js"></script>
+<script src="scripts/functions.js"></script>
+<link rel="stylesheet" type="text/css" href="stylesheets/design.css">
+<link rel="stylesheet" href="stylesheets/bootstrap.min.css">
+<meta charset="UTF-8">
+<title>Poslovni parnter</title>
+
+<style>
+table tr.zoomHighlighted{
+	background: #89C4F4;	
+}
+</style>
+<script>
+	$(document).ready(
+			function() {
+				$.ajax({
+					url : "http://localhost:8080/api/poslovniPartner/getPoslovniPartner"
+				}).then(
+						function(data) {
+							for (i = 0; i < data.length; i++) {
+								newRow = "<tr>"
+										+ "<td class=\"name\">" + data[i].naziv + "</td>"
+										+ "<td class=\"country\">" + data[i].grupa.naziv + "</td>"
+										+ "<td class=\"mera\">" + data[i].jedinicaMere.naziv + "</td>"
+										+ "</td>"
+										+ "<td><a class=\"edit\" href='/api/roba/" + data[i].id + "'>" 
+										+ "<img src='images/edit.gif'/></a></td>"
+										+ "<td><a class=\"remove\" href='/api/roba/" + data[i].id + "'>" 
+										+ "<img src='images/remove.gif'/></a></td>"
+										+ "</tr>"
+								$("#dataTable").append(newRow)
+							}
+						});
+				
+				
+				$.ajax({
+					url : "http://localhost:8080/api/grupaRoba/getGrupaRoba"
+				}).then(
+						function(data) {
+							for (i = 0; i < data.length; i++) {
+								newOption = "<option value=\"" + data[i].id + "\">"
+								+ data[i].naziv + "</option>" 
+								$("#drzavaSelect").append(newOption)
+								
+								newOption = "<option value=\"" + data[i].id + "\">"
+								+ data[i].naziv + "</option>" 
+								$("#drzavaSelectEdit").append(newOption)
+								
+								newRow = "<tr>"
+								+ "<td class=\"name\">" + data[i].naziv + "</td>"
+								+ "<td class=\"idCell\">" + data[i].id + "</td>"
+								  "</tr>"
+								 $("#zoomTable").append(newRow)
+								 
+								 newRow = "<tr>"
+								+ "<td class=\"name\">" + data[i].naziv + "</td>"
+								+ "<td class=\"idCell\">" + data[i].id + "</td>"
+								  "</tr>"
+								 $("#zoomTableEdit").append(newRow)
+								 
+							}
+
+						});
+				
+				$.ajax({
+					url : "http://localhost:8080/api/jedinicaMere/getJedinicaMere"
+				}).then(
+						function(data) {
+							for (i = 0; i < data.length; i++) {
+								newOption = "<option value=\"" + data[i].id + "\">"
+								+ data[i].naziv + "</option>" 
+								$("#mereSelect").append(newOption)
+								
+								newOption = "<option value=\"" + data[i].id + "\">"
+								+ data[i].naziv + "</option>" 
+								$("#mereSelectEdit").append(newOption)
+								
+								newRow = "<tr>"
+								+ "<td class=\"name\">" + data[i].naziv + "</td>"
+								+ "<td class=\"idCell\">" + data[i].id + "</td>"
+								  "</tr>"
+								 $("#zoomTableMere").append(newRow)
+								 
+								 newRow = "<tr>"
+								+ "<td class=\"name\">" + data[i].naziv + "</td>"
+								+ "<td class=\"idCell\">" + data[i].id + "</td>"
+								  "</tr>"
+								 $("#zoomTableMereEdit").append(newRow)
+								 
+							}
+
+						});
+				
+				$("#first").click(function(){
+					goFirst()
+				 });
+				
+				$("#next").click(function(){
+					goNext()
+				 });
+				
+				$("#last").click(function(){
+					goLast()
+				});
+				
+				$("#prev").click(function(){
+					goPrev()
+				});
+				
+				$("#add").click(function(){
+					//pripremamo JSON koji cemo poslati
+    	            
+					var grupa1 = { id: $("#inputForm [name='drzava']").val(), naziv:$("#inputForm [name='drzava'] option:selected").text()};
+					var mere = { id: $("#inputForm [name='mera']").val(), naziv:$("#inputForm [name='mera'] option:selected").text()};
+					
+					formData = JSON.stringify({
+    	                naziv:$("#inputForm [name='name']").val(),
+    	                jedinicaMere:mere,
+    	                grupa:grupa1
+    	            });
+
+					$.ajax({
+						url: "/api/roba",
+						type: "POST",
+						data: formData,
+						//saljemo json i ocekujemo json nazad
+						contentType: "application/json",
+						datatype: 'json',
+						success: function(data) {
+							newRow = "<tr>"
+							+ "<td class=\"name\">" + data.naziv + "</td>"
+							+ "<td class=\"country\">" + data.grupa.naziv + "</td>"
+							+ "<td class=\"mere\">" + data.jedinicaMere.naziv + "</td>"
+							+ "</td>"
+							+ "<td><a class=\"edit\" href='/api/roba/" + data.id + "'>" 
+							+ "<img src='images/edit.gif'/></a></td>"
+							+ "<td><a class=\"remove\" href='/api/roba/" + data.id + "'>" 
+							+ "<img src='images/remove.gif'/></a></td>"
+							+ "</tr>"
+							$("#dataTable").append(newRow)
+						  }
+						});
+					$('#inputModal').modal('toggle');
+				});
+				
+				$("#edit").click(function(){
+					//pripremamo JSON koji cemo poslati
+
+					var grupa1 = { id: $("#editModal [name='drzavaEdit']").val(), naziv:$("#editModal [name='drzavaEdit'] option:selected").text()};
+					var mere = { id: $("#editModal [name='mereEdit']").val(), naziv:$("#editModal [name='mereEdit'] option:selected").text()};
+
+					formData = JSON.stringify({
+						id:$("#editModal [name='idEdit']").val(),
+    	                naziv:$("#editModal [name='nameEdit']").val(),
+						grupa: grupa1,
+						jedinicaMere:mere
+    	            });
+					
+					$("#dataTable").find("tr:not(:first)").remove();
+					$.ajax({
+						url: "/api/roba/edit",
+						type: "POST",
+						data: formData,
+						//saljemo json i ocekujemo json nazad
+						contentType: "application/json",
+						datatype: 'json',
+						success: function(data) {
+
+							for (i = 0; i < data.length; i++) {
+								newRow = "<tr>"
+										+ "<td class=\"name\">" + data[i].naziv + "</td>"
+										+ "<td class=\"country\">" + data[i].grupa.naziv + "</td>"
+										+ "<td class=\"mere\">" + data[i].jedinicaMere.naziv + "</td>"
+										+ "</td>"
+										+ "<td><a class=\"edit\" href='/api/roba/" + data[i].id + "'>" 
+										+ "<img src='images/edit.gif'/></a></td>"
+										+ "<td><a class=\"remove\" href='/api/roba/" + data[i].id + "'>" 
+										+ "<img src='images/remove.gif'/></a></td>"
+										+ "</tr>"
+								$("#dataTable").append(newRow)
+							}
+						}
+						});
+					$('#editModal').modal('toggle');
+				});
+				
+				$("#search").click(function(){
+					//pripremamo JSON koji cemo poslati
+					formData = JSON.stringify({
+    	                naziv:$("#searchModal [name='nameSearch']").val(),
+    	            });
+					
+					$("#dataTable").find("tr:not(:first)").remove();
+					$.ajax({
+						url: "/api/roba/search",
+						type: "POST",
+						data: formData,
+						//saljemo json i ocekujemo json nazad
+						contentType: "application/json",
+						datatype: 'json',
+						success: function(data) {
+
+							for (i = 0; i < data.length; i++) {
+								newRow = "<tr>"
+										+ "<td class=\"name\">" + data[i].naziv + "</td>"
+										+ "<td class=\"country\">" + data[i].grupa.naziv + "</td>"
+										+ "<td class=\"mera\">" + data[i].jedinicaMere.naziv + "</td>"
+										+ "</td>"
+										+ "<td><a class=\"edit\" href='/api/roba/" + data[i].id + "'>" 
+										+ "<img src='images/edit.gif'/></a></td>"
+										+ "<td><a class=\"remove\" href='/api/roba/" + data[i].id + "'>" 
+										+ "<img src='images/remove.gif'/></a></td>"
+										+ "</tr>"
+								$("#dataTable").append(newRow)
+							}
+						}
+						});
+					$('#searchModal').modal('toggle');
+				});
+				
+				$(document).on("click", ".remove", function(event){
+					//ne salji get zahtev
+					event.preventDefault(); 
+					
+					var confirmed = confirm("Da li ste sigurni da zelite da obrišete?");
+					if(confirmed){
+						var url = $(this).attr("href")
+						//red koji se treba izbrisati ako je brisanje na serveru bilo uspesno
+						tr_parent = $(this).closest("tr")
+						$.ajax({
+				        	url: url,
+				        	type: "DELETE",
+				        	success: function(){
+				        		//ukloni i na strani 
+								tr_parent.remove()
+					        }
+						});
+					}
+				});
+				
+				$(document).on("click", ".edit", function(event){
+					//ne salji get zahtev
+					event.preventDefault(); 
+					
+						
+						var url = $(this).attr("href")
+						$.ajax({
+				        	url: url,
+				        	type: "GET",
+				        	success: function(data){
+				        		$("#idEdit").val(data.id);
+				        		$("#nazivEdit").val(data.naziv);
+				        		$("#inputForm [name='drzava']").val(data.grupa.id);
+				        		$('#editModal').modal('toggle');
+				        		
+					        }
+						});
+				});
+				
+				$("#drzavaPickup").click(function(){
+					id = $(".zoomHighlighted").find(".idCell").html();
+					$("#drzavaSelect").val(id);
+					$('#drzaveModal').modal('toggle');
+				});		
+				
+				$("#drzavaPickupEdit").click(function(){
+					id = $(".zoomHighlighted").find(".idCell").html();
+					$("#drzavaSelectEdit").val(id);
+					$('#drzaveModalEdit').modal('toggle');
+				});	
+				
+				$("#merePickup").click(function(){
+					id = $(".zoomHighlighted").find(".idCell").html();
+					$("#mereSelect").val(id);
+					$('#mereModal').modal('toggle');
+				});		
+				
+				$("#merePickupEdit").click(function(){
+					id = $(".zoomHighlighted").find(".idCell").html();
+					$("#mereSelectEdit").val(id);
+					$('#mereModalEdit').modal('toggle');
+				});	
+			});
+	
+	$(document).on("click", '#dataTable tr', function(event) {
+		highlightRow(this)
+	});
+	
+	$(document).on("click", '#zoomTable tr', function(event) {
+		 if(!$(this).hasClass("header")){
+		 	$(".zoomHighlighted").removeClass("zoomHighlighted");
+		 	$(this).addClass("zoomHighlighted");
+		  }
+	});
+	
+	$(document).on("click", '#zoomTableEdit tr', function(event) {
+		 if(!$(this).hasClass("header")){
+		 	$(".zoomHighlighted").removeClass("zoomHighlighted");
+		 	$(this).addClass("zoomHighlighted");
+		  }
+	});
+	
+	$(document).on("click", '#zoomTableMere tr', function(event) {
+		 if(!$(this).hasClass("header")){
+		 	$(".zoomHighlighted").removeClass("zoomHighlighted");
+		 	$(this).addClass("zoomHighlighted");
+		  }
+	});
+	
+	$(document).on("click", '#zoomTableMereEdit tr', function(event) {
+		 if(!$(this).hasClass("header")){
+		 	$(".zoomHighlighted").removeClass("zoomHighlighted");
+		 	$(this).addClass("zoomHighlighted");
+		  }
+	});
+	
+	function sync(item){
+	    naziv = item.find(".name").html()
+	    drzava = item.find(".country").html()
+	    mere = item.find(".mera").html()
+	    $("#naziv").val(naziv);
+	    $("#drzava").val(drzava);
+	    $("#mere").val(mere);
+	}
+</script>
+
+
+</head>
+<body>
+
+<div class="formContainer">
+			<ul>
+				<li class="group-start"><a href="searchModal" data-toggle="modal" data-target="#searchModal"><img src="images/search.gif" /></a></li>
+				<li><a href="#" id="refresh"><img src="images/refresh.gif" /></a></li>
+				<li><a href="#" id="help"><img src="images/help.gif" /></a></li>
+				<li class="group-start"><a id="first"><img src="images/first.gif" /></a></li>
+				<li><a id="prev"><img src="images/prev.gif" /></a></li>
+				<li><a id="next"><img src="images/next.gif" /></a></li>
+				<li><a id="last"><img src="images/last.gif" /></a></li>
+				<li class="group-start"><a href="#inputModal" data-toggle="modal" data-target="#inputModal"><img src="images/add.gif" /></a></li>
+				<li class="group-start"><a href="#" id="nextform"><img src="images/nextform.gif" /></a></li>
+			</ul>
+
+		<h1>Poslovni partner</h1>
+		<table id="dataTable" class="table">
+			<tr class="header">
+				<th>Naziv</th>
+				<th>Tip</th>
+				<th>PIB</th>
+				<th>Aresa</th>
+				<th>Mesto</th>
+				<th>Preduzeće</th>
+				<th></th>
+				<th></th>
+			</tr>
+		</table>
+
+		<div class="panel">
+			<p>
+				<form>
+					<input type="hidden" name="id" id="id" />
+					<p>
+						<label for="naziv">Naziv</label> <input type="text" name="naziv"
+							id="naziv" disabled />
+					</p>
+					<p>
+						<label for="tip">Tip</label> <input type="text" name="tip"
+							id="tip" disabled />
+					</p>
+					<p>
+						<label >PIB</label> <input type="text" name="pib"
+							id="pib" disabled />
+					</p>
+					<p>
+						<label >Adresa</label> <input type="text" name="adresa"
+							id="adresa" disabled />
+					</p>
+					<p>
+						<label >Mesto</label> <input type="text" name="mesto"
+							id="mesto" disabled />
+					</p>
+					<p>
+						<label >Preduzeće</label> <input type="text" name="preduzece"
+							id="preduzece" disabled />
+					</p>
+				</form>
+			</p>
+		</div>
+		
+		<div class="modal fade" id="inputModal" tabindex="-1" role="dialog">
+		 <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="exampleModalLabel">Novi poslovni partner</h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <form id="inputForm">
+		      <div class="modal-body">
+					<input type="hidden" name="id" id="id" />
+				<p>
+					<label for="naziv">Naziv</label> <input type="text" name="name"
+						id="naziv" />
+				</p>
+				<p>
+					<label>Tip </label><select id="tipSelect">
+						<option value="KUPAC">KUPAC</option>
+						<option value="DOBAVLJAC">DOBAVLJAC</option>
+						<option value="KUPACIDOBAVLJAC">KUPACIDOBAVLJAC</option>
+					</select>
+				</p>
+				<p>
+					<label for="naziv">Mesto</label> 
+					<select name="mesto" id="mestoSelect">
+					</select>
+					<button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#mestoModal">...	</button>
+				</p>	
+				<p>
+					<label for="naziv">Preduzeće</label> 
+					<select name="preduzece" id="preduzeceSelect">
+					</select>
+					<button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#preduzeceModal">...	</button>
+				</p>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+		        <button type="button" class="btn btn-primary" id="add">Potvrda</button>
+		      </div>
+		      </form>
+		    </div>
+		  </div>
+		</div>
+		
+		<div class="modal fade" id="editModal" tabindex="-1" role="dialog">
+		 <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="exampleModalLabel">Izmeni poslovnog partnera</h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <form id="editForm">
+		      <div class="modal-body">
+					<input type="hidden" name="idEdit" id="idEdit" />
+				<p>
+					<label for="naziv">Naziv</label> <input type="text" name="nameEdit"
+						id="nazivEdit" />
+				</p>
+				<p>
+					<label>Tip </label><select id="tipSelectEdit">
+						<option value="KUPAC">KUPAC</option>
+						<option value="DOBAVLJAC">DOBAVLJAC</option>
+						<option value="KUPACIDOBAVLJAC">KUPACIDOBAVLJAC</option>
+					</select>
+				</p>
+				<p>
+					<label for="naziv">PIB</label> <input type="text" name="pibEdit"
+						id="pibEdit" />
+				</p>
+				<p>
+					<label for="naziv">Adresa</label> <input type="text" name="adresaEdit"
+						id="adresaEdit" />
+				</p>
+				<p>
+					<label for="naziv">Mesto</label> 
+					<select name="mestoEdit" id="mestoSelectEdit">
+					</select>
+					<button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#mestoModalEdit">...	</button>
+				</p>
+				<p>
+					<label for="naziv">Preduzeće</label> 
+					<select name="prduzeceEdit" id="preduzeceSelectEdit">
+					</select>
+					<button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#preduzeceModalEdit">...	</button>
+				</p>	
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+		        <button type="button" class="btn btn-primary" id="edit">Izmeni</button>
+		      </div>
+		      </form>
+		    </div>
+		  </div>
+		</div>
+		
+		<div class="modal fade" id="searchModal" tabindex="-1" role="dialog">
+		 <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="exampleModalLabel">Pretraga poslovnih partnera</h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <form id="editForm">
+		      <div class="modal-body">
+					<input type="hidden" name="idSearch" id="idSearch" />
+				<p>
+					<label for="naziv">Naziv</label> <input type="text" name="nameSearch"
+						id="nazivSearch" />
+				</p>	
+				<p>
+					<label>Tip </label><select id="tipSelectSearch">
+						<option value="KUPAC">KUPAC</option>
+						<option value="DOBAVLJAC">DOBAVLJAC</option>
+						<option value="KUPACIDOBAVLJAC">KUPACIDOBAVLJAC</option>
+					</select>
+				</p>
+				<p>
+					<label for="naziv">PIB</label> <input type="text" name="pibSearch"
+						id="pibSearch" />
+				</p>
+				<p>
+					<label for="naziv">Adresa</label> <input type="text" name="adresaSearch"
+						id="adresaSearch" />
+				</p>
+				<p>
+					<label for="naziv">Adresa</label> <input type="text" name="adresaSearch"
+						id="adresaSearch" />
+				</p>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+		        <button type="button" class="btn btn-primary" id="search">Pretrazi</button>
+		      </div>
+		      </form>
+		    </div>
+		  </div>
+		</div>
+		
+  		<div class="modal fade" id="mestoModal" role="dialog">
+    		<div class="modal-dialog">
+		      <!-- Modal content-->
+		      <div class="modal-content">
+		      <div class="modal-header">
+		      	mesto
+		      </div>
+		      <div class="modal-body">
+			    <table style = "padding:2em" id = "zoomTable">
+				<tr class = "header">
+				   <th>Naziv</th>
+				</tr>
+		
+				</table>
+				<div class="modal-footer">
+				<input id = "mestoPickup" type = "button" value = "izbor"/>
+			</div>
+			</div>
+	      </div>
+	    </div>
+	   </div>
+	   
+	   <div class="modal fade" id="preduzeceModal" role="dialog">
+    		<div class="modal-dialog">
+		      <!-- Modal content-->
+		      <div class="modal-content">
+		      <div class="modal-header">
+		      	Preduzeće
+		      </div>
+		      <div class="modal-body">
+			    <table style = "padding:2em" id = "zoomTableMere">
+				<tr class = "header">
+				   <th>Naziv</th>
+				</tr>
+		
+				</table>
+				<div class="modal-footer">
+				<input id = "preduzecePickup" type = "button" value = "izbor"/>
+			</div>
+			</div>
+	      </div>
+	    </div>
+	   </div>
+	   
+	   
+  		<div class="modal fade" id="mestoModalEdit" role="dialog">
+    		<div class="modal-dialog">
+		      <!-- Modal content-->
+		      <div class="modal-content">
+		      <div class="modal-header">
+		      	Mesto
+		      </div>
+		      <div class="modal-body">
+			    <table style = "padding:2em" id = "zoomTableEdit">
+				<tr class = "header">
+				   <th>Naziv</th>
+				</tr>
+		
+				</table>
+				<div class="modal-footer">
+				<input id = "mestoPickupEdit" type = "button" value = "izbor"/>
+			</div>
+			</div>
+	      </div>
+	    </div>
+	   </div>
+	   
+	   <div class="modal fade" id="preduzeceModalEdit" role="dialog">
+    		<div class="modal-dialog">
+		      <!-- Modal content-->
+		      <div class="modal-content">
+		      <div class="modal-header">
+		      	Preduzeće
+		      </div>
+		      <div class="modal-body">
+			    <table style = "padding:2em" id = "zoomTablePreduzeceEdit">
+				<tr class = "header">
+				   <th>Naziv</th>
+				</tr>
+		
+				</table>
+				<div class="modal-footer">
+				<input id = "preduzecePickupEdit" type = "button" value = "izbor"/>
+			</div>
+			</div>
+	      </div>
+	    </div>
+	   </div>
+	   
+	   <div class="modal fade" id="mestoModalSelect" role="dialog">
+    		<div class="modal-dialog">
+		      <!-- Modal content-->
+		      <div class="modal-content">
+		      <div class="modal-header">
+		      	Mesto
+		      </div>
+		      <div class="modal-body">
+			    <table style = "padding:2em" id = "zoomTableSelect">
+				<tr class = "header">
+				   <th>Naziv</th>
+				</tr>
+		
+				</table>
+			</div>
+	      </div>
+	    </div>
+	   </div>
+</div>
+
+</body>
+</html>
