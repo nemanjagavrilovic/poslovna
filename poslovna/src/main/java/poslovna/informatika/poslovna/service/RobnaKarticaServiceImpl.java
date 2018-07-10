@@ -14,6 +14,17 @@ public class RobnaKarticaServiceImpl implements RobnaKarticaService {
 
 	@Autowired
 	private RobnaKarticaRepository robnaKarticaRepository;
+
+	@Override
+	public List<RobnaKartica> findAll() {
+		return robnaKarticaRepository.findAll();
+	}
+
+	@Override
+	public RobnaKartica save(RobnaKartica robnaKartica) {
+		return robnaKarticaRepository.save(robnaKartica);
+	}
+
 	@Override
 	public List<RobnaKartica> findByMagacin(Long id) {
 		// TODO Auto-generated method stub

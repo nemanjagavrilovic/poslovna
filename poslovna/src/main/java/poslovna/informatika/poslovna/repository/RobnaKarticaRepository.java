@@ -10,5 +10,9 @@ import poslovna.informatika.poslovna.model.RobnaKartica;
 @Repository
 public interface RobnaKarticaRepository extends PagingAndSortingRepository<RobnaKartica,Long>{
 
-	public List<RobnaKartica> findByMagacinId(Long id);
+	List<RobnaKartica> findAll();
+
+	RobnaKartica save(RobnaKartica robnaKartica);
+
+	List<RobnaKartica> findByMagacinId(Long id);
 }
