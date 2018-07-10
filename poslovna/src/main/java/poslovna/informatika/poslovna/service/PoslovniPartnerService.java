@@ -2,16 +2,15 @@ package poslovna.informatika.poslovna.service;
 
 import java.util.List;
 
-
 import poslovna.informatika.poslovna.model.PoslovniPartner;
+
 
 public interface PoslovniPartnerService {
 
-	public PoslovniPartner findById(Long id);
+	public PoslovniPartner findByPib(int id);
+	public List<PoslovniPartner> findAll();
 	
 	PoslovniPartner findOne(Long id);
-	
-	List<PoslovniPartner> findAll();
 	
 	PoslovniPartner save(PoslovniPartner poslovniPartner);
 	
@@ -22,5 +21,4 @@ public interface PoslovniPartnerService {
 	void delete(List<Long> ids);
 	
 	List<PoslovniPartner> findByNazivContainingIgnoreCase(String naziv);
-	
 }

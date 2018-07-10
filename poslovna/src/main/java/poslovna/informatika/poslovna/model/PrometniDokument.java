@@ -1,5 +1,7 @@
+
 package poslovna.informatika.poslovna.model;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -12,7 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 @Entity
-public class PrometniDokument {
+public class PrometniDokument implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -25,7 +27,7 @@ public class PrometniDokument {
 	protected int redniBr;
 	
 	@Column
-	protected Date datumForimranja;
+	protected Date datumFormiranja;
 	
 	@Column
 	protected Date datumKnjizenja;
@@ -34,10 +36,29 @@ public class PrometniDokument {
 	protected StatusDokumenta status;
 
 	@ManyToOne
-	protected PoslovniPartner poslovniPartenr;
+	protected PoslovniPartner poslovniPartner;
 	
-	@OneToMany
+	@OneToMany(mappedBy="dokument")
 	protected List<StavkaDokumenta> stavkeDokumenta;
+	
+	@ManyToOne
+	protected Magacin magacin;
+	public PoslovniPartner getPoslovniPartner() {
+		return poslovniPartner;
+	}
+
+	public void setPoslovniPartner(PoslovniPartner poslovniPartner) {
+		this.poslovniPartner = poslovniPartner;
+	}
+
+	public Magacin getMagacin() {
+		return magacin;
+	}
+
+	public void setMagacin(Magacin magacin) {
+		this.magacin = magacin;
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -62,12 +83,14 @@ public class PrometniDokument {
 		this.redniBr = redniBr;
 	}
 
-	public Date getDatumForimranja() {
-		return datumForimranja;
+	public Date getDatumFormiranja() {
+		Date date = new Date(datumFormiranja.getTime());
+		System.out.println(date);
+		return date;
 	}
 
 	public void setDatumForimranja(Date datumForimranja) {
-		this.datumForimranja = datumForimranja;
+		this.datumFormiranja = datumForimranja;
 	}
 
 	public Date getDatumKnjizenja() {
@@ -87,11 +110,11 @@ public class PrometniDokument {
 	}
 
 	public PoslovniPartner getPoslovniPartenr() {
-		return poslovniPartenr;
+		return poslovniPartner;
 	}
 
 	public void setPoslovniPartenr(PoslovniPartner poslovniPartenr) {
-		this.poslovniPartenr = poslovniPartenr;
+		this.poslovniPartner = poslovniPartenr;
 	}
 
 	public List<StavkaDokumenta> getStavkeDokumenta() {
@@ -102,4 +125,5 @@ public class PrometniDokument {
 		this.stavkeDokumenta = stavkeDokumenta;
 	}
 }
+
 

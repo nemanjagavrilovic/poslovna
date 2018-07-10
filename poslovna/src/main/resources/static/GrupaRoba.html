@@ -13,7 +13,7 @@
 	$(document).ready(
 			function() {
 				$.ajax({
-					url : "http://localhost:8080/api/grupaRoba/getGrupaRoba"
+					url : "http://localhost:9000/api/grupaRoba/getGrupaRoba"
 				}).then(
 						function(data) {
 							for (i = 0; i < data.length; i++) {
@@ -34,14 +34,16 @@
 						});
 				
 				$.ajax({
-					url : "http://localhost:8080/api/jedinicaMere/getJedinicaMere"
-				}).then(
-						function(data) {								
-								newOption = "<option value=\"" + data[i].id + "\">"
-								+ data[i].naziv + "</option>" 
-								$("#mereSelect").append(newOption)
-						});
-				
+					url : "http://localhost:9000/api/jedinicaMere/getJedinicaMere",
+					type:'GET',
+					success:function(data) {		
+						for(i=0;i<data.length;i++){
+						newOption = "<option value=\"" + data[i].id + "\">"
+						+ data[i].naziv + "</option>" 
+						$("#mereSelect").append(newOption)
+						}
+				}
+				});
 				$("#first").click(function(){
 					goFirst()
 				 });

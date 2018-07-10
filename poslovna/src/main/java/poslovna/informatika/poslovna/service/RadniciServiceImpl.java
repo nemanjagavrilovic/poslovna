@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import poslovna.informatika.poslovna.model.Magacin;
 import poslovna.informatika.poslovna.model.Radnik;
 import poslovna.informatika.poslovna.repository.RadniciRepository;
 
@@ -24,9 +25,14 @@ public class RadniciServiceImpl implements RadniciService{
 		return radniciRepository.findOne(id);
 	}
 	@Override
-	public int update(Long magacinId,Long radnikId) {
+	public int update(Magacin magacinId,Long radnikId) {
 		// TODO Auto-generated method stub
 		return radniciRepository.update(magacinId, radnikId);
+	}
+	@Override
+	public List<Radnik> findByMagacin(Magacin magacin) {
+		// TODO Auto-generated method stub
+		return radniciRepository.findByMagacin(magacin);
 	}
 
 }

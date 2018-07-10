@@ -4,6 +4,7 @@ import java.util.List;
 
 public class MagacinDTO {
 
+	public Long id;
 	public String naziv;
 	public List<Long> radnici;
 	public String getNaziv() {
@@ -17,6 +18,12 @@ public class MagacinDTO {
 	}
 	public void setRadnici(List<Long> radnici) {
 		this.radnici = radnici;
+	}
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
 	

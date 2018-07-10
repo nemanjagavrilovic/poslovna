@@ -1,0 +1,562 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<script src="scripts/jquery-3.2.1.min.js"></script>
+<script src="scripts/tether.min.js"></script>
+<script src="scripts/bootstrap.min.js"></script>
+<script src="scripts/functions.js"></script>
+<link rel="stylesheet" type="text/css" href="stylesheets/design.css">
+<link rel="stylesheet" href="stylesheets/bootstrap.min.css">
+<meta charset="UTF-8">
+<title>Grupa roba</title>
+<script>
+	$(document)
+			.ready(
+					function() {
+						var url = window.location.href;
+						var magacin_id = url.substring(
+								url.lastIndexOf('#') + 1, url.length);
+						$
+								.ajax(
+										{
+											url : "http://localhost:9000/magacin/getRoba/"
+													+ magacin_id
+										})
+								.then(
+										function(data) {
+											for (i = 0; i < data.length; i++) {
+												newRow = "<tr>"
+														+ "<td class = \"id\">"
+														+ data[i].id
+														+ "<td class=\"name\">"
+														+ data[i].naziv
+														+ "</td>"
+														+ "<td class=\"jedinica\">"
+														+ data[i].jedinicaMere.naziv
+														+ "</td>"
+														+ "<td><input id=\"stanje_"+data[i].id+"\"></input></td>"
+														+ "</tr>"
+												$("#dataTable").append(newRow)
+
+											}
+										});
+
+						$.ajax({
+							url : "http://localhost:9000/radnici/all/"
+						}).then(
+								function(data) {
+									for (i = 0; i < data.length; i++) {
+										newRow = "<tr>"
+
+										+ "<td class=\"ime\">" + data[i].ime
+												+ "</td>"
+												+ "<td class=\"prezime\">"
+												+ data[i].prezime + "</td>"
+												+ "</tr>"
+										$("#radnici").append(newRow);
+										$("#predsednik").append(
+												"<option value=\""+data[i].id+"\">"
+														+ data[i].ime + " "
+														+ data[i].prezime
+														+ "</option>")
+										$("#clan1").append(
+												"<option value=\""+data[i].id+"\">"
+														+ data[i].ime + " "
+														+ data[i].prezime
+														+ "</option>")
+										$("#clan2").append(
+												"<option value=\""+data[i].id+"\">"
+														+ data[i].ime + " "
+														+ data[i].prezime
+														+ "</option>")
+
+									}
+								});
+
+						$("#first").click(function() {
+							goFirst()
+						});
+
+						$("#next").click(function() {
+							goNext()
+						});
+
+						$("#last").click(function() {
+							goLast()
+						});
+
+						$("#prev").click(function() {
+							goPrev()
+						});
+
+						$("#add")
+								.click(
+										function() {
+											//pripremamo JSON koji cemo poslati
+											formData = JSON
+													.stringify({
+														naziv : $(
+																"#inputForm [name='name']")
+																.val(),
+													});
+											$
+													.ajax({
+														url : "/api/jedinicaMere",
+														type : "POST",
+														data : formData,
+														//saljemo json i ocekujemo json nazad
+														contentType : "application/json",
+														datatype : 'json',
+														success : function(data) {
+															newRow = "<tr>"
+																	+ "<td class=\"name\">"
+																	+ data.naziv
+																	+ "</td>"
+																	+ "<td><a class=\"edit\" href='/api/jedinicaMere/" + data.id + "'>"
+																	+ "<img src='images/edit.gif'/></a></td>"
+																	+ "<td><a class=\"remove\" href='/api/jedinicaMere/" + data.id + "'>"
+																	+ "<img src='images/remove.gif'/></a></td>"
+																	+ "</tr>"
+															$("#dataTable")
+																	.append(
+																			newRow)
+														}
+													});
+											$('#inputModal').modal('toggle');
+										});
+
+						$("#search")
+								.click(
+										function() {
+											//pripremamo JSON koji cemo poslati
+
+											formData = JSON
+													.stringify({
+														naziv : $(
+																"#searchForm [name='nameSearch']")
+																.val(),
+													});
+
+											$("#dataTable").find(
+													"tr:not(:first)").remove();
+											$
+													.ajax({
+														url : "/api/jedinicaMere/search",
+														type : "POST",
+														data : formData,
+														//saljemo json i ocekujemo json nazad
+														contentType : "application/json",
+														datatype : 'json',
+														success : function(data) {
+															console
+																	.log("usaoo");
+															for (i = 0; i < data.length; i++) {
+																newRow = "<tr>"
+																		+ "<td class=\"name\">"
+																		+ data[i].naziv
+																		+ "</td>"
+																		+ "<td><a class=\"edit\" href='/api/jedinicaMere/" + data[i].id + "'>"
+																		+ "<img src='images/edit.gif'/></a></td>"
+																		+ "<td><a class=\"remove\" href='/api/jedinicaMere/" + data[i].id + "'>"
+																		+ "<img src='images/remove.gif'/></a></td>"
+																		+ "</tr>"
+																$("#dataTable")
+																		.append(
+																				newRow)
+															}
+														}
+													});
+											$('#searchModal').modal('toggle');
+										});
+
+						$("#edit")
+								.click(
+										function() {
+											//pripremamo JSON koji cemo poslati
+											formData = JSON
+													.stringify({
+														naziv : $(
+																"#editForm [name='nameEdit']")
+																.val(),
+														id : $(
+																"#editForm [name='idEdit']")
+																.val(),
+													});
+
+											$("#dataTable").find(
+													"tr:not(:first)").remove();
+											$
+													.ajax({
+														url : "/api/jedinicaMere/edit",
+														type : "POST",
+														data : formData,
+														//saljemo json i ocekujemo json nazad
+														contentType : "application/json",
+														datatype : 'json',
+														success : function(data) {
+
+															for (i = 0; i < data.length; i++) {
+																newRow = "<tr>"
+																		+ "<td class=\"name\">"
+																		+ data[i].naziv
+																		+ "</td>"
+																		+ "<td><a class=\"edit\" href='/api/jedinicaMere/" + data[i].id + "'>"
+																		+ "<img src='images/edit.gif'/></a></td>"
+																		+ "<td><a class=\"remove\" href='/api/jedinicaMere/" + data[i].id + "'>"
+																		+ "<img src='images/remove.gif'/></a></td>"
+																		+ "</tr>"
+																$("#dataTable")
+																		.append(
+																				newRow)
+															}
+														}
+													});
+											$('#editModal').modal('toggle');
+										});
+
+						$("#nextForm")
+								.click(
+										function() {
+											//pripremamo JSON koji cemo poslati
+											naziv = $(".highlighted").find(
+													".name").html()
+											id = $(".highlighted").find(
+													".idCell").html()
+											console.log(id);
+											formData = JSON.stringify({
+												id : $(".highlighted").find(
+														".idCell").html(),
+												naziv : $(".highlighted").find(
+														".name").html(),
+											});
+
+											$
+													.ajax({
+														url : "/api/roba/getRobuOdGrupeRobe",
+														type : "POST",
+														data : formData,
+														//saljemo json i ocekujemo json nazad
+														contentType : "application/json",
+														datatype : 'json',
+														success : function(data) {
+															$("#zoomTable")
+																	.find(
+																			"tr:not(:first)")
+																	.remove();
+															for (i = 0; i < data.length; i++) {
+																console
+																		.log(data[i]);
+																newRow = "<tr>"
+																		+ "<td class=\"name\">"
+																		+ data[i].naziv
+																		+ "</td>"
+																		+ "<td class=\"country\">"
+																		+ data[i].grupa.naziv
+																		+ "</td>"
+																		+ "</tr>"
+																$("#zoomTable")
+																		.append(
+																				newRow)
+															}
+														}
+													});
+											$('#nextformModal').modal('toggle');
+										});
+
+						$("#addCity")
+								.click(
+										function() {
+											//pripremamo JSON koji cemo poslati
+											var grupa1 = {
+												id : $(
+														"#nextformForm [name='drzava']")
+														.val(),
+												naziv : $(
+														"#nextformForm [name='drzava'] option:selected")
+														.text()
+											};
+
+											formData = JSON
+													.stringify({
+														naziv : $(
+																"#nextformModal [name='namenextform']")
+																.val(),
+														grupa : grupa1
+													});
+
+											$
+													.ajax({
+														url : "/api/roba",
+														type : "POST",
+														data : formData,
+														//saljemo json i ocekujemo json nazad
+														contentType : "application/json",
+														datatype : 'json',
+														success : function(data) {
+															for (i = 0; i < data.length; i++) {
+																console
+																		.log(data[i]);
+																newRow = +"<td class=\"name\">"
+																		+ data[i].naziv
+																		+ "</td>"
+																		+ "<td class=\"country\">"
+																		+ data[i].grupa.naziv
+																		+ "</td>"
+																		+ "</tr>"
+																$("#zoomTable")
+																		.append(
+																				newRow)
+															}
+														}
+													});
+											$('#nextformModal').modal('toggle');
+										});
+
+					});
+
+	$(document).on("click", "tr", function(event) {
+		highlightRow(this)
+	});
+
+	$(document).on("click", ".remove", function(event) {
+		//ne salji get zahtev
+		event.preventDefault();
+
+		var confirmed = confirm("Da li ste sigurni da zelite da obrišete?");
+		if (confirmed) {
+			var url = $(this).attr("href")
+			//red koji se treba izbrisati ako je brisanje na serveru bilo uspesno
+			tr_parent = $(this).closest("tr")
+			$.ajax({
+				url : url,
+				type : "DELETE",
+				success : function() {
+					//ukloni i na strani 
+					tr_parent.remove()
+				}
+			});
+		}
+	});
+
+	$(document).on("click", ".edit", function(event) {
+		//ne salji get zahtev
+		event.preventDefault();
+
+		var url = $(this).attr("href")
+
+		$.ajax({
+			url : url,
+			type : "GET",
+			success : function(data) {
+				$("#idEdit").val(data.id);
+				$("#nazivEdit").val(data.naziv);
+				$('#editModal').modal('toggle');
+
+			}
+		});
+
+	});
+
+	function izaberi(){
+		
+		 $("#inputModal").modal('toggle');
+		var highlighted = $(".highlighted");
+		console.log(highlighted);
+		index =  $("tr").index(highlighted);
+		index-=2;
+		
+		item = $("tr:nth-child(" + index + ")");
+		
+		var ime=item.find(".ime").html();
+		var prezime=item.find(".prezime").html();
+		
+		var radnik = ime + " " + prezime;
+		console.log(radnik)
+		var selectname=$("#hiddenValue").val()
+		$("#"+selectname+" option").each(function(){
+			if($(this).text()==radnik){
+				$(this).prop("selected","selected");
+			}
+		});
+	}
+
+	function sync(item) {
+		oznaka = item.find(".code").html()
+		naziv = item.find(".name").html()
+		id = item.find(".idCell").html()
+		$("#oznaka").val(oznaka);
+		$("#naziv").val(naziv);
+		$("#id").val(id);
+	}
+	function draw(selectname) {
+		$("#hiddenValue").val(selectname)
+		$("#inputModal").modal('toggle')
+		
+
+	}
+	function Popis(){
+		var url = window.location.href;
+		var magacin_id = url.substring(url.lastIndexOf('#') + 1, url.length);
+		var stavke = [];
+		var kolicine = [];
+		var data = $("#dataTable tr");
+		$.each(data.slice(1),function(){
+			var id =$(this).find(".id").html();
+			var kolicina = $("#stanje_"+id).val();
+			stavke.push(id);
+			kolicine.push(kolicina)
+		});
+		
+		var komisija = [];
+		
+		var predsednik =$("#predsednik").val();
+		var clan1 = $("#clan1").val();
+		var clan2 = $("#clan2").val();
+		
+		komisija.push(predsednik);
+		komisija.push(clan1);
+		komisija.push(clan2);
+		var komisijaId;
+		var KomisijaDTO = JSON.stringify({
+		"komisija":komisija	
+		});
+		console.log(KomisijaDTO);
+		$.ajax({
+			url : "http://localhost:9000/komisija",
+			type : "POST",
+			data : KomisijaDTO,
+			//saljemo json i ocekujemo json nazad
+			contentType : "application/json",
+			datatype : 'json',
+			success : function(data) {
+				console.log("napravio komisiju");
+			komisijaId= data.id;
+				console.log(komisijaId);
+				console.log(stavke);
+				console.log("kolicine: "+kolicine);
+			var StavkaPopisaDTO = JSON.stringify({
+				"magacin" : magacin_id,
+				"stavke" : stavke,
+				"vrednosti" : kolicine,
+				}); 
+				
+			
+				$.ajax({
+					url : "http://localhost:9000/stavkaPopisa",
+					type : "POST",
+					data : StavkaPopisaDTO,
+					//saljemo json i ocekujemo json nazad
+					contentType : "application/json",
+					datatype : 'json',
+					success : function(data) {
+						console.log("napravio stavke");
+						var roba = [];
+						$.each(data,function(index){
+							roba.push(data[index].id);
+						});
+						var PopisniDokumentDTO = JSON.stringify({
+							"magacin": magacin_id,
+							"roba" : roba,
+							"komisija" : komisijaId
+						});
+						$.ajax({
+							url : "http://localhost:9000/popisniDokument/save",
+							type : "POST",
+							data : PopisniDokumentDTO,
+							//saljemo json i ocekujemo json nazad
+							contentType : "application/json",
+							datatype : 'json',
+							success : function(data) {
+							alert("USPESNOO");		
+					}
+						});
+					}
+				});
+			}
+				});
+		
+			
+	}
+</script>
+
+</head>
+<body>
+	<div class="formContainer">
+		<ul>
+			<li class="group-start"><a href="searchModal"
+				data-toggle="modal" data-target="#searchModal"><img
+					src="images/search.gif" /></a></li>
+			<li><a href="#" id="refresh"><img src="images/refresh.gif" /></a></li>
+			<li class="group-start"><a href="#" id="help"><img
+					src="images/help.gif" /></a></li>
+			<li class="group-start"><a id="first"><img
+					src="images/first.gif" /></a></li>
+			<li><a id="prev"><img src="images/prev.gif" /></a></li>
+			<li><a id="next"><img src="images/next.gif" /></a></li>
+			<li><a id="last"><img src="images/last.gif" /></a></li>
+			<li class="group-start"><a href="#inputModal"
+				data-toggle="modal" data-target="#inputModal"><img
+					src="images/add.gif" /></a></li>
+			<li><a id="nextForm"><img src="images/nextform.gif" /></a></li>
+		</ul>
+
+		<h1>Stavke popisa</h1>
+		<table id="dataTable" class="table">
+			<tr class="header">
+				<th>Id</th>
+				<th>Naziv</th>
+				<th>Jedinica</th>
+				<th>Stanje</th>
+
+			</tr>
+		</table>
+		Predsenik komisije: <select id="predsednik"></select> <input
+			type="button" data-toggle="modal" data-target="#choose"
+			onclick="draw('predsednik')" value="..."></input> Član komisije 1: <select
+			id="clan1"></select><input type="button" data-toggle="modal"
+			data-target="#choose" onclick="draw('clan1')" value="..."></input>
+		Član komisije 2: <select id="clan2"></select><input type="button"
+			data-toggle="modal" data-target="#choose" onclick="draw('clan2')"
+			value="..."></input>
+		<div class="modal fade" id="inputModal" role="dialog">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">Add city</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div id="selection">
+						<table id="radnici" border=1>
+							<tr>
+								<th>Ime</th>
+								<th>Prezime</th>
+							</tr>
+						</table>
+
+					</div>
+
+					<div class="modal-footer">
+						<input id="hiddenValue" type="text" value="" style="display: none"></input>
+						<button type="button" class="btn btn-secondary"
+							data-dismiss="modal">Zatvori</button>
+						<button type="button" class="btn btn-primary" id="izaberi"
+							onClick="izaberi()">Izaberi</button>
+
+					</div>
+
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<button type="button" class="btn btn-primary" data-dismiss="modal"
+		onClick="Popis()">Popisi</button>
+
+
+</body>
+</html>

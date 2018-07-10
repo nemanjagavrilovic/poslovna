@@ -13,21 +13,23 @@ public class PoslovniPartnerServiceImpl implements PoslovniPartnerService{
 
 	@Autowired
 	private PoslovniPartnerRepository poslovniPartnerRepository;
+	
 	@Override
-	public PoslovniPartner findById(Long id) {
+	public List<PoslovniPartner> findAll() {
 		// TODO Auto-generated method stub
-		return poslovniPartnerRepository.findOne(id);
+		return (List<PoslovniPartner>) poslovniPartnerRepository.findAll();
+	}
+	@Override
+	public PoslovniPartner findByPib(int id) {
+		// TODO Auto-generated method stub
+		return poslovniPartnerRepository.findByPib(id);
 	}
 	@Override
 	public PoslovniPartner findOne(Long id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	@Override
-	public List<PoslovniPartner> findAll() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 	@Override
 	public PoslovniPartner save(PoslovniPartner poslovniPartner) {
 		// TODO Auto-generated method stub

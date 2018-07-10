@@ -23,6 +23,7 @@ public class MagacinDTOtoMagacin implements Converter<MagacinDTO,Magacin>{
 			return null;
 		Magacin magacin=new Magacin();
 		magacin.setNaziv(source.getNaziv());
+		magacin.setId(source.getId());
 		if(source.getRadnici().size()!=0){
 			magacin.setRadnici(new ArrayList<Radnik>());
 			for(Long id:source.getRadnici()){

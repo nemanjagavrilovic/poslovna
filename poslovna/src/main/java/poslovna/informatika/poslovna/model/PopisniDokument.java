@@ -12,6 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class PopisniDokument {
 
@@ -29,10 +31,14 @@ public class PopisniDokument {
 	protected List<PoslovnaGodina> poslovneGodine;	
 	
 	@ManyToOne
+	@JsonIgnore
 	protected Magacin magacin;
 	
 	@OneToOne
 	protected PopisnaKomisija komisija;
+	
+	@OneToMany
+	protected List<StavkaPopisa> stavke;
 	
 	public Magacin getMagacin() {
 		return magacin;
@@ -73,4 +79,21 @@ public class PopisniDokument {
 	public void setBrojPopisa(int brojPopisa) {
 		this.brojPopisa = brojPopisa;
 	}
+
+	public PopisnaKomisija getKomisija() {
+		return komisija;
+	}
+
+	public void setKomisija(PopisnaKomisija komisija) {
+		this.komisija = komisija;
+	}
+
+	public List<StavkaPopisa> getStavke() {
+		return stavke;
+	}
+
+	public void setStavke(List<StavkaPopisa> stavke) {
+		this.stavke = stavke;
+	}
+	
 }

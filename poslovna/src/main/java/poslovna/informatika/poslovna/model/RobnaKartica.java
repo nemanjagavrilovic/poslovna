@@ -1,7 +1,9 @@
 package poslovna.informatika.poslovna.model;
 
+import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,7 +15,7 @@ import javax.persistence.OneToMany;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-public class RobnaKartica {
+public class RobnaKartica implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -48,7 +50,7 @@ public class RobnaKartica {
 	protected float ukupnaVr;
 
 	
-	@ManyToOne
+	@ManyToOne(cascade=CascadeType.ALL)
 	protected Magacin magacin;
 	
 	@ManyToOne
