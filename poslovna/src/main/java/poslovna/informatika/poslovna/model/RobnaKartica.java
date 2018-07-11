@@ -180,23 +180,33 @@ public class RobnaKartica implements Serializable {
 		this.ukupnaVr = ukupnaVr;
 	}
 
-	public void obradiTransfer(float kolicina, float vrednost, float cena, VrstaPrDokumenta vrstaPrDokumenta) {
-		setCena(cena);
-		if(vrstaPrDokumenta.equals(VrstaPrometa.OT)) {
+	public void obradiTransfer(float kolicina, float vrednost, float prosecnaCena, VrstaPrDokumenta vrstaPrDokumenta) {
+		if(vrstaPrDokumenta == null) {
+			ukupnaKol = kolicina;
+			ukupnaVr = cena*kolicina;
+		}
+		else if(vrstaPrDokumenta.toString().equals("OT")) {
 			prometIzlazaKol += kolicina;
-			prometIzlazaVr += vrednost;
+			prometIzlazaVr += kolicina*prosecnaCena;
+			izracunajUkupno();
 		}
-		else if(vrstaPrDokumenta.equals(VrstaPrometa.PR)){
+		else if(vrstaPrDokumenta.toString().equals("PR")){
 			prometUlazaKol += kolicina;
-			prometUlazaVr += vrednost;
+			prometUlazaVr += kolicina*prosecnaCena;
+			izracunajUkupno();
 		}
-		else if(vrstaPrDokumenta.equals(VrstaPrometa.MM)) {
+		else if(vrstaPrDokumenta.toString().equals("MM")) {
 			//TODO
+			izracunajUkupno();
 		}
-		izracunajUkupno();
+		
+
 	}
 
-
+	public float nivelacija(){
+		ukupnaVr+=ukupnaKol*cena-ukupnaVr;
+		return ukupnaVr-analitike.get(analitike.size()-1).getUkupnaVr();
+	}
 	private void izracunajUkupno() {
 		ukupnaKol = pocetnoStanjeKol + prometUlazaKol - prometIzlazaKol;
 		ukupnaVr = pocetnoStanjeVr + prometUlazaVr - prometIzlazaVr;

@@ -14,13 +14,13 @@
 	$(document).ready(
 			function() {
 				$.ajax({
-					url : "http://localhost:8080/api/mesto/getMesto"
+					url : "http://localhost:9000/api/mesto/getMesto"
 				}).then(
 						function(data) {
 							for (i = 0; i < data.length; i++) {
 								newRow = "<tr>"
 										+ "<td class=\"name\">" + data[i].naziv + "</td>"
-										+ "<td class=\"name\">" + data[i].ptt + "</td>"
+										+ "<td class=\"ptt\">" + data[i].ptt + "</td>"
 									
 										+ "<td><a class=\"edit\" href='/api/mesto/" + data[i].id + "'>" 
 										+ "<img src='images/edit.gif'/></a></td>"
@@ -65,7 +65,7 @@
 						success: function(data) {
 							newRow = "<tr>"
 							+ "<td class=\"name\">" + data.naziv + "</td>"
-							+ "<td class=\"name\">" + data.ptt + "</td>"	
+							+ "<td class=\"ptt\">" + data.ptt + "</td>"	
 							+ "<td><a class=\"edit\" href='/api/mesto/" + data.id + "'>" 
 							+ "<img src='images/edit.gif'/></a></td>"
 							+ "<td><a class=\"remove\" href='/api/mesto/" + data.id + "'>" 
@@ -99,10 +99,10 @@
 							for (i = 0; i < data.length; i++) {
 								newRow = "<tr>"
 										+ "<td class=\"name\">" + data[i].naziv + "</td>"
-										+ "<td class=\"name\">" + data[i].ptt + "</td>"
-										+ "<td><a class=\"edit\" href='/api/roba/" + data[i].id + "'>" 
+										+ "<td class=\"ptt\">" + data[i].ptt + "</td>"
+										+ "<td><a class=\"edit\" href='/api/mesto/" + data[i].id + "'>" 
 										+ "<img src='images/edit.gif'/></a></td>"
-										+ "<td><a class=\"remove\" href='/api/roba/" + data[i].id + "'>" 
+										+ "<td><a class=\"remove\" href='/api/mesto/" + data[i].id + "'>" 
 										+ "<img src='images/remove.gif'/></a></td>"
 										+ "</tr>"
 								$("#dataTable").append(newRow)
@@ -132,10 +132,10 @@
 							for (i = 0; i < data.length; i++) {
 								newRow = "<tr>"
 										+ "<td class=\"name\">" + data[i].naziv + "</td>"
-										+ "<td class=\"name\">" + data[i].ptt + "</td>"
-										+ "<td><a class=\"edit\" href='/api/roba/" + data[i].id + "'>" 
+										+ "<td class=\"ptt\">" + data[i].ptt + "</td>"
+										+ "<td><a class=\"edit\" href='/api/mesto/" + data[i].id + "'>" 
 										+ "<img src='images/edit.gif'/></a></td>"
-										+ "<td><a class=\"remove\" href='/api/roba/" + data[i].id + "'>" 
+										+ "<td><a class=\"remove\" href='/api/mesto/" + data[i].id + "'>" 
 										+ "<img src='images/remove.gif'/></a></td>"
 										+ "</tr>"
 								$("#dataTable").append(newRow)
@@ -183,73 +183,18 @@
 					        }
 						});
 				});
-		/*		
-				$("#drzavaPickup").click(function(){
-					id = $(".zoomHighlighted").find(".idCell").html();
-					$("#drzavaSelect").val(id);
-					$('#drzaveModal').modal('toggle');
-				});		
-				
-				$("#drzavaPickupEdit").click(function(){
-					id = $(".zoomHighlighted").find(".idCell").html();
-					$("#drzavaSelectEdit").val(id);
-					$('#drzaveModalEdit').modal('toggle');
-				});	
-				*/
-			/*	$("#merePickup").click(function(){
-					id = $(".zoomHighlighted").find(".idCell").html();
-					$("#mereSelect").val(id);
-					$('#mereModal').modal('toggle');
-				});		
-				
-				$("#merePickupEdit").click(function(){
-					id = $(".zoomHighlighted").find(".idCell").html();
-					$("#mereSelectEdit").val(id);
-					$('#mereModalEdit').modal('toggle');
-				});	*/
 			});
 	
 	$(document).on("click", '#dataTable tr', function(event) {
 		highlightRow(this)
 	});
-	/*
-	$(document).on("click", '#zoomTable tr', function(event) {
-		 if(!$(this).hasClass("header")){
-		 	$(".zoomHighlighted").removeClass("zoomHighlighted");
-		 	$(this).addClass("zoomHighlighted");
-		  }
-	});
-	
-	$(document).on("click", '#zoomTableEdit tr', function(event) {
-		 if(!$(this).hasClass("header")){
-		 	$(".zoomHighlighted").removeClass("zoomHighlighted");
-		 	$(this).addClass("zoomHighlighted");
-		  }
-	});
-	
-	$(document).on("click", '#zoomTableMere tr', function(event) {
-		 if(!$(this).hasClass("header")){
-		 	$(".zoomHighlighted").removeClass("zoomHighlighted");
-		 	$(this).addClass("zoomHighlighted");
-		  }
-	});
-	
-	$(document).on("click", '#zoomTableMereEdit tr', function(event) {
-		 if(!$(this).hasClass("header")){
-		 	$(".zoomHighlighted").removeClass("zoomHighlighted");
-		 	$(this).addClass("zoomHighlighted");
-		  }
-	});
-	*/
 	function sync(item){
 	    naziv = item.find(".name").html()
 	    ptt=item.find(".ptt").html()
-	//    drzava = item.find(".partner").html()
-	//    mere = item.find(".mera").html()
+
 	    $("#naziv").val(naziv);
 	    $("#ptt").val(ptt);
-	 //   $("#partner").val(partner);
-	//    $("#mere").val(mere);
+
 	}
 				
 </script>

@@ -52,7 +52,7 @@ $(document).on('click','#novi',function(){
 		}
 	})
 	$.ajax({
-		url:'../api/poslovniPartner/all',
+		url:'http://localhost:9000/api/poslovniPartner/all',
 		type:'GET',
 		contentType:'application/json',
 		async:false,
@@ -78,7 +78,7 @@ $(document).on('click','#addR',function(e){
 		success:function(data){
 			
 		var row='<tr><td class="roba">'+data.roba.id+'</td><td>'+data.roba.naziv+'</td><td>'+data.roba.jedinicaMere.naziv+'</td>'
-			+'<td class="cena">'+data.cena+'</td><td class="kolicina">'+$("#kolicina").val()+'</td><td class="vrednost">'+data.cena*$("#kolicina").val()+'</td>'
+			+'<td class="cena">'+$("#cena").val()+'</td><td class="kolicina">'+$("#kolicina").val()+'</td><td class="vrednost">'+$("#cena").val()*$("#kolicina").val()+'</td>'
 			+'<td><button id="deleteStavka">Delete</button></td></tr>';
 			$("#stavke").append(row)
 			$("#stavke").css("display","block")
@@ -124,7 +124,7 @@ $(document).on('click','#add',function(event){
 			"magacin":$("#magacin option:selected").attr('id')
 		})
 		$.ajax({
-			url:'../prometniDokument/save',
+			url:'http://localhost:9000/prometniDokument/save',
 			type:'POST',
 			contentType:'application/json',
 			dataType:'json',
@@ -134,7 +134,7 @@ $(document).on('click','#add',function(event){
 				var row='<tr><td>'+data.redniBr+'</td><td>'+convertDate(data.datumFormiranja)+'</td>'
 				+'<td>'+convertDate(data.datumKnjizenja)+'</td><td>'+data.poslovniPartner.naziv+'</td>'
 				+'<td>'+data.magacin.naziv+'</td><td>'+data.vrsta+'</td><td>'+data.status+'</td>'
-				+'<td></td><td><a href=""../../stavkaDokumenta/'+data.id+'>Stavke</a></td><td><a href=""../../knjizenje/'+data.id+'>Proknjizi</a></td></tr>'
+				+'<td></td><td><a href=""../../stavkaDokumenta/'+data.id+'">Stavke</a></td><td><a onclick="proknjizi('+data.id+')">Proknjizi</a></td></tr>'
 				$("#dokumenti").append(row);
 				$('#inputModal').modal('toggle');
 			
@@ -350,7 +350,7 @@ $(document).on('click',"#searchD",function(){
 		
 	
 			$.ajax({
-	url:'http://localhost:9000//api/poslovniPartner/all',
+	url:'http://localhost:9000/api/poslovniPartner/all',
 	type:'GET',
 	contentType:'application/json',
 	async:false,
@@ -381,10 +381,16 @@ $(document).on('click',"#searchButton",function(){
 		success:function(data){
 			$("#dokumenti").find("tr:not(:first)").remove();
 			$.each(data,function(index,dokument){
-				var row='<tr><td>'+data.redniBr+'</td><td>'+convertDate(data.datumFormiranja)+'</td>'
-				+'<td>'+convertDate(data.datumKnjizenja)+'</td><td>'+data.poslovniPartner.naziv+'</td>'
-				+'<td>'+data.magacin.naziv+'</td><td>'+data.vrsta+'</td><td>'+data.status+'</td>'
-				+'<td></td><td><a href=""../../stavkaDokumenta/'+data.id+'>Stavke</a></td><td><a href=""../../knjizenje/'+data.id+'>Proknjizi</a></td></tr>'
+				var row='<tr><td>'+dokument.redniBr+'</td><td>'+convertDate(dokument.datumFormiranja)+'</td>'
+				+'<td>'+convertDate(dokument.datumKnjizenja)+'</td><td>'+dokument.poslovniPartner.naziv+'</td>'
+				+'<td>'+dokument.magacin.naziv+'</td><td>'+dokument.vrsta+'</td><td>'+dokument.status+'</td>'
+				+'<td></td><td><a href=""../../stavkaDokumenta/'+dokument.id+'>Stavke</a></td>'
+				
+				if(dokument.datumKnjizenja==null){
+					row+='<a onclick="proknjizi('+dokument.id+')">Proknjizi</a>';
+				}else{
+					row+='<td>Proknjizen</td>'
+				}
 				$("#dokumenti").append(row);
 			})
 		}

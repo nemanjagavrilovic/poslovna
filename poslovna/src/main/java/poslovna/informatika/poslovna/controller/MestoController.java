@@ -58,12 +58,15 @@ public class MestoController {
 	public ResponseEntity<List<Mesto>> searchMesto(@RequestBody Mesto mesto) {
 		List<Mesto> m  =new ArrayList<Mesto>();
 		
-		if(!mesto.getNaziv().equals("")){
+		if(mesto.getNaziv() !=("") &&  mesto.getPtt() ==0){
 			m = mestoService.findByNazivContainingIgnoreCase(mesto.getNaziv());
-		}
-		
-		if(mesto.getPtt()!=0){
-			m = mestoService.findByPTT(mesto.getPtt());
+		}else if(mesto.getNaziv() ==("") &&  mesto.getPtt() !=0){
+
+			m =(mestoService.findByPtt(mesto.getPtt()));
+		}else if(mesto.getNaziv() !=("") &&  mesto.getPtt() !=0){
+			m=mestoService.findByNazivAndPtt(mesto.getNaziv(),mesto.getPtt());
+		}else{
+			m=mestoService.findAll();
 		}
 
 		return new ResponseEntity<>(m, HttpStatus.OK);

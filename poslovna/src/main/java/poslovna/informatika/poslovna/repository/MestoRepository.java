@@ -11,5 +11,8 @@ import poslovna.informatika.poslovna.model.Mesto;
 public interface MestoRepository  extends JpaRepository<Mesto, Long>{
 	
 	public List<Mesto> findByNazivContainingIgnoreCase(String naziv);
+	public List<Mesto> findByPtt(int ptt);
+	public List<Mesto> findByNazivAndPtt(String naziv,int ptt);
+	
 
 }

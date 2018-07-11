@@ -18,7 +18,6 @@ public interface PoslovniPartnerService {
 	
 	PoslovniPartner delete(Long id);
 	
-	void delete(List<Long> ids);
-	
-	List<PoslovniPartner> findByNazivContainingIgnoreCase(String naziv);
+//	void delete(List<Long> ids);
+
 }

@@ -182,6 +182,7 @@
 					
 					<label for="roba">Roba</label> <select id="roba" name="roba"></select>
 					Kolicina:<input type="text" id="kolicina">
+					Cena:<input type="text" id="cena">
 						<button id="addR">Add</button>
 					
 					<a  href="#choose" data-toggle="modal" data-target="#choose" onclick="draw()">...</a><br>

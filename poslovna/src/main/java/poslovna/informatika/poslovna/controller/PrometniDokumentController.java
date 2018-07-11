@@ -92,6 +92,8 @@ public class PrometniDokumentController {
 		List<PrometniDokument> search=prometniDokumentService.findByStatusAndVrstaAndMagacinAndPoslovniPartner(d.getStatus(), d.getVrsta(),magacinService.findById(d.getMagacin().getId()),poslovniPartner.findByPib(dokument.getPoslovniPartner()));
 		return new ResponseEntity<List<PrometniDokument>>(search,HttpStatus.OK);
 	}
+	//(ukupna vrednost + količina ulaza * nabavna cena) / (ukupna količina + količina ulaza)
+
 	@RequestMapping(value="/{id}/proknjizi", method=RequestMethod.POST)
 	public ResponseEntity proknjizi(@PathVariable("id") Long id) {
 		PrometniDokument prometniDokument = prometniDokumentService.findById(id);
@@ -99,6 +101,10 @@ public class PrometniDokumentController {
 			RobnaKartica robnaKartica = robnaKarticaService.findByMagacinAndRoba(prometniDokument.getMagacin(), stavka.getRoba());
 			AnalitikaMagKartice analitikaMagKartice = new AnalitikaMagKartice();
 			analitikaMagKartice.setRobnaKartica(robnaKartica);
+			float prosecna=(robnaKartica.getUkupnaVr()+stavka.getKolicina()*stavka.getCena())/(robnaKartica.getUkupnaKol()+stavka.getKolicina());
+			stavka.setCena(prosecna);
+			stavka.setVrednost(prosecna*stavka.getKolicina());
+			stavka=stavkaDokumentaService.save(stavka);
 			analitikaMagKartice.setStavkaDokumenta(stavka);
 			analitikaMagKartice.setVrstaPrometa(VrstaPrometaVrstaPrDokumentaMapper.mapVrstaPrometaToVrstaPrDokumenta(prometniDokument.getVrsta()));
 			if(prometniDokument.getVrsta().equals(VrstaPrDokumenta.OT)) {
@@ -107,8 +113,10 @@ public class PrometniDokumentController {
 				analitikaMagKartice.setSmerPrometa(SmerPrometa.U);
 			}
 			robnaKartica.obradiTransfer(stavka.getKolicina(), stavka.getVrednost(), stavka.getCena(), prometniDokument.getVrsta());
+			analitikaMagKartice.setUkupnaVr(robnaKartica.getUkupnaVr());
+			analitikaMagKartice.setUkupnaKol(robnaKartica.getUkupnaKol());
 			analitikaMagKarticeService.save(analitikaMagKartice);
-			robnaKartica.addAnalitika(analitikaMagKartice);
+			robnaKartica.getAnalitike().add(analitikaMagKartice);
 			robnaKarticaService.save(robnaKartica);
 		}
 		prometniDokument.setDatumKnjizenja(new Date());

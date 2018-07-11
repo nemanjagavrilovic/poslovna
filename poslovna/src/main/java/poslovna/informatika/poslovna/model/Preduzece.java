@@ -40,8 +40,9 @@ public class Preduzece {
 	@OneToMany
 	protected List<Magacin> magacini;
 	
-	@OneToMany
+/*	@OneToMany
 	protected List<PoslovniPartner> partneri;
+	*/
 	public Mesto getMesto() {
 		return mesto;
 	}
@@ -74,14 +75,14 @@ public class Preduzece {
 		this.magacini = magacini;
 	}
 
-	public List<PoslovniPartner> getPartneri() {
+/*	public List<PoslovniPartner> getPartneri() {
 		return partneri;
 	}
 
 	public void setPartneri(List<PoslovniPartner> partneri) {
 		this.partneri = partneri;
 	}
-
+*/
 	public Long getId() {
 		return id;
 	}

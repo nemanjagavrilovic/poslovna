@@ -30,6 +30,12 @@ public class AnalitikaMagKartice {
 	@ManyToOne
 	protected StavkaDokumenta stavkaDokumenta;
 
+	@Column
+	protected float ukupnaKol;
+	
+	@Column
+	protected float ukupnaVr;
+	
 	public Long getId() {
 		return id;
 	}
@@ -76,6 +82,22 @@ public class AnalitikaMagKartice {
 
 	public void setStavkaDokumenta(StavkaDokumenta stavkaDokumenta) {
 		this.stavkaDokumenta = stavkaDokumenta;
+	}
+
+	public float getUkupnaKol() {
+		return ukupnaKol;
+	}
+
+	public void setUkupnaKol(float ukupnaKol) {
+		this.ukupnaKol = ukupnaKol;
+	}
+
+	public float getUkupnaVr() {
+		return ukupnaVr;
+	}
+
+	public void setUkupnaVr(float ukupnaVr) {
+		this.ukupnaVr = ukupnaVr;
 	}
 	
 	

@@ -35,7 +35,7 @@
 						<td></td>
 						<td>${analitika.stavkaDokumenta.vrednost }</td>
 					</c:if>
-					<td>${analitika.stavkaDokumenta.kolicina * analitika.stavkaDokumenta.cena }</td>
+					<td>${analitika.ukupnaVr}</td>
 				</tr>
 			</c:forEach>
 		</tbody>
