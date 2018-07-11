@@ -113,7 +113,7 @@ public class MagacinController {
 		
 		return new ResponseEntity<List<Roba>>(roba,HttpStatus.OK);
 	}
-
+/*
 	@RequestMapping(value="/izvestaj/{id}",method=RequestMethod.POST)
 	public ResponseEntity<String> izvestaj(@PathVariable("id") Long id){
 		try {
@@ -133,6 +133,6 @@ public class MagacinController {
 			}
 		return new ResponseEntity<String>("ok",HttpStatus.OK);
 		}
-	
+	*/
 	
 }

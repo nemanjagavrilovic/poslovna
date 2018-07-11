@@ -15,7 +15,7 @@ public interface RobnaKarticaRepository extends PagingAndSortingRepository<Robna
 
 	List<RobnaKartica> findAll();
 
-	RobnaKartica save(RobnaKartica robnaKartica);
+	//RobnaKartica save(RobnaKartica robnaKartica);
 
 	RobnaKartica findByMagacinAndRoba(Magacin magacin, Roba roba);
 

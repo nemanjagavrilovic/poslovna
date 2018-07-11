@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import poslovna.informatika.poslovna.model.Magacin;
 import poslovna.informatika.poslovna.model.PoslovnaGodina;
@@ -22,7 +23,9 @@ public class RobnaKarticaServiceImpl implements RobnaKarticaService {
 		return robnaKarticaRepository.findAll();
 	}
 
+	
 	@Override
+	@Transactional
 	public RobnaKartica save(RobnaKartica robnaKartica) {
 		return robnaKarticaRepository.save(robnaKartica);
 	}
