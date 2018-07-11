@@ -200,6 +200,7 @@ public class RobnaKartica implements Serializable {
 			izracunajUkupno();
 		}
 		
+
 	}
 
 	public float nivelacija(){
