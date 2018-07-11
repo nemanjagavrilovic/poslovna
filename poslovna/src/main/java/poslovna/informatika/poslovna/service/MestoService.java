@@ -18,6 +18,7 @@ public interface MestoService {
 	void delete(List<Long> ids);
 	
 	List<Mesto> findByNazivContainingIgnoreCase(String naziv);
-	List<Mesto> findByPTT(int ptt);
+	List<Mesto> findByPtt(int ptt);
+	List<Mesto> findByNazivAndPtt(String naziv,int ptt);
 
 }

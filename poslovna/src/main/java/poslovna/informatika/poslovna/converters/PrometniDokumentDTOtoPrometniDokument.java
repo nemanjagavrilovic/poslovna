@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import poslovna.informatika.poslovna.dto.PrometniDokumentDTO;
 import poslovna.informatika.poslovna.model.PrometniDokument;
+import poslovna.informatika.poslovna.model.StatusDokumenta;
 import poslovna.informatika.poslovna.model.StavkaDokumenta;
 import poslovna.informatika.poslovna.model.VrstaPrDokumenta;
 import poslovna.informatika.poslovna.service.MagacinService;
@@ -38,7 +39,15 @@ public class PrometniDokumentDTOtoPrometniDokument implements Converter<Prometni
 		}else if(source.getVrsta().equals("PR")){
 			prometniDokument.setVrsta(VrstaPrDokumenta.PR);
 		}
-		
+		if(source.getStatus()!=null){
+			if(source.getStatus().equals("F")){
+				prometniDokument.setStatus(StatusDokumenta.F);
+			}else if(source.getStatus().equals("P")){
+				prometniDokument.setStatus(StatusDokumenta.P);
+			}else if(source.getStatus().equals("S")){
+				prometniDokument.setStatus(StatusDokumenta.S);
+			}
+		}
 		if(source.getMagacin()!=null){
 			prometniDokument.setMagacin(magacinService.findOne(source.getMagacin()));
 		}
@@ -47,7 +56,7 @@ public class PrometniDokumentDTOtoPrometniDokument implements Converter<Prometni
 		if(source.getPoslovniPartner()!=-1){
 			prometniDokument.setPoslovniPartenr(poslovniPartnerSerivce.findByPib(source.getPoslovniPartner()));
 		}
-		if(source.getStavke().size()!=0){
+		if(source.getStavke()!= null && source.getStavke().size()!=0){
 			for(Long id:source.getStavke()){
 				prometniDokument.getStavkeDokumenta().add(stavkaDokumentaService.findById(id));
 			}

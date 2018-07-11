@@ -52,7 +52,7 @@ $(document).on('click','#novi',function(){
 		}
 	})
 	$.ajax({
-		url:'/poslovniPartner/all',
+		url:'http://localhost:9000/api/poslovniPartner/all',
 		type:'GET',
 		contentType:'application/json',
 		async:false,
@@ -78,7 +78,7 @@ $(document).on('click','#addR',function(e){
 		success:function(data){
 			
 		var row='<tr><td class="roba">'+data.roba.id+'</td><td>'+data.roba.naziv+'</td><td>'+data.roba.jedinicaMere.naziv+'</td>'
-			+'<td class="cena">'+data.cena+'</td><td class="kolicina">'+$("#kolicina").val()+'</td><td class="vrednost">'+data.cena*$("#kolicina").val()+'</td>'
+			+'<td class="cena">'+$("#cena").val()+'</td><td class="kolicina">'+$("#kolicina").val()+'</td><td class="vrednost">'+$("#cena").val()*$("#kolicina").val()+'</td>'
 			+'<td><button id="deleteStavka">Delete</button></td></tr>';
 			$("#stavke").append(row)
 			$("#stavke").css("display","block")
@@ -116,14 +116,15 @@ $(document).on('click','#add',function(event){
 				stavke.push(data.id)
 			}
 		})
+	})
 		var dokument=JSON.stringify({
 			"vrsta":$("#vrsta option:selected").val(),
 			"stavke":stavke,
 			"poslovniPartner":$("#partner option:selected").attr('id'),
-			"magacin":$("magacin option:selected").attr('id')
+			"magacin":$("#magacin option:selected").attr('id')
 		})
 		$.ajax({
-			url:'../save',
+			url:'http://localhost:9000/prometniDokument/save',
 			type:'POST',
 			contentType:'application/json',
 			dataType:'json',
@@ -133,29 +134,32 @@ $(document).on('click','#add',function(event){
 				var row='<tr><td>'+data.redniBr+'</td><td>'+convertDate(data.datumFormiranja)+'</td>'
 				+'<td>'+convertDate(data.datumKnjizenja)+'</td><td>'+data.poslovniPartner.naziv+'</td>'
 				+'<td>'+data.magacin.naziv+'</td><td>'+data.vrsta+'</td><td>'+data.status+'</td>'
-				+'<td></td></tr>'
-				$("#dokumenti tbody").append(row);
+				+'<td></td><td><a href=""../../stavkaDokumenta/'+data.id+'">Stavke</a></td><td><a onclick="proknjizi('+data.id+')">Proknjizi</a></td></tr>'
+				$("#dokumenti").append(row);
 				$('#inputModal').modal('toggle');
 			
 			}
 	
 		})
 	})
-})
+
 function convertDate(stamp){
-	var a=new Date(stamp);
-	var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-	  var year = a.getFullYear();
-	  var month = months[a.getMonth()];
-	  var date = a.getDate();
-	  
-	  var time = date + '.' + month + '.' + year+'.' ;
-	  return time;
-	
+	if(stamp!=null){
+		var a=new Date(stamp);
+		var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+		var year = a.getFullYear();
+		var month = months[a.getMonth()];
+		var date = a.getDate();
+		  
+		var time = date + '.' + month + '.' + year+'.' ;
+		return time;
+	}else{
+		return ""
+	}
 }
 function draw(){
 	$.ajax({
-		url:'/robnaKartica/all',
+		url:'/robnaKartica/all/'+$("#magacin option:selected").attr('id'),
 		type:'GET',
 		contentType:'application/json',
 		success:function(data){
@@ -275,7 +279,7 @@ function goNext(){
 	highlighted = $(".highlighted");
 	//nalazi poziciju trazanog u okviru selektovane selekcije
 	//indeksi pocinju od 0
-	var count = $("#dokumenti >tbody >tr").length-1;
+	var count = $("#dokumenti >tbody >tr").length;
 	if (count == 0)
 		return;
 	index =  $("tr").index(highlighted);
@@ -283,12 +287,14 @@ function goNext(){
 		return;
 	//ako smo na poslednjem, predji na prvi (odnosno drugi red, preskacuci header)
 	selectChild = 1;
+	if(index!=0)
+	index-=1
 	//inace
 	if(index==count-2){
 		selectChild = 1;
 	}
 	else if (index <= count - 1)
-		selectChild = index + 1; 
+		selectChild = index + 2; 
 	item = $("tr:nth-child(" + selectChild + ")");
 	$(".highlighted").removeClass("highlighted");
 	item.addClass("highlighted");
@@ -299,7 +305,7 @@ function goPrevious(){
 	var count = $("#dokumenti >tbody >tr").length-1;
 	if (count == 0)
 		return;
-	index =  $("tr").index(highlighted)-1;
+	index =  $("tr").index(highlighted);
 	if (index < 0)
 		return;
 	selectChild = count;
@@ -326,3 +332,79 @@ $(document).on('change','#magacin',function(){
 	})
 	
 })
+
+$(document).on('click',"#searchD",function(){
+	$.ajax({
+		url:'/magacin/allM',
+		type:'GET',
+		contentType:'application/json',
+		async:false,
+		success:function(data){
+				$("#magacinS").empty();
+				$.each(data,function(index,magacin){
+					$("#magacinS").append('<option selected id="'+magacin.id+'">'+magacin.naziv+'</option>')
+					
+					})
+				}
+			})
+		
+	
+			$.ajax({
+	url:'http://localhost:9000/api/poslovniPartner/all',
+	type:'GET',
+	contentType:'application/json',
+	async:false,
+	success:function(data){
+		$("#partnerS").empty();
+		$.each(data,function(index,partner){
+			$("#partnerS").append('<option id="'+partner.pib+'">'+partner.naziv+'</option>')
+			
+		})
+	}
+	})
+	
+})
+$(document).on('click',"#searchButton",function(){
+	
+	var podaci=JSON.stringify({
+		"vrsta":$("#vrstaS option:selected").val(),
+		"status":$("#statusS option:selected").val(),
+		"poslovniPartner":$("#partnerS option:selected").attr('id'),
+		"magacin":$("#magacinS option:selected").attr('id'),
+	})
+	$.ajax({
+		url:'http://localhost:9000/prometniDokument/search',
+		type:'POST',
+		dataType:'json',
+		contentType:'application/json',
+		data:podaci,
+		success:function(data){
+			$("#dokumenti").find("tr:not(:first)").remove();
+			$.each(data,function(index,dokument){
+				var row='<tr><td>'+dokument.redniBr+'</td><td>'+convertDate(dokument.datumFormiranja)+'</td>'
+				+'<td>'+convertDate(dokument.datumKnjizenja)+'</td><td>'+dokument.poslovniPartner.naziv+'</td>'
+				+'<td>'+dokument.magacin.naziv+'</td><td>'+dokument.vrsta+'</td><td>'+dokument.status+'</td>'
+				+'<td></td><td><a href=""../../stavkaDokumenta/'+dokument.id+'>Stavke</a></td>'
+				
+				if(dokument.datumKnjizenja==null){
+					row+='<a onclick="proknjizi('+dokument.id+')">Proknjizi</a>';
+				}else{
+					row+='<td>Proknjizen</td>'
+				}
+				$("#dokumenti").append(row);
+			})
+		}
+	})
+	
+})
+
+function proknjizi(id) {
+    $.ajax({
+        url:'/prometniDokument/'+ id + '/proknjizi',
+        type:'POST',
+        contentType:'application/json',
+        success:function(data){
+            alert("Uspesno proknjizeno!");
+        }
+    })
+}

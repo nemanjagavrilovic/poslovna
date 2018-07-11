@@ -4,21 +4,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
-import poslovna.informatika.poslovna.dto.StavkaDokumentaDTO;
+import poslovna.informatika.poslovna.dto.StavkaDokumentaPretraga;
 import poslovna.informatika.poslovna.model.StavkaDokumenta;
 import poslovna.informatika.poslovna.service.JpaRobaServis;
-import poslovna.informatika.poslovna.service.PrometniDokumentService;
 
 @Component
-public class StavkaDokumentaDTOtoStavkaDokumenta implements Converter<StavkaDokumentaDTO,StavkaDokumenta> {
+public class StavkaDokumentaPretragaConverter implements Converter<StavkaDokumentaPretraga,StavkaDokumenta>  {
 
 	@Autowired
 	private JpaRobaServis robaService;
-	
-	@Autowired
-	private PrometniDokumentService prometniDokumentService;
 	@Override
-	public StavkaDokumenta convert(StavkaDokumentaDTO source) {
+	public StavkaDokumenta convert(StavkaDokumentaPretraga source) {
 		// TODO Auto-generated method stub
 		if(source==null)
 			return null;
@@ -26,10 +22,7 @@ public class StavkaDokumentaDTOtoStavkaDokumenta implements Converter<StavkaDoku
 		stavka.setCena(source.getCena());
 		stavka.setKolicina(source.getKolicina());
 		stavka.setVrednost(source.getVrednost());
-		stavka.setRoba(robaService.findOne(source.getRoba()));
-		if(source.getPrometniDokument()!=null){
-			stavka.setDokument(prometniDokumentService.findById(source.getPrometniDokument()));
-		}
+		stavka.setRoba(robaService.findByNazivContainingIgnoreCase(source.getRoba()).get(0));
 		return stavka;
 	}
 

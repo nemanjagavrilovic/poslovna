@@ -5,11 +5,14 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Magacin {
@@ -31,10 +34,10 @@ public class Magacin {
 	@OneToMany(cascade=CascadeType.ALL)
 	protected List<Radnik> radnici;
 	
-	@OneToMany(cascade=CascadeType.ALL)
+	@OneToMany(cascade=CascadeType.ALL,fetch=FetchType.LAZY)
 	protected List<PrometniDokument> prometniDokumenti;
 	
-	@OneToMany(cascade=CascadeType.ALL)
+	@OneToMany(cascade=CascadeType.ALL,fetch=FetchType.LAZY)
 	protected List<RobnaKartica> robneKartice;
 
 	public Long getId() {
@@ -76,7 +79,7 @@ public class Magacin {
 	public void setRadnici(List<Radnik> radnici) {
 		this.radnici = radnici;
 	}
-
+	@JsonIgnore
 	public List<PrometniDokument> getPrometniDokumenti() {
 		return prometniDokumenti;
 	}
@@ -84,7 +87,7 @@ public class Magacin {
 	public void setPrometniDokumenti(List<PrometniDokument> prometniDokumenti) {
 		this.prometniDokumenti = prometniDokumenti;
 	}
-
+	@JsonIgnore
 	public List<RobnaKartica> getRobneKartice() {
 		return robneKartice;
 	}

@@ -65,9 +65,10 @@ li a:hover {
 
 form label, form input{
 	margin-left:1em;
+	
 }
 
 form label{
-	width:3em;
+	width:5em;
 	display:inline-block
 }

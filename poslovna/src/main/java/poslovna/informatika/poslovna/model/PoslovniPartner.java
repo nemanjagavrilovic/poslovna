@@ -38,15 +38,6 @@ public class PoslovniPartner {
 	@OneToMany
 	protected List<PrometniDokument> dokumenti;
 	
-	@ManyToOne
-	protected Preduzece preduzece;
-	public Preduzece getPreduzece() {
-		return preduzece;
-	}
-
-	public void setPreduzece(Preduzece preduzece) {
-		this.preduzece = preduzece;
-	}
 
 	public List<PrometniDokument> getDokumenti() {
 		return dokumenti;

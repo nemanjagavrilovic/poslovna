@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import poslovna.informatika.poslovna.model.PrometniDokument;
+import poslovna.informatika.poslovna.model.Roba;
 import poslovna.informatika.poslovna.model.StavkaDokumenta;
 
 @Repository
@@ -20,4 +21,7 @@ public interface StavkaDokumentaRepository extends PagingAndSortingRepository<St
 	public int update(PrometniDokument dokument,Long stavka);
 	
 	public List<StavkaDokumenta> findByDokument(PrometniDokument dokument);
+	
+	public List<StavkaDokumenta> findByRobaOrKolicinaLessThanOrCenaLessThanOrVrednostLessThan(Roba roba,float kolicina,float cena,float vrednost);
+
 }

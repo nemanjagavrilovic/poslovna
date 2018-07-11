@@ -6,6 +6,7 @@ public class StavkaDokumentaDTO {
 	private float cena;
 	private float vrednost;
 	private Long roba;
+	private Long prometniDokument;
 	public float getKolicina() {
 		return kolicina;
 	}
@@ -29,6 +30,12 @@ public class StavkaDokumentaDTO {
 	}
 	public void setRoba(Long roba) {
 		this.roba = roba;
+	}
+	public Long getPrometniDokument() {
+		return prometniDokument;
+	}
+	public void setPrometniDokument(Long prometniDokument) {
+		this.prometniDokument = prometniDokument;
 	}
 	
 	

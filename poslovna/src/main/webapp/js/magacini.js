@@ -118,7 +118,10 @@ $(document).on('click','#add',function(event){
 		dataType:'json',
 		data:data,
 		success:function(data){
-			let row='<tr><td class="idCell">'+data.id+'</td><td class="naziv">'+data.naziv+'</td><td><a class="edit" href="../magacin/'+data.id+'">Edit</a></td><td><a class="delete" href="../magacin/delete/'+data.id+'">Delete</a></td><td><a href="../prometniDokument/all/'+data.id+'">Dokumenti</a></td></tr>'
+			let row='<tr><td class="idCell">'+data.id+'</td><td class="naziv">'+data.naziv+'</td><td><a class="edit" href="../magacin/'+data.id+'">Edit</a>'
+			+'</td><td><a class="delete" href="../magacin/delete/'+data.id+'">Delete</a></td>'
+			+'<td><a href="../prometniDokument/all/'+data.id+'">Dokumenti</a></td><td><a href="/robnaKartica/index/'+data.id+'">Robne kartice</a></td></tr>'
+			
 			$("#magacini").append(row)
 		}
 	})

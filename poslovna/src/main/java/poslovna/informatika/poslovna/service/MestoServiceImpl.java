@@ -66,8 +66,14 @@ public class MestoServiceImpl implements MestoService{
 	}
 
 	@Override
-	public List<Mesto> findByPTT(int ptt) {
+	public List<Mesto> findByPtt(int ptt) {
 		// TODO Auto-generated method stub
-		return null;
+		return mestoRepository.findByPtt(ptt);
+	}
+
+	@Override
+	public List<Mesto> findByNazivAndPtt(String naziv, int ptt) {
+		// TODO Auto-generated method stub
+		return mestoRepository.findByNazivAndPtt(naziv,ptt);
 	}
 }
