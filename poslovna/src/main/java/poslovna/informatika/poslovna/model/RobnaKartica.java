@@ -179,6 +179,31 @@ public class RobnaKartica implements Serializable {
 	public void setUkupnaVr(float ukupnaVr) {
 		this.ukupnaVr = ukupnaVr;
 	}
-	
+
+	public void obradiTransfer(float kolicina, float vrednost, float cena, VrstaPrDokumenta vrstaPrDokumenta) {
+		setCena(cena);
+		if(vrstaPrDokumenta.equals(VrstaPrometa.OT)) {
+			prometIzlazaKol += kolicina;
+			prometIzlazaVr += vrednost;
+		}
+		else if(vrstaPrDokumenta.equals(VrstaPrometa.PR)){
+			prometUlazaKol += kolicina;
+			prometUlazaVr += vrednost;
+		}
+		else if(vrstaPrDokumenta.equals(VrstaPrometa.MM)) {
+			//TODO
+		}
+		izracunajUkupno();
+	}
+
+
+	private void izracunajUkupno() {
+		ukupnaKol = pocetnoStanjeKol + prometUlazaKol - prometIzlazaKol;
+		ukupnaVr = pocetnoStanjeVr + prometUlazaVr - prometIzlazaVr;
+	}
+
+	public void addAnalitika(AnalitikaMagKartice analitikaMagKartice) {
+		analitike.add(analitikaMagKartice);
+	}
 	
 }

@@ -326,3 +326,14 @@ $(document).on('change','#magacin',function(){
 	})
 	
 })
+
+function proknjizi(id) {
+    $.ajax({
+        url:'/prometniDokument/'+ id + '/proknjizi',
+        type:'POST',
+        contentType:'application/json',
+        success:function(data){
+            alert("Uspesno proknjizeno!");
+        }
+    })
+}

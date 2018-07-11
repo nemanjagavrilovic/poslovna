@@ -16,6 +16,7 @@ public class AnalitikaMagKartice {
 	
 	@Column
 	protected int rbr;
+
 	@ManyToOne
 	protected RobnaKartica robnaKartica;
 	
@@ -24,15 +25,7 @@ public class AnalitikaMagKartice {
 	
 	@Column
 	protected SmerPrometa smerPrometa;
-	
-	@Column(nullable=false)
-	protected float cena;
-	
-	@Column(nullable=false)
-	protected float kolicina;
-	
-	@Column(nullable=false)
-	protected float vrednost;
+
 	
 	@ManyToOne
 	protected StavkaDokumenta stavkaDokumenta;
@@ -75,30 +68,6 @@ public class AnalitikaMagKartice {
 
 	public void setSmerPrometa(SmerPrometa smerPrometa) {
 		this.smerPrometa = smerPrometa;
-	}
-
-	public float getCena() {
-		return cena;
-	}
-
-	public void setCena(float cena) {
-		this.cena = cena;
-	}
-
-	public float getKolicina() {
-		return kolicina;
-	}
-
-	public void setKolicina(float kolicina) {
-		this.kolicina = kolicina;
-	}
-
-	public float getVrednost() {
-		return vrednost;
-	}
-
-	public void setVrednost(float vrednost) {
-		this.vrednost = vrednost;
 	}
 
 	public StavkaDokumenta getStavkaDokumenta() {

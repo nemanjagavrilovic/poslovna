@@ -55,7 +55,6 @@ public class RobnaKarticaController {
 
 	@RequestMapping(value="/{id}",method=RequestMethod.GET)
 	public ResponseEntity <RobnaKartica> findById(@PathVariable("id") Long id){
-		
 		RobnaKartica robneKartice=robnaKarticaService.findById(id);
 		return new ResponseEntity<>(robneKartice,HttpStatus.OK);
 	}
@@ -68,5 +67,12 @@ public class RobnaKarticaController {
 		robnaKartica.setRoba(roba);
 		robnaKarticaService.save(robnaKartica);
 		return new ResponseEntity<>(robnaKartica, HttpStatus.OK);
+	}
+
+	@RequestMapping(value="/{id}/analitika", method=RequestMethod.GET)
+	public String analitike(@PathVariable("id") Long id, HttpServletRequest request) {
+		RobnaKartica robnaKartica = robnaKarticaService.findById(id);
+		request.setAttribute("robnaKartica", robnaKartica);
+		return "forward:/analitikaRobneKartice.jsp";
 	}
 }
