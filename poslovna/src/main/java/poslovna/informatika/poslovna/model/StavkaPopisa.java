@@ -7,7 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 @Entity
 public class StavkaPopisa {
@@ -24,8 +24,8 @@ public class StavkaPopisa {
 
 	
 	@ManyToOne
-	@JsonIgnore
 	protected Roba roba;
+	
 	public Long getId() {
 		return id;
 	}
@@ -48,6 +48,14 @@ public class StavkaPopisa {
 
 	public void setKolicinaPoKartici(float kolicinaPoKartici) {
 		this.kolicinaPoKartici = kolicinaPoKartici;
+	}
+
+	public Roba getRoba() {
+		return roba;
+	}
+
+	public void setRoba(Roba roba) {
+		this.roba = roba;
 	}
 	
 	

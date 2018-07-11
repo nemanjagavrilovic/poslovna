@@ -181,6 +181,10 @@ public class RobnaKartica implements Serializable {
 	}
 
 	public void obradiTransfer(float kolicina, float vrednost, float prosecnaCena, VrstaPrDokumenta vrstaPrDokumenta) {
+		if(vrstaPrDokumenta == null) {
+			ukupnaKol = kolicina;
+			ukupnaVr = cena*kolicina;
+		}
 		if(vrstaPrDokumenta.toString().equals("OT")) {
 			prometIzlazaKol += kolicina;
 			prometIzlazaVr += kolicina*prosecnaCena;

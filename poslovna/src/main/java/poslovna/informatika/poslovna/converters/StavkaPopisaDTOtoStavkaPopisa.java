@@ -26,6 +26,7 @@ public class StavkaPopisaDTOtoStavkaPopisa implements Converter<StavkaPopisaDTO,
 			for(RobnaKartica rk : kartice) {
 				if(rk.getRoba().getId() == source.getStavke().get(i)){
 					sp.setKolicinaPoKartici(rk.getUkupnaKol());
+					sp.setRoba(rk.getRoba());
 				}
 			}
 			stavke.add(sp);
