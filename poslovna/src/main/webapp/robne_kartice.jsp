@@ -304,6 +304,8 @@
                 <td class="pocetno-stanje-kol">${ robnaKartica.pocetnoStanjeKol }</td>
                 <td class="pocetno-stanje-vred">${ robnaKartica.pocetnoStanjeVr }</td>
                 <td><a href="/robnaKartica/${ robnaKartica.id }/analitika">Analitika</a></td>
+                <td><a href="/robnaKartica/${ robnaKartica.id }/nivelacija">Nivelacija</a></td>
+                
             </tr>
         </c:forEach>
         </tbody>
