@@ -20,22 +20,22 @@
 			</tr>
 		</thead>
 		<tbody>
-			<c:forEach items="${robnaKartica.analitika}" var="analitika">
+			<c:forEach items="${robnaKartica.analitike}" var="analitika">
 				<tr>
 					<td>${analitika.rbr }</td>
 					<td>${analitika.vrstaPrometa}</td>
 					<td>${analitika.smerPrometa}</td>
-					<td>${analitika.kolicina }</td>
-					<td>${analitika.cena}</td>
+					<td>${analitika.stavkaDokumenta.kolicina }</td>
+					<td>${analitika.stavkaDokumenta.cena}</td>
 					<c:if test="${analitika.smerPrometa=='U' }">
-						<td>${analitika.vrednost }</td>
+						<td>${analitika.stavkaDokumenta.vrednost }</td>
 						<td></td>
 					</c:if>
 					<c:if test="${analitika.smerPrometa=='I' }">
 						<td></td>
-						<td>${analitika.vrednost }</td>
+						<td>${analitika.stavkaDokumenta.vrednost }</td>
 					</c:if>
-					<td>${analitika.kolicina}*${analitika.cena }</td>	
+					<td>${analitika.stavkaDokumenta.kolicina * analitika.stavkaDokumenta.cena }</td>
 				</tr>
 			</c:forEach>
 		</tbody>

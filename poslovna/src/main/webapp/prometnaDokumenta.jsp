@@ -55,7 +55,7 @@
 						<td><a href="../../stavkaDokumenta/${dokument.id}">Stavke</a></td>
 						<c:choose>
 						    <c:when test="${dokument.datumKnjizenja eq null}">
-						  		<td><a href="../../knjizenje/${dokument.id}">Proknjizi</a></td>
+						  		<td><a onclick="proknjizi(${ dokument.id })">Proknjizi</a></td>
 						
 						    </c:when>
 						    <c:otherwise>
@@ -253,3 +253,5 @@
 		  </div>
 		</div>
 </body>
+
+</html>

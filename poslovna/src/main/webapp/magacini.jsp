@@ -49,6 +49,7 @@
 						<td ><a class="edit" href="../magacin/${magacin.id}">Edit</a></td>
 						<td ><a class="delete"href="../magacin/delete/${magacin.id}">Delete</a></td>
 						<td><a href="../prometniDokument/all/${magacin.id}">Dokumenti</a></td>
+						<td><a href="/robnaKartica/index/${ magacin.id }">Robne kartice</a></td>
 					</tr>
 				</c:forEach>
 				
@@ -116,5 +117,6 @@
 		    </div>
 		  </div>
 		</div>
+	</div>
 </body>
 </html>

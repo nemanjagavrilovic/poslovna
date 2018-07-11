@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import poslovna.informatika.poslovna.model.Magacin;
+import poslovna.informatika.poslovna.model.Roba;
 import poslovna.informatika.poslovna.model.RobnaKartica;
 import poslovna.informatika.poslovna.repository.RobnaKarticaRepository;
 
@@ -14,11 +15,28 @@ public class RobnaKarticaServiceImpl implements RobnaKarticaService {
 
 	@Autowired
 	private RobnaKarticaRepository robnaKarticaRepository;
+
+	@Override
+	public List<RobnaKartica> findAll() {
+		return robnaKarticaRepository.findAll();
+	}
+
+	@Override
+	public RobnaKartica save(RobnaKartica robnaKartica) {
+		return robnaKarticaRepository.save(robnaKartica);
+	}
+
 	@Override
 	public List<RobnaKartica> findByMagacin(Long id) {
 		// TODO Auto-generated method stub
 		return robnaKarticaRepository.findByMagacinId(id);
 	}
+
+	@Override
+	public RobnaKartica findByMagacinAndRoba(Magacin magacin, Roba roba) {
+		return robnaKarticaRepository.findByMagacinAndRoba(magacin, roba);
+	}
+
 	@Override
 	public RobnaKartica findById(Long id) {
 		// TODO Auto-generated method stub

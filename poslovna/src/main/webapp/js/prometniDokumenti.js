@@ -332,6 +332,7 @@ $(document).on('change','#magacin',function(){
 	})
 	
 })
+
 $(document).on('click',"#searchD",function(){
 	$.ajax({
 		url:'/magacin/allM',
@@ -390,3 +391,14 @@ $(document).on('click',"#searchButton",function(){
 	})
 	
 })
+
+function proknjizi(id) {
+    $.ajax({
+        url:'/prometniDokument/'+ id + '/proknjizi',
+        type:'POST',
+        contentType:'application/json',
+        success:function(data){
+            alert("Uspesno proknjizeno!");
+        }
+    })
+}
