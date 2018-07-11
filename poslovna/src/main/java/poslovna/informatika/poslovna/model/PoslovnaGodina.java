@@ -8,8 +8,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class PoslovnaGodina {
@@ -25,10 +26,12 @@ public class PoslovnaGodina {
 	protected boolean zakljucena;
 
 	@OneToMany
+	@JsonIgnore
 	protected List<RobnaKartica> kartice;
 	
-	@ManyToOne
-	protected PopisniDokument popisniDokument;
+	@OneToMany
+	@JsonIgnore
+	protected List<PopisniDokument> popisniDokumenti;
 	public Long getId() {
 		return id;
 	}
@@ -52,6 +55,8 @@ public class PoslovnaGodina {
 	public void setZakljucena(boolean zakljucena) {
 		this.zakljucena = zakljucena;
 	}
+	
+
 	
 	
 }

@@ -27,8 +27,9 @@ public class PopisniDokument {
 	@Column
 	protected int brojPopisa;
 
-	@OneToMany
-	protected List<PoslovnaGodina> poslovneGodine;	
+	@ManyToOne
+	@JsonIgnore
+	protected PoslovnaGodina poslovnaGodina;	
 	
 	@ManyToOne
 	@JsonIgnore
@@ -48,12 +49,12 @@ public class PopisniDokument {
 		this.magacin = magacin;
 	}
 
-	public List<PoslovnaGodina> getPoslovneGodine() {
-		return poslovneGodine;
+	public PoslovnaGodina getPoslovnaGodine() {
+		return poslovnaGodina;
 	}
 
-	public void setPoslovneGodine(List<PoslovnaGodina> poslovneGodine) {
-		this.poslovneGodine = poslovneGodine;
+	public void setPoslovnaGodina(PoslovnaGodina poslovneGodine) {
+		this.poslovnaGodina = poslovneGodine;
 	}
 
 	public Long getId() {

@@ -6,6 +6,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 import poslovna.informatika.poslovna.model.Magacin;
+import poslovna.informatika.poslovna.model.PoslovnaGodina;
 import poslovna.informatika.poslovna.model.Roba;
 import poslovna.informatika.poslovna.model.RobnaKartica;
 
@@ -19,4 +20,6 @@ public interface RobnaKarticaRepository extends PagingAndSortingRepository<Robna
 	RobnaKartica findByMagacinAndRoba(Magacin magacin, Roba roba);
 
 	List<RobnaKartica> findByMagacinId(Long id);
+
+	List<RobnaKartica> findByMagacinAndPoslovnaGodina(Magacin magacin, PoslovnaGodina pg);
 }
