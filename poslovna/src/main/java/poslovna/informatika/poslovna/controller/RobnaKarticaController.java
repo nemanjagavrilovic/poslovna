@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import poslovna.informatika.poslovna.model.Magacin;
 import poslovna.informatika.poslovna.model.RobnaKartica;
+import poslovna.informatika.poslovna.service.PrometniDokumentService;
 import poslovna.informatika.poslovna.service.RobnaKarticaService;
 
 @Repository
@@ -23,6 +23,8 @@ public class RobnaKarticaController {
 	@Autowired
 	private RobnaKarticaService robnaKarticaService;
 
+	@Autowired 
+	private PrometniDokumentService prometniDokumentService;
 	@RequestMapping(value="/all/{id}",method=RequestMethod.GET)
 	public ResponseEntity<List<RobnaKartica>> robneKartice(@PathVariable ("id") Long id,HttpServletRequest request){
 		List<RobnaKartica> robneKartice=robnaKarticaService.findByMagacin(id);
@@ -34,5 +36,11 @@ public class RobnaKarticaController {
 		
 		RobnaKartica robneKartice=robnaKarticaService.findById(id);
 		return new ResponseEntity<RobnaKartica>(robneKartice,HttpStatus.OK);
+	}
+	@RequestMapping(value="/allFromStavka/{id}",method=RequestMethod.GET)
+	public ResponseEntity<List<RobnaKartica>> robneKarticeFromStavka(@PathVariable ("id") Long id,HttpServletRequest request){
+		
+		List<RobnaKartica> robneKartice=robnaKarticaService.findByMagacin(prometniDokumentService.findById(id).getMagacin().getId());
+		return new ResponseEntity<List<RobnaKartica>>(robneKartice,HttpStatus.OK);
 	}
 }

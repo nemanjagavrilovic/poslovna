@@ -13,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class PrometniDokument implements Serializable{
 
@@ -50,7 +52,7 @@ public class PrometniDokument implements Serializable{
 	public void setPoslovniPartner(PoslovniPartner poslovniPartner) {
 		this.poslovniPartner = poslovniPartner;
 	}
-
+	
 	public Magacin getMagacin() {
 		return magacin;
 	}
@@ -116,7 +118,7 @@ public class PrometniDokument implements Serializable{
 	public void setPoslovniPartenr(PoslovniPartner poslovniPartenr) {
 		this.poslovniPartner = poslovniPartenr;
 	}
-
+	@JsonIgnore
 	public List<StavkaDokumenta> getStavkeDokumenta() {
 		return stavkeDokumenta;
 	}

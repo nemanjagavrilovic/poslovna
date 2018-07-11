@@ -54,6 +54,10 @@ public class PoslovniPartnerController {
 
 		return new ResponseEntity<>(partner, HttpStatus.OK);
 	}
-	
+		@RequestMapping(value="/all",method=RequestMethod.GET)
+		public ResponseEntity<List<PoslovniPartner>> all(){
+			List<PoslovniPartner> partneri=poslovniPartner.findAll();
+			return new ResponseEntity<List<PoslovniPartner>>(partneri,HttpStatus.OK);
+	}
 
 }

@@ -1,5 +1,6 @@
 package poslovna.informatika.poslovna.dto;
 
+import java.util.Date;
 import java.util.List;
 
 public class PrometniDokumentDTO {
@@ -8,6 +9,28 @@ public class PrometniDokumentDTO {
 	private List<Long> stavke;
 	private int poslovniPartner;
 	private Long magacin;
+	private String status;
+	private Date datumKnjizenja;
+	private Date datumFormiranja;
+	private int redniBr;
+	public int getRedniBr() {
+		return redniBr;
+	}
+	public void setRedniBr(int redniBr) {
+		this.redniBr = redniBr;
+	}
+	public Date getDatumKnjizenja() {
+		return datumKnjizenja;
+	}
+	public void setDatumKnjizenja(Date datumKnjizenja) {
+		this.datumKnjizenja = datumKnjizenja;
+	}
+	public Date getDatumFormiranja() {
+		return datumFormiranja;
+	}
+	public void setDatumFormiranja(Date datumFormiranja) {
+		this.datumFormiranja = datumFormiranja;
+	}
 	public String getVrsta() {
 		return vrsta;
 	}
@@ -32,6 +55,13 @@ public class PrometniDokumentDTO {
 	public void setMagacin(Long magacin) {
 		this.magacin = magacin;
 	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	
 	
 	
 	

@@ -52,7 +52,7 @@ $(document).on('click','#novi',function(){
 		}
 	})
 	$.ajax({
-		url:'/poslovniPartner/all',
+		url:'../api/poslovniPartner/all',
 		type:'GET',
 		contentType:'application/json',
 		async:false,
@@ -116,14 +116,15 @@ $(document).on('click','#add',function(event){
 				stavke.push(data.id)
 			}
 		})
+	})
 		var dokument=JSON.stringify({
 			"vrsta":$("#vrsta option:selected").val(),
 			"stavke":stavke,
 			"poslovniPartner":$("#partner option:selected").attr('id'),
-			"magacin":$("magacin option:selected").attr('id')
+			"magacin":$("#magacin option:selected").attr('id')
 		})
 		$.ajax({
-			url:'../save',
+			url:'../prometniDokument/save',
 			type:'POST',
 			contentType:'application/json',
 			dataType:'json',
@@ -133,29 +134,32 @@ $(document).on('click','#add',function(event){
 				var row='<tr><td>'+data.redniBr+'</td><td>'+convertDate(data.datumFormiranja)+'</td>'
 				+'<td>'+convertDate(data.datumKnjizenja)+'</td><td>'+data.poslovniPartner.naziv+'</td>'
 				+'<td>'+data.magacin.naziv+'</td><td>'+data.vrsta+'</td><td>'+data.status+'</td>'
-				+'<td></td></tr>'
-				$("#dokumenti tbody").append(row);
+				+'<td></td><td><a href=""../../stavkaDokumenta/'+data.id+'>Stavke</a></td><td><a href=""../../knjizenje/'+data.id+'>Proknjizi</a></td></tr>'
+				$("#dokumenti").append(row);
 				$('#inputModal').modal('toggle');
 			
 			}
 	
 		})
 	})
-})
+
 function convertDate(stamp){
-	var a=new Date(stamp);
-	var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-	  var year = a.getFullYear();
-	  var month = months[a.getMonth()];
-	  var date = a.getDate();
-	  
-	  var time = date + '.' + month + '.' + year+'.' ;
-	  return time;
-	
+	if(stamp!=null){
+		var a=new Date(stamp);
+		var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+		var year = a.getFullYear();
+		var month = months[a.getMonth()];
+		var date = a.getDate();
+		  
+		var time = date + '.' + month + '.' + year+'.' ;
+		return time;
+	}else{
+		return ""
+	}
 }
 function draw(){
 	$.ajax({
-		url:'/robnaKartica/all',
+		url:'/robnaKartica/all/'+$("#magacin option:selected").attr('id'),
 		type:'GET',
 		contentType:'application/json',
 		success:function(data){
@@ -275,7 +279,7 @@ function goNext(){
 	highlighted = $(".highlighted");
 	//nalazi poziciju trazanog u okviru selektovane selekcije
 	//indeksi pocinju od 0
-	var count = $("#dokumenti >tbody >tr").length-1;
+	var count = $("#dokumenti >tbody >tr").length;
 	if (count == 0)
 		return;
 	index =  $("tr").index(highlighted);
@@ -283,12 +287,14 @@ function goNext(){
 		return;
 	//ako smo na poslednjem, predji na prvi (odnosno drugi red, preskacuci header)
 	selectChild = 1;
+	if(index!=0)
+	index-=1
 	//inace
 	if(index==count-2){
 		selectChild = 1;
 	}
 	else if (index <= count - 1)
-		selectChild = index + 1; 
+		selectChild = index + 2; 
 	item = $("tr:nth-child(" + selectChild + ")");
 	$(".highlighted").removeClass("highlighted");
 	item.addClass("highlighted");
@@ -299,7 +305,7 @@ function goPrevious(){
 	var count = $("#dokumenti >tbody >tr").length-1;
 	if (count == 0)
 		return;
-	index =  $("tr").index(highlighted)-1;
+	index =  $("tr").index(highlighted);
 	if (index < 0)
 		return;
 	selectChild = count;
@@ -321,6 +327,64 @@ $(document).on('change','#magacin',function(){
 			$.each(data,function(index,kartica){
 				$("#roba").append('<option id="'+kartica.id+'">'+kartica.roba.naziv+'</option>')
 				
+			})
+		}
+	})
+	
+})
+$(document).on('click',"#searchD",function(){
+	$.ajax({
+		url:'/magacin/allM',
+		type:'GET',
+		contentType:'application/json',
+		async:false,
+		success:function(data){
+				$("#magacinS").empty();
+				$.each(data,function(index,magacin){
+					$("#magacinS").append('<option selected id="'+magacin.id+'">'+magacin.naziv+'</option>')
+					
+					})
+				}
+			})
+		
+	
+			$.ajax({
+	url:'http://localhost:9000//api/poslovniPartner/all',
+	type:'GET',
+	contentType:'application/json',
+	async:false,
+	success:function(data){
+		$("#partnerS").empty();
+		$.each(data,function(index,partner){
+			$("#partnerS").append('<option id="'+partner.pib+'">'+partner.naziv+'</option>')
+			
+		})
+	}
+	})
+	
+})
+$(document).on('click',"#searchButton",function(){
+	
+	var podaci=JSON.stringify({
+		"vrsta":$("#vrstaS option:selected").val(),
+		"status":$("#statusS option:selected").val(),
+		"poslovniPartner":$("#partnerS option:selected").attr('id'),
+		"magacin":$("#magacinS option:selected").attr('id'),
+	})
+	$.ajax({
+		url:'http://localhost:9000/prometniDokument/search',
+		type:'POST',
+		dataType:'json',
+		contentType:'application/json',
+		data:podaci,
+		success:function(data){
+			$("#dokumenti").find("tr:not(:first)").remove();
+			$.each(data,function(index,dokument){
+				var row='<tr><td>'+data.redniBr+'</td><td>'+convertDate(data.datumFormiranja)+'</td>'
+				+'<td>'+convertDate(data.datumKnjizenja)+'</td><td>'+data.poslovniPartner.naziv+'</td>'
+				+'<td>'+data.magacin.naziv+'</td><td>'+data.vrsta+'</td><td>'+data.status+'</td>'
+				+'<td></td><td><a href=""../../stavkaDokumenta/'+data.id+'>Stavke</a></td><td><a href=""../../knjizenje/'+data.id+'>Proknjizi</a></td></tr>'
+				$("#dokumenti").append(row);
 			})
 		}
 	})

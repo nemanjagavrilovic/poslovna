@@ -21,6 +21,7 @@ import poslovna.informatika.poslovna.model.PrometniDokument;
 import poslovna.informatika.poslovna.model.StatusDokumenta;
 import poslovna.informatika.poslovna.model.StavkaDokumenta;
 import poslovna.informatika.poslovna.service.MagacinService;
+import poslovna.informatika.poslovna.service.PoslovniPartnerService;
 import poslovna.informatika.poslovna.service.PrometniDokumentService;
 import poslovna.informatika.poslovna.service.StavkaDokumentaService;
 
@@ -39,16 +40,20 @@ public class PrometniDokumentController {
 	
 	@Autowired
 	private MagacinService magacinService;
+	
+	@Autowired
+	private PoslovniPartnerService poslovniPartner;
+	
 	@RequestMapping(value="/save",method=RequestMethod.POST)
 	public ResponseEntity<PrometniDokument> save(@RequestBody PrometniDokumentDTO dokument,HttpServletRequest request){
 		
-		Magacin magacin=(Magacin)request.getSession().getAttribute("magacin");
+		
 		PrometniDokument prometniDokument=prometniDokumentConverter.convert(dokument);
 		Calendar cal = Calendar.getInstance();
 		prometniDokument.setDatumForimranja(cal.getTime());
 		prometniDokument.setStatus(StatusDokumenta.F);
-		prometniDokument.setMagacin(magacin);
-		prometniDokument.setRedniBr(prometniDokumentService.findAll(magacin).size()+1);
+		prometniDokument.setMagacin(magacinService.findOne(dokument.getMagacin()));
+		prometniDokument.setRedniBr(prometniDokumentService.findAll(prometniDokument.getMagacin()).size()+1);
 		prometniDokument=prometniDokumentService.save(prometniDokument);
 		for(StavkaDokumenta stavka:prometniDokument.getStavkeDokumenta()){
 			stavkaDokumentaService.update(prometniDokument, stavka.getId());
@@ -68,5 +73,11 @@ public class PrometniDokumentController {
 		List<PrometniDokument> d=prometniDokumentService.findAll();
 		request.getSession().setAttribute("prometniDokumenti",d );
 		return "forward:/prometnaDokumenta.jsp";
+	}
+	@RequestMapping(value="/search",method=RequestMethod.POST)
+	public ResponseEntity<List<PrometniDokument>>search(@RequestBody PrometniDokumentDTO dokument){
+		PrometniDokument d=prometniDokumentConverter.convert(dokument);
+		List<PrometniDokument> search=prometniDokumentService.findByStatusAndVrstaAndMagacinAndPoslovniPartner(d.getStatus(), d.getVrsta(),magacinService.findById(d.getMagacin().getId()),poslovniPartner.findByPib(dokument.getPoslovniPartner()));
+		return new ResponseEntity<List<PrometniDokument>>(search,HttpStatus.OK);
 	}
 }
