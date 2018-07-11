@@ -50,6 +50,8 @@
 						<td ><a class="delete"href="../magacin/delete/${magacin.id}">Delete</a></td>
 						<td><a href="../prometniDokument/all/${magacin.id}">Dokumenti</a></td>
 						<td><a href="/robnaKartica/index/${ magacin.id }">Robne kartice</a></td>
+						<td><a class="izvestaj" href="/magacin/izvestaj/${ magacin.id }">Izvestaj</a></td>
+						
 					</tr>
 				</c:forEach>
 				
