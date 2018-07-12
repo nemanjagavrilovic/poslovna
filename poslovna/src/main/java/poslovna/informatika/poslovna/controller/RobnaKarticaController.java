@@ -99,7 +99,9 @@ public class RobnaKarticaController {
 		robnaKartica.addAnalitika(analitikaMagKartice);
 		robnaKartica.setUkupnaKol(robnaKartica.getPocetnoStanjeKol());
 		robnaKartica.setUkupnaVr(robnaKartica.getPocetnoStanjeVr());
-		robnaKarticaService.save(robnaKartica);
+		robnaKartica=robnaKarticaService.save(robnaKartica);
+		magacin.getRobneKartice().add(robnaKartica);
+		magacinService.save(magacin);
 		return new ResponseEntity<>(robnaKartica, HttpStatus.OK);
 	}
 
@@ -118,16 +120,22 @@ public class RobnaKarticaController {
 		return new ResponseEntity<List<RobnaKartica>>(robneKartice,HttpStatus.OK);
 	}
 	@RequestMapping(value="/{id}/nivelacija", method=RequestMethod.GET)
-	public String nivelacija(@PathVariable("id") Long id, HttpServletRequest request) {
+	public ResponseEntity nivelacija(@PathVariable("id") Long id, HttpServletRequest request) {
 		RobnaKartica robnaKartica = robnaKarticaService.findById(id);
 		AnalitikaMagKartice analitikaMagKartice = new AnalitikaMagKartice();
-		analitikaMagKartice.setSmerPrometa(SmerPrometa.U);
-		analitikaMagKartice.setVrstaPrometa(VrstaPrometa.NI);
-		analitikaMagKartice.setRobnaKartica(robnaKartica);
 		StavkaDokumenta stavka=new StavkaDokumenta();
 		stavka.setVrednost(robnaKartica.nivelacija());
 		stavka.setKolicina(0);
 		stavka.setCena(0);
+		if(stavka.getVrednost()>0){
+			analitikaMagKartice.setSmerPrometa(SmerPrometa.U);
+			
+		}else
+			analitikaMagKartice.setSmerPrometa(SmerPrometa.I);
+		
+		analitikaMagKartice.setVrstaPrometa(VrstaPrometa.NI);
+		analitikaMagKartice.setRbr(robnaKartica.getAnalitike().size() + 1);
+		analitikaMagKartice.setRobnaKartica(robnaKartica);
 		stavka=stavkaDokumentaService.save(stavka);
 		analitikaMagKartice.setStavkaDokumenta(stavka);
 		analitikaMagKartice.setUkupnaKol(robnaKartica.getUkupnaKol());
@@ -136,7 +144,7 @@ public class RobnaKarticaController {
 		robnaKartica.addAnalitika(analitikaMagKartice);
 		robnaKarticaService.save(robnaKartica);
 
-		return "forward:/analitikaRobneKartice.jsp";
+		return new ResponseEntity(HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.PATCH)

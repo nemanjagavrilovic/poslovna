@@ -17,4 +17,10 @@ public class PoslovnaGodinaServiceImpl implements PoslovnaGodinaService{
 		return poslovnaGodinaRepository.findByZakljucena(zakljucena);
 	}
 
+	@Override
+	public PoslovnaGodina findAkivna(boolean aktivna) {
+		// TODO Auto-generated method stub
+		return poslovnaGodinaRepository.findByAktivna(aktivna);
+	}
+
 }

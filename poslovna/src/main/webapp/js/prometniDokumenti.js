@@ -389,7 +389,7 @@ $(document).on('click',"#searchButton",function(){
 				if(dokument.datumKnjizenja==null){
 					row+='<a onclick="proknjizi('+dokument.id+')">Proknjizi</a>';
 				}else{
-					row+='<td>Proknjizen</td>'
+					row+='<a onclick="storno('+dokument.id+')">Storno</a>';
 				}
 				$("#dokumenti").append(row);
 			})
@@ -408,3 +408,14 @@ function proknjizi(id) {
         }
     })
 }
+function storno(id) {
+    $.ajax({
+        url:'/prometniDokument/'+ id + '/storno',
+        type:'POST',
+        contentType:'application/json',
+        success:function(data){
+            alert("Uspesno stornirano!");
+        }
+    })
+}
+

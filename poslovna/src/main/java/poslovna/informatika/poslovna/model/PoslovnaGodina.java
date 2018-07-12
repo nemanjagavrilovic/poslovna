@@ -25,6 +25,9 @@ public class PoslovnaGodina {
 	@Column
 	protected boolean zakljucena;
 
+	@Column
+	protected boolean aktivna;
+
 	@OneToMany
 	@JsonIgnore
 	protected List<RobnaKartica> kartice;
@@ -54,6 +57,14 @@ public class PoslovnaGodina {
 
 	public void setZakljucena(boolean zakljucena) {
 		this.zakljucena = zakljucena;
+	}
+
+	public boolean isAktivna() {
+		return aktivna;
+	}
+
+	public void setAktivna(boolean aktivna) {
+		this.aktivna = aktivna;
 	}
 	
 

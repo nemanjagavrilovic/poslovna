@@ -9,4 +9,6 @@ import poslovna.informatika.poslovna.model.PoslovnaGodina;
 public interface PoslovnaGodinaRepository extends JpaRepository<PoslovnaGodina,Long> {
 
 		PoslovnaGodina findByZakljucena(boolean zakljucena);
+		PoslovnaGodina findByAktivna(boolean aktivna);
+		
 }

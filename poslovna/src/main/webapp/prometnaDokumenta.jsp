@@ -59,7 +59,7 @@
 						
 						    </c:when>
 						    <c:otherwise>
-								<td>Proknjizen</td>
+								<td><a onclick="storno(${ dokument.id })">Storno</a></td>
 						    </c:otherwise>
 						</c:choose>
 					</tr>

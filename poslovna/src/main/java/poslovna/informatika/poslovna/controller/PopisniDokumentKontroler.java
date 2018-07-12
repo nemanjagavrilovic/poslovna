@@ -77,31 +77,29 @@ public class PopisniDokumentKontroler {
 				System.out.println("kartica: " + rk.getRoba().getId());
 				if(sp.getRoba().getId()==rk.getRoba().getId()){
 					if(sp.getKolicinaPoKartici() != sp.getKolicinaPoPopisu()) {
-						rk.setUkupnaKol(sp.getKolicinaPoPopisu());
-						rk.setUkupnaVr(rk.getCena()*rk.getUkupnaKol());
 						
-						System.out.println("poslato: " + rk.getUkupnaKol());
-						RobnaKartica retKartica = robnaKarticaService.save(rk);
-						
-						System.out.println("vraceno: " + retKartica.getUkupnaKol());
 						AnalitikaMagKartice analitikaMagKartice = new AnalitikaMagKartice();
-						analitikaMagKartice.setRobnaKartica(retKartica);
 						analitikaMagKartice.setVrstaPrometa(VrstaPrometa.KOR);
-		
-						if(sp.getKolicinaPoKartici() > rk.getUkupnaKol()) {
+						analitikaMagKartice.setRbr(rk.getAnalitike().size() + 1);
+						
+						if(sp.getKolicinaPoPopisu() > rk.getUkupnaKol()) {
 							analitikaMagKartice.setSmerPrometa(SmerPrometa.U);
+							rk.visak(Math.abs(sp.getKolicinaPoKartici()-sp.getKolicinaPoPopisu()));
 						} else {
 							analitikaMagKartice.setSmerPrometa(SmerPrometa.I);
+							rk.manjak(Math.abs(sp.getKolicinaPoKartici()-sp.getKolicinaPoPopisu()));
 						}
 						
 						StavkaDokumenta stavka=new StavkaDokumenta();
-						stavka.setVrednost(retKartica.getCena());
-						stavka.setKolicina(0);
-						stavka.setCena(0);
+						stavka.setVrednost(Math.abs(sp.getKolicinaPoKartici()-sp.getKolicinaPoPopisu())*rk.getCena());
+						stavka.setKolicina(Math.abs(sp.getKolicinaPoKartici()-sp.getKolicinaPoPopisu()));
+						stavka.setCena(rk.getCena());
 						stavka=stavkaDokumentaService.save(stavka);
 						analitikaMagKartice.setStavkaDokumenta(stavka);
 						analitikaMagKartice.setUkupnaKol(rk.getUkupnaKol());
 						analitikaMagKartice.setUkupnaVr(rk.getUkupnaVr());
+						RobnaKartica retKartica = robnaKarticaService.save(rk);
+						analitikaMagKartice.setRobnaKartica(retKartica);
 						
 						AnalitikaMagKartice retAnalitika = analitikaMagKarticeService.save(analitikaMagKartice);
 						
