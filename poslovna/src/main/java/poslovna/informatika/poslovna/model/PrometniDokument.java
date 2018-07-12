@@ -45,10 +45,14 @@ public class PrometniDokument implements Serializable{
 	
 	@ManyToOne
 	protected Magacin magacin;
+	
+	@ManyToOne
+	protected Magacin magacin2;
 	public PoslovniPartner getPoslovniPartner() {
 		return poslovniPartner;
 	}
-
+	@ManyToOne
+	protected PoslovnaGodina poslovnaGodina;
 	public void setPoslovniPartner(PoslovniPartner poslovniPartner) {
 		this.poslovniPartner = poslovniPartner;
 	}
@@ -91,9 +95,7 @@ public class PrometniDokument implements Serializable{
 		return date;
 	}
 
-	public void setDatumForimranja(Date datumForimranja) {
-		this.datumFormiranja = datumForimranja;
-	}
+	
 
 	public Date getDatumKnjizenja() {
 		return datumKnjizenja;
@@ -126,6 +128,27 @@ public class PrometniDokument implements Serializable{
 	public void setStavkeDokumenta(List<StavkaDokumenta> stavkeDokumenta) {
 		this.stavkeDokumenta = stavkeDokumenta;
 	}
+
+	public Magacin getMagacin2() {
+		return magacin2;
+	}
+
+	public void setMagacin2(Magacin magacin2) {
+		this.magacin2 = magacin2;
+	}
+
+	public void setDatumFormiranja(Date datumFormiranja) {
+		this.datumFormiranja = datumFormiranja;
+	}
+
+	public PoslovnaGodina getPoslovnaGodina() {
+		return poslovnaGodina;
+	}
+
+	public void setPoslovnaGodina(PoslovnaGodina poslovnaGodina) {
+		this.poslovnaGodina = poslovnaGodina;
+	}
+	
 }
 
 

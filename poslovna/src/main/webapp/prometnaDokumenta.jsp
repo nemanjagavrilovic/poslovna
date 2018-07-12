@@ -186,9 +186,13 @@
 						<button id="addR">Add</button>
 					
 					<a  href="#choose" data-toggle="modal" data-target="#choose" onclick="draw()">...</a><br>
+					<div id="poslovniDIV">
 					<label for="partner">Poslovni partner</label><select id="partner"></select>
 					<a  href="#choose" data-toggle="modal" data-target="#choose" onclick="drawPartners()">...</a>
-		
+					</div>
+					<div id="magacin2DIV" style="display:none">
+						<label for="magacin2">Magacin primalac:</label><select name="magacin2" id="magacin2"></select>
+					</div>
 				</fieldset>
 		      </div>
 		      <div class="modal-footer">
