@@ -121,6 +121,9 @@
                 data: JSON.stringify(data),
                 success: function (data) {
                     alert("Dodata robna kartica!")
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    alert(jqXHR.responseText);
                 }
             });
         }
@@ -160,12 +163,24 @@
             let magacin = item.find(".magacin").html();
             let pocetnoStanjeVred = item.find(".pocetno-stanje-vred").html();
             let pocetnoStanjeKol = item.find(".pocetno-stanje-kol").html();
+            let prometUlazaVred = item.find(".promet-ulaza-vr").html();
+            let prometIzlazaVred = item.find(".promet-izlaza-vr").html();
+            let prometUlazaKol = item.find(".promet-ulaza-kol").html();
+            let prometIzlazaKol = item.find(".promet-izlaza-kol").html();
+            let ukupnoKol = item.find(".ukupna-kol").html();
+            let ukupnoVred = item.find(".ukupna-vr").html();
             let cena = item.find(".cena").html();
 
             $("#magacinPanel").val(magacin);
             $("#robaPanel").val(roba);
             $("#pocetnoStanjeVrPanel").val(pocetnoStanjeVred);
             $("#pocetnoStanjeKolPanel").val(pocetnoStanjeKol);
+            $("#prometUlazaVrPanel").val(prometUlazaVred);
+            $("#prometIzlazaVrPanel").val(prometIzlazaVred);
+            $("#prometUlazaKolPanel").val(prometUlazaKol);
+            $("#prometIzlazaKolPanel").val(prometIzlazaKol);
+            $("#ukupnaVrPanel").val(ukupnoVred);
+            $("#ukupnaKolPanel").val(ukupnoKol);
             $("#cenaPanel").val(cena);
         }
 
@@ -184,7 +199,7 @@
             })
             $("#robaSelection").css("display","none");
             $("#form").css("display","block");
-        })
+        });
 
         $(document).on('click','.izvestaj',function(e){
 		e.preventDefault();
@@ -321,6 +336,12 @@
             <th>Cena</th>
             <th>Pocetno stanje kolicinski</th>
             <th>Pocetno stanje vrednosno</th>
+            <th>Promet ulaza (kol.)</th>
+            <th>Promet izlaza (kol.)</th>
+            <th>Promet ulaza (vr.)</th>
+            <th>Promet izlaza (vr.)</th>
+            <th>Ukupna kol.</th>
+            <th>Ukupna vr.</th>
         </tr>
 
         <tbody>
@@ -331,6 +352,12 @@
                 <td class="cena">${ robnaKartica.cena }</td>
                 <td class="pocetno-stanje-kol">${ robnaKartica.pocetnoStanjeKol }</td>
                 <td class="pocetno-stanje-vred">${ robnaKartica.pocetnoStanjeVr }</td>
+                <td class="promet-ulaza-kol">${ robnaKartica.prometUlazaKol }</td>
+                <td class="promet-izlaza-kol">${ robnaKartica.prometIzlazaKol }</td>
+                <td class="promet-ulaza-vr">${ robnaKartica.prometUlazaVr }</td>
+                <td class="promet-izlaza-vr">${ robnaKartica.prometIzlazaVr }</td>
+                <td class="ukupna-kol">${ robnaKartica.ukupnaKol }</td>
+                <td class="ukupna-vr">${ robnaKartica.ukupnaVr }</td>
                 <td><a onclick="otvoriIzmeniModal(${ robnaKartica.id }, ${ robnaKartica.cena })">Izmeni</a></td>
                 <td><a href="/robnaKartica/${ robnaKartica.id }/analitika">Analitika</a></td>
                 <td><a href="/robnaKartica/${ robnaKartica.id }/nivelacija">Nivelacija</a></td>
@@ -366,6 +393,30 @@
             <tr>
                 <td><label for="pocetnoStanjeVrPanel">Pocetno stanje (vr.)</label></td>
                 <td><input type="text" name="pocetnoStanjeVrPanel" id="pocetnoStanjeVrPanel" disabled /></td>
+            </tr>
+            <tr>
+                <td><label for="prometUlazaKolPanel">Promet ulaza (kol.)</label></td>
+                <td><input type="text" name="prometUlazaKolPanel" id="prometUlazaKolPanel" disabled /></td>
+            </tr>
+            <tr>
+                <td><label for="prometIzlazaKolPanel">Promet izlaza (kol.)</label></td>
+                <td><input type="text" name="prometIzlazaKolPanel" id="prometIzlazaKolPanel" disabled /></td>
+            </tr>
+            <tr>
+                <td><label for="prometUlazaVrPanel">Promet ulaza (vr.)</label></td>
+                <td><input type="text" name="prometUlazaVrPanel" id="prometUlazaVrPanel" disabled /></td>
+            </tr>
+            <tr>
+                <td><label for="prometIzlazaVrPanel">Promet izlaza (vr.)</label></td>
+                <td><input type="text" name="prometIzlazaVrPanel" id="prometIzlazaVrPanel" disabled /></td>
+            </tr>
+            <tr>
+                <td><label for="ukupnaKolPanel">Ukupna kol.</label></td>
+                <td><input type="text" name="ukupnaKolPanel" id="ukupnaKolPanel" disabled /></td>
+            </tr>
+            <tr>
+                <td><label for="ukupnaVrPanel">Ukupna vr.</label></td>
+                <td><input type="text" name="ukupnaVrPanel" id="ukupnaVrPanel" disabled /></td>
             </tr>
         </table>
     </div>

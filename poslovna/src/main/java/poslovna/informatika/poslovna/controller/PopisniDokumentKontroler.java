@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import poslovna.informatika.poslovna.converters.PopisniDokumentDTOtoPopisniDokument;
 import poslovna.informatika.poslovna.dto.PopisniDokumentDTO;
 import poslovna.informatika.poslovna.model.AnalitikaMagKartice;
+import poslovna.informatika.poslovna.model.Magacin;
 import poslovna.informatika.poslovna.model.PopisnaKomisija;
 import poslovna.informatika.poslovna.model.PopisniDokument;
 import poslovna.informatika.poslovna.model.PoslovnaGodina;
@@ -22,6 +24,7 @@ import poslovna.informatika.poslovna.model.StavkaDokumenta;
 import poslovna.informatika.poslovna.model.StavkaPopisa;
 import poslovna.informatika.poslovna.model.VrstaPrometa;
 import poslovna.informatika.poslovna.service.AnalitikaMagKarticeService;
+import poslovna.informatika.poslovna.service.MagacinService;
 import poslovna.informatika.poslovna.service.PopisnaKomisijaService;
 import poslovna.informatika.poslovna.service.PopisniDokumentService;
 import poslovna.informatika.poslovna.service.PoslovnaGodinaService;
@@ -45,6 +48,8 @@ public class PopisniDokumentKontroler {
 	@Autowired
 	private StavkaDokumentaService stavkaDokumentaService;
 	@Autowired
+	private MagacinService magacinService;
+	@Autowired
 	private PopisniDokumentDTOtoPopisniDokument dokumentDTOtopopisniDokument;
 
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
@@ -59,7 +64,7 @@ public class PopisniDokumentKontroler {
 
 		popisnaKomisijaService.save(komisija);
 
-		PoslovnaGodina pg = poslovnaGodinaService.findActive(false);
+		PoslovnaGodina pg = poslovnaGodinaService.findActive(true);
 
 		retDokument.setPoslovnaGodina(pg);
 		popisniDokumentService.save(retDokument);
@@ -111,5 +116,20 @@ public class PopisniDokumentKontroler {
 			}
 		}
 	}
+	
+	@RequestMapping(value = "/getAll", method = RequestMethod.GET)
+	public ResponseEntity<List<PopisniDokument>> getAll() {
+
+		List<PopisniDokument> dokumenti = popisniDokumentService.findAll();
+		return new ResponseEntity<List<PopisniDokument>>(dokumenti, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/getAll/{id}", method = RequestMethod.GET)
+	public ResponseEntity<List<PopisniDokument>> getAllByMagacin(@PathVariable("id") Long id) {
+		Magacin magacin = magacinService.findById(id);
+		List<PopisniDokument> dokumenti = popisniDokumentService.findByMagacin(magacin);
+		return new ResponseEntity<List<PopisniDokument>>(dokumenti, HttpStatus.OK);
+	}
+
 
 }

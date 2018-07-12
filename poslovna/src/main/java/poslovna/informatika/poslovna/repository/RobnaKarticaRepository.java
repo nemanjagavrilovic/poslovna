@@ -22,4 +22,5 @@ public interface RobnaKarticaRepository extends PagingAndSortingRepository<Robna
 	List<RobnaKartica> findByMagacinId(Long id);
 
 	List<RobnaKartica> findByMagacinAndPoslovnaGodina(Magacin magacin, PoslovnaGodina pg);
+
 }

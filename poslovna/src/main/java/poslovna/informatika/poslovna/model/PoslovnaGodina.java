@@ -59,13 +59,9 @@ public class PoslovnaGodina {
 		this.zakljucena = zakljucena;
 	}
 
-	public boolean isAktivna() {
-		return aktivna;
-	}
+	public boolean isAktivna() { return aktivna; }
 
-	public void setAktivna(boolean aktivna) {
-		this.aktivna = aktivna;
-	}
+	public void setAktivna(boolean aktivna) { this.aktivna = aktivna; }
 	
 
 	
