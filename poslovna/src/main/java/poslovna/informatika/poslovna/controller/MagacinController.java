@@ -113,17 +113,17 @@ public class MagacinController {
 		
 		return new ResponseEntity<List<Roba>>(roba,HttpStatus.OK);
 	}
-
+/*
 	@RequestMapping(value="/izvestaj/{id}",method=RequestMethod.POST)
 	public ResponseEntity<String> izvestaj(@PathVariable("id") Long id){
 		try {
 			Connection conn;
 			conn =
 				       DriverManager.getConnection("jdbc:mysql://localhost:3306/poslovna?useSSL=false&" +
-				                                   "user=root&password=malizvornik95");
+				                                   "user=root&password=admin");
 			HashMap map = new HashMap();
 			map.put("idMagacina", id);
-            JasperReport jasReport = (JasperReport) JRLoader.loadObjectFromFile("C:/Users/Nemanja/git/poslovna/poslovna/src/main/resources/listaLagera.jasper");
+            JasperReport jasReport = (JasperReport) JRLoader.loadObjectFromFile("C:/Users/nenad/git/poslovna/poslovna/src/main/resources/listaLagera.jasper");
             JasperPrint jasPrint = JasperFillManager.fillReport(jasReport, map, conn);
             File pdf = File.createTempFile("output.", ".pdf");
 			JasperExportManager.exportReportToPdfStream(jasPrint, new FileOutputStream(pdf));
@@ -133,6 +133,6 @@ public class MagacinController {
 			}
 		return new ResponseEntity<String>("ok",HttpStatus.OK);
 		}
-	
+	*/
 	
 }

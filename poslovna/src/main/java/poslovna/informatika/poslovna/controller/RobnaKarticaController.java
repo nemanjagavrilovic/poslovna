@@ -9,10 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import poslovna.informatika.poslovna.model.AnalitikaMagKartice;
 import poslovna.informatika.poslovna.model.Magacin;
@@ -21,12 +18,7 @@ import poslovna.informatika.poslovna.model.RobnaKartica;
 import poslovna.informatika.poslovna.model.SmerPrometa;
 import poslovna.informatika.poslovna.model.StavkaDokumenta;
 import poslovna.informatika.poslovna.model.VrstaPrometa;
-import poslovna.informatika.poslovna.service.AnalitikaMagKarticeService;
-import poslovna.informatika.poslovna.service.MagacinService;
-import poslovna.informatika.poslovna.service.PrometniDokumentService;
-import poslovna.informatika.poslovna.service.RobaServis;
-import poslovna.informatika.poslovna.service.RobnaKarticaService;
-import poslovna.informatika.poslovna.service.StavkaDokumentaService;
+import poslovna.informatika.poslovna.service.*;
 
 @Controller
 @RequestMapping("/robnaKartica")
@@ -47,6 +39,9 @@ public class RobnaKarticaController {
 
 	@Autowired
 	private StavkaDokumentaService stavkaDokumentaService;
+
+	@Autowired
+    private PoslovnaGodinaService poslovnaGodinaService;
 	
 	@Autowired
 	private AnalitikaMagKarticeService analitikaMagKarticeService;
@@ -95,8 +90,10 @@ public class RobnaKarticaController {
 		analitikaMagKartice.setUkupnaKol(robnaKartica.getPocetnoStanjeKol());
 		analitikaMagKartice.setUkupnaVr(robnaKartica.getPocetnoStanjeVr());
 		analitikaMagKartice.setStavkaDokumenta(stavka);
+		robnaKartica.setPoslovnaGodina(poslovnaGodinaService.findActive(false));
 		robnaKartica=robnaKarticaService.save(robnaKartica);
 		analitikaMagKartice.setRobnaKartica(robnaKartica);
+		analitikaMagKartice.setRbr(1);
 		analitikaMagKarticeService.save(analitikaMagKartice);
 		robnaKartica.setAnalitike(new ArrayList<AnalitikaMagKartice>());
 		robnaKartica.addAnalitika(analitikaMagKartice);
@@ -109,7 +106,9 @@ public class RobnaKarticaController {
 	@RequestMapping(value="/{id}/analitika", method=RequestMethod.GET)
 	public String analitike(@PathVariable("id") Long id, HttpServletRequest request) {
 		RobnaKartica robnaKartica = robnaKarticaService.findById(id);
+		List<AnalitikaMagKartice> analitikeSortirane = analitikaMagKarticeService.findByRobnaKarticaOrderByRbrAsc(robnaKartica);
 		request.setAttribute("robnaKartica", robnaKartica);
+		request.setAttribute("analitikeSortirane", analitikeSortirane);
 		return "forward:/analitikaRobneKartice.jsp";
 	}
 	@RequestMapping(value="/allFromStavka/{id}",method=RequestMethod.GET)
@@ -138,5 +137,13 @@ public class RobnaKarticaController {
 		robnaKarticaService.save(robnaKartica);
 
 		return "forward:/analitikaRobneKartice.jsp";
+	}
+
+	@RequestMapping(value = "/{id}", method = RequestMethod.PATCH)
+	private ResponseEntity edit(@PathVariable("id") Long id, @RequestBody RobnaKartica newRobnaKartica) {
+		RobnaKartica robnaKartica = robnaKarticaService.findById(id);
+		robnaKartica.setCena(newRobnaKartica.getCena());
+		robnaKarticaService.save(robnaKartica);
+		return new ResponseEntity(HttpStatus.OK);
 	}
 }

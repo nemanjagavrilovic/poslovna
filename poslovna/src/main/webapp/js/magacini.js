@@ -62,7 +62,7 @@ $(document).on('click','#select',function(event){
 	$("izabraniRadnici option").each(function(){
 		if($(this).attr('id')==id){
 			postoji=true;
-			break;
+			return;
 		}
 	})
 	if(postoji==false){
