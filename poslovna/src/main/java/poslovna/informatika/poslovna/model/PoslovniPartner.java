@@ -11,6 +11,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class PoslovniPartner {
 
@@ -38,7 +40,7 @@ public class PoslovniPartner {
 	@OneToMany
 	protected List<PrometniDokument> dokumenti;
 	
-
+	@JsonIgnore
 	public List<PrometniDokument> getDokumenti() {
 		return dokumenti;
 	}

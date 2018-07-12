@@ -1,7 +1,7 @@
 package poslovna.informatika.poslovna.controller;
 
-import java.util.Date;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,17 +17,24 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import poslovna.informatika.poslovna.converters.PrometniDokumentDTOtoPrometniDokument;
 import poslovna.informatika.poslovna.dto.PrometniDokumentDTO;
-
+import poslovna.informatika.poslovna.model.AnalitikaMagKartice;
 import poslovna.informatika.poslovna.model.Magacin;
+import poslovna.informatika.poslovna.model.PoslovnaGodina;
+import poslovna.informatika.poslovna.model.PoslovniPartner;
 import poslovna.informatika.poslovna.model.PrometniDokument;
+import poslovna.informatika.poslovna.model.RobnaKartica;
+import poslovna.informatika.poslovna.model.SmerPrometa;
 import poslovna.informatika.poslovna.model.StatusDokumenta;
 import poslovna.informatika.poslovna.model.StavkaDokumenta;
+import poslovna.informatika.poslovna.model.VrstaPrDokumenta;
+import poslovna.informatika.poslovna.model.VrstaPrometa;
+import poslovna.informatika.poslovna.service.AnalitikaMagKarticeService;
 import poslovna.informatika.poslovna.service.MagacinService;
+import poslovna.informatika.poslovna.service.PoslovnaGodinaService;
 import poslovna.informatika.poslovna.service.PoslovniPartnerService;
 import poslovna.informatika.poslovna.service.PrometniDokumentService;
+import poslovna.informatika.poslovna.service.RobnaKarticaService;
 import poslovna.informatika.poslovna.service.StavkaDokumentaService;
-import poslovna.informatika.poslovna.model.*;
-import poslovna.informatika.poslovna.service.*;
 import poslovna.informatika.poslovna.util.VrstaPrometaVrstaPrDokumentaMapper;
 
 
@@ -55,11 +62,14 @@ public class PrometniDokumentController {
 
 	@Autowired
 	private AnalitikaMagKarticeService analitikaMagKarticeService;
-
+	
+	@Autowired
+	private PoslovnaGodinaService poslovnaGodinaService;
 	@RequestMapping(value="/save",method=RequestMethod.POST)
 	public ResponseEntity<PrometniDokument> save(@RequestBody PrometniDokumentDTO dokument,HttpServletRequest request){
 		
-		
+		Magacin magacin=magacinService.findOne(dokument.getMagacin());
+		PoslovniPartner pp=poslovniPartner.findByPib(dokument.getPoslovniPartner());
 		PrometniDokument prometniDokument=prometniDokumentConverter.convert(dokument);
 		Calendar cal = Calendar.getInstance();
 		prometniDokument.setDatumForimranja(cal.getTime());
@@ -70,6 +80,10 @@ public class PrometniDokumentController {
 		for(StavkaDokumenta stavka:prometniDokument.getStavkeDokumenta()){
 			stavkaDokumentaService.update(prometniDokument, stavka.getId());
 		}
+		magacin.getPrometniDokumenti().add(prometniDokument);
+		pp.getDokumenti().add(prometniDokument);
+		poslovniPartner.save(pp);
+		magacinService.save(magacin);
 		return new ResponseEntity<PrometniDokument>(prometniDokument,HttpStatus.OK);
 	}
 	@RequestMapping(value="/all/{id}",method=RequestMethod.GET)
@@ -97,8 +111,9 @@ public class PrometniDokumentController {
 	@RequestMapping(value="/{id}/proknjizi", method=RequestMethod.POST)
 	public ResponseEntity proknjizi(@PathVariable("id") Long id) {
 		PrometniDokument prometniDokument = prometniDokumentService.findById(id);
+		PoslovnaGodina godina=poslovnaGodinaService.findAkivna(true);
 		for(StavkaDokumenta stavka : prometniDokument.getStavkeDokumenta()) {
-			RobnaKartica robnaKartica = robnaKarticaService.findByMagacinAndRoba(prometniDokument.getMagacin(), stavka.getRoba());
+			RobnaKartica robnaKartica = robnaKarticaService.findByMagacinAndRobaAndPoslovnaGodina(prometniDokument.getMagacin(), stavka.getRoba(),godina);
 			AnalitikaMagKartice analitikaMagKartice = new AnalitikaMagKartice();
 			analitikaMagKartice.setRobnaKartica(robnaKartica);
 			float prosecna=(robnaKartica.getUkupnaVr()+stavka.getKolicina()*stavka.getCena())/(robnaKartica.getUkupnaKol()+stavka.getKolicina());
@@ -122,6 +137,39 @@ public class PrometniDokumentController {
 		}
 		prometniDokument.setDatumKnjizenja(new Date());
 		prometniDokument.setStatus(StatusDokumenta.P);
+		prometniDokumentService.save(prometniDokument);
+		return new ResponseEntity(HttpStatus.OK);
+	}
+	@RequestMapping(value="/{id}/storno", method=RequestMethod.POST)
+	public ResponseEntity storno(@PathVariable("id") Long id) {
+		PrometniDokument prometniDokument = prometniDokumentService.findById(id);
+		PoslovnaGodina godina=poslovnaGodinaService.findAkivna(true);
+		
+		for(StavkaDokumenta stavka : prometniDokument.getStavkeDokumenta()) {
+			RobnaKartica robnaKartica = robnaKarticaService.findByMagacinAndRobaAndPoslovnaGodina(prometniDokument.getMagacin(), stavka.getRoba(),godina);
+			AnalitikaMagKartice analitikaMagKartice = new AnalitikaMagKartice();
+			analitikaMagKartice.setRobnaKartica(robnaKartica);
+			float prosecna=(robnaKartica.getUkupnaVr()+stavka.getKolicina()*stavka.getCena())/(robnaKartica.getUkupnaKol()+stavka.getKolicina());
+			stavka.setCena(prosecna);
+			stavka.setVrednost(prosecna*stavka.getKolicina());
+			stavka=stavkaDokumentaService.save(stavka);
+			analitikaMagKartice.setStavkaDokumenta(stavka);
+			analitikaMagKartice.setVrstaPrometa(VrstaPrometa.STO);
+			if(prometniDokument.getVrsta().equals(VrstaPrDokumenta.OT)) {
+				analitikaMagKartice.setSmerPrometa(SmerPrometa.I);
+			} else {
+				analitikaMagKartice.setSmerPrometa(SmerPrometa.U);
+			}
+			robnaKartica.storno(stavka.getKolicina(), stavka.getVrednost(), stavka.getCena(), prometniDokument.getVrsta());
+			analitikaMagKartice.setUkupnaVr(robnaKartica.getUkupnaVr());
+			analitikaMagKartice.setUkupnaKol(robnaKartica.getUkupnaKol());
+			analitikaMagKartice.setRbr(robnaKartica.getAnalitike().size() + 1);
+			analitikaMagKarticeService.save(analitikaMagKartice);
+			robnaKartica.getAnalitike().add(analitikaMagKartice);
+			robnaKarticaService.save(robnaKartica);
+		}
+		prometniDokument.setDatumKnjizenja(new Date());
+		prometniDokument.setStatus(StatusDokumenta.S);
 		prometniDokumentService.save(prometniDokument);
 		return new ResponseEntity(HttpStatus.OK);
 	}

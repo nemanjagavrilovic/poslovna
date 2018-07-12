@@ -37,8 +37,8 @@ public class RobnaKarticaServiceImpl implements RobnaKarticaService {
 	}
 
 	@Override
-	public RobnaKartica findByMagacinAndRoba(Magacin magacin, Roba roba) {
-		return robnaKarticaRepository.findByMagacinAndRoba(magacin, roba);
+	public RobnaKartica findByMagacinAndRobaAndPoslovnaGodina(Magacin magacin, Roba roba,PoslovnaGodina poslovnaGodina) {
+		return robnaKarticaRepository.findByMagacinAndRobaAndPoslovnaGodina(magacin, roba,poslovnaGodina);
 	}
 
 	@Override
@@ -51,6 +51,11 @@ public class RobnaKarticaServiceImpl implements RobnaKarticaService {
 	public List<RobnaKartica> findByMagacinAndPoslovnaGodina(Magacin magacin, PoslovnaGodina pg) {
 		// TODO Auto-generated method stub
 		return robnaKarticaRepository.findByMagacinAndPoslovnaGodina(magacin,pg);
+	}
+
+	@Override
+	public RobnaKartica findByMagacinAndRoba(Magacin magacin, Roba roba) {
+		return robnaKarticaRepository.findByMagacinAndRoba(magacin, roba);
 	}
 
 }

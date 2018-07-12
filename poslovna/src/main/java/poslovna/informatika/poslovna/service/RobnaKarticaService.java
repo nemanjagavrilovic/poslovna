@@ -13,7 +13,8 @@ public interface RobnaKarticaService {
 	List<RobnaKartica> findAll();
 	RobnaKartica save(RobnaKartica robnaKartica);
 	public List<RobnaKartica> findByMagacin(Long id);
-	public RobnaKartica findByMagacinAndRoba(Magacin magacin, Roba roba);
+	public RobnaKartica findByMagacinAndRobaAndPoslovnaGodina(Magacin magacin, Roba roba,PoslovnaGodina poslovnaGodina);
 	public RobnaKartica findById(Long id);
 	List<RobnaKartica> findByMagacinAndPoslovnaGodina(Magacin magacin, PoslovnaGodina pg);
+	RobnaKartica findByMagacinAndRoba(Magacin magacin, Roba roba);
 }

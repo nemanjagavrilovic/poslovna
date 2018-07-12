@@ -16,6 +16,7 @@
 				<th>Smer</th>
 				<th>Količina</th>
 				<th>Jedinična cena</th>
+				<th>Saldo</th>
 				<th>Vrednost ulaza</th>
 				<th>Vrednost izlaza</th>
 				<th>Ukupna vrednost</th>
@@ -29,6 +30,7 @@
 					<td>${analitika.smerPrometa}</td>
 					<td>${analitika.stavkaDokumenta.kolicina }</td>
 					<td>${analitika.stavkaDokumenta.cena}</td>
+					<td>${analitika.ukupnaKol}</td>
 					<c:if test="${analitika.smerPrometa=='U' }">
 						<td>${analitika.stavkaDokumenta.vrednost }</td>
 						<td></td>

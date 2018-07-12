@@ -29,6 +29,8 @@ import poslovna.informatika.poslovna.model.SmerPrometa;
 import poslovna.informatika.poslovna.model.StavkaDokumenta;
 import poslovna.informatika.poslovna.model.VrstaPrometa;
 import poslovna.informatika.poslovna.service.*;
+import poslovna.informatika.poslovna.validation.RobnaKarticaValidator;
+import poslovna.informatika.poslovna.validation.Validator;
 
 @Controller
 @RequestMapping("/robnaKartica")
@@ -84,33 +86,68 @@ public class RobnaKarticaController {
 	}
 
 	@RequestMapping(method=RequestMethod.POST)
-	public ResponseEntity<RobnaKartica> create(@RequestBody RobnaKartica robnaKartica) {
+	public ResponseEntity create(@RequestBody RobnaKartica robnaKartica) {
 		Magacin magacin = magacinService.findOne(robnaKartica.getMagacin().getId());
 		Roba roba = robaServis.findOne(robnaKartica.getRoba().getId());
+		
+		if(robnaKarticaService.findByMagacinAndRobaAndPoslovnaGodina(magacin, roba,poslovnaGodinaService.findAkivna(true)) != null) {
+		    return new ResponseEntity("Vec postoji robna kartica za robu u izabranom magacinu.", HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+        robnaKartica.setPoslovnaGodina(poslovnaGodinaService.findActive(true));
 		robnaKartica.setMagacin(magacin);
 		robnaKartica.setRoba(roba);
+        Validator robnaKarticaValidator = new RobnaKarticaValidator(robnaKartica);
+		if(!robnaKarticaValidator.test()) {
+		    return new ResponseEntity(robnaKarticaValidator.getResults(), HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+        RobnaKartica karticaSaIstomRobom =robnaKarticaService.findByMagacinAndRoba(magacin, roba);
 		AnalitikaMagKartice analitikaMagKartice = new AnalitikaMagKartice();
 		analitikaMagKartice.setSmerPrometa(SmerPrometa.U);
 		analitikaMagKartice.setVrstaPrometa(VrstaPrometa.PS);
 		StavkaDokumenta stavka=new StavkaDokumenta();
+		if(!karticaSaIstomRobom.getPoslovnaGodina().getGodina().equals(poslovnaGodinaService.findActive(true))) {
+			stavka.setVrednost(karticaSaIstomRobom.getUkupnaVr());
+			stavka.setKolicina(karticaSaIstomRobom.getUkupnaKol());
+			stavka=stavkaDokumentaService.save(stavka);
+			analitikaMagKartice.setUkupnaKol(karticaSaIstomRobom.getUkupnaKol());
+			analitikaMagKartice.setUkupnaVr(karticaSaIstomRobom.getUkupnaVr());
+			analitikaMagKartice.setStavkaDokumenta(stavka);
+			robnaKartica.setPocetnoStanjeKol(karticaSaIstomRobom.getUkupnaKol());
+			robnaKartica.setPocetnoStanjeVr(karticaSaIstomRobom.getUkupnaVr());
+			robnaKartica.setCena(karticaSaIstomRobom.getCena());
+			robnaKartica.setPoslovnaGodina(poslovnaGodinaService.findAkivna(true));
+			robnaKartica=robnaKarticaService.save(robnaKartica);
+			analitikaMagKartice.setRobnaKartica(robnaKartica);
+			analitikaMagKartice.setRbr(1);
+			analitikaMagKarticeService.save(analitikaMagKartice);
+			robnaKartica.setAnalitike(new ArrayList<>());
+			robnaKartica.addAnalitika(analitikaMagKartice);
+			robnaKartica.setUkupnaKol(karticaSaIstomRobom.getUkupnaKol());
+			robnaKartica.setUkupnaVr(karticaSaIstomRobom.getUkupnaVr());
+			robnaKartica=robnaKarticaService.save(robnaKartica);
+			magacin.getRobneKartice().add(robnaKartica);
+			magacinService.save(magacin);
+			return new ResponseEntity<>("Kreirana je nova kartica za aktivnu godinu, pocetne vrednosti su uzete sa kartice iz prosle godine.", HttpStatus.OK);
+		}
 		stavka.setVrednost(robnaKartica.getPocetnoStanjeVr());
 		stavka.setKolicina(robnaKartica.getPocetnoStanjeKol());
-		stavka.setCena(0);
 		stavka=stavkaDokumentaService.save(stavka);
 		analitikaMagKartice.setUkupnaKol(robnaKartica.getPocetnoStanjeKol());
 		analitikaMagKartice.setUkupnaVr(robnaKartica.getPocetnoStanjeVr());
 		analitikaMagKartice.setStavkaDokumenta(stavka);
-		robnaKartica.setPoslovnaGodina(poslovnaGodinaService.findActive(false));
+		robnaKartica.setPoslovnaGodina(poslovnaGodinaService.findAkivna(true));
 		robnaKartica=robnaKarticaService.save(robnaKartica);
 		analitikaMagKartice.setRobnaKartica(robnaKartica);
 		analitikaMagKartice.setRbr(1);
 		analitikaMagKarticeService.save(analitikaMagKartice);
-		robnaKartica.setAnalitike(new ArrayList<AnalitikaMagKartice>());
+		robnaKartica.setAnalitike(new ArrayList<>());
 		robnaKartica.addAnalitika(analitikaMagKartice);
 		robnaKartica.setUkupnaKol(robnaKartica.getPocetnoStanjeKol());
 		robnaKartica.setUkupnaVr(robnaKartica.getPocetnoStanjeVr());
-		robnaKarticaService.save(robnaKartica);
-		return new ResponseEntity<>(robnaKartica, HttpStatus.OK);
+		robnaKartica=robnaKarticaService.save(robnaKartica);
+		magacin.getRobneKartice().add(robnaKartica);
+		magacinService.save(magacin);
+		return new ResponseEntity<>("Uspesno kreirana kartica!", HttpStatus.OK);
 	}
 
 	@RequestMapping(value="/{id}/analitika", method=RequestMethod.GET)
@@ -128,25 +165,33 @@ public class RobnaKarticaController {
 		return new ResponseEntity<List<RobnaKartica>>(robneKartice,HttpStatus.OK);
 	}
 	@RequestMapping(value="/{id}/nivelacija", method=RequestMethod.GET)
-	public String nivelacija(@PathVariable("id") Long id, HttpServletRequest request) {
+	public ResponseEntity nivelacija(@PathVariable("id") Long id, HttpServletRequest request) {
 		RobnaKartica robnaKartica = robnaKarticaService.findById(id);
 		AnalitikaMagKartice analitikaMagKartice = new AnalitikaMagKartice();
-		analitikaMagKartice.setSmerPrometa(SmerPrometa.U);
-		analitikaMagKartice.setVrstaPrometa(VrstaPrometa.NI);
-		analitikaMagKartice.setRobnaKartica(robnaKartica);
 		StavkaDokumenta stavka=new StavkaDokumenta();
 		stavka.setVrednost(robnaKartica.nivelacija());
 		stavka.setKolicina(0);
 		stavka.setCena(0);
+		if(stavka.getVrednost()>0){
+			analitikaMagKartice.setSmerPrometa(SmerPrometa.U);
+			
+		}else
+			analitikaMagKartice.setSmerPrometa(SmerPrometa.I);
+		
+		analitikaMagKartice.setVrstaPrometa(VrstaPrometa.NI);
+		analitikaMagKartice.setRbr(robnaKartica.getAnalitike().size() + 1);
+		analitikaMagKartice.setRobnaKartica(robnaKartica);
 		stavka=stavkaDokumentaService.save(stavka);
 		analitikaMagKartice.setStavkaDokumenta(stavka);
 		analitikaMagKartice.setUkupnaKol(robnaKartica.getUkupnaKol());
 		analitikaMagKartice.setUkupnaVr(robnaKartica.getUkupnaVr());
+		analitikaMagKartice.setRbr(robnaKartica.getAnalitike().size()+1);
 		analitikaMagKarticeService.save(analitikaMagKartice);
 		robnaKartica.addAnalitika(analitikaMagKartice);
 		robnaKarticaService.save(robnaKartica);
 
-		return "forward:/analitikaRobneKartice.jsp";
+		return new ResponseEntity(HttpStatus.OK);
+
 	}
 	
 	@RequestMapping(value="/{id}/izvestaj", method=RequestMethod.POST)
