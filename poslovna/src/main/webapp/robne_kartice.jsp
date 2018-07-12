@@ -197,6 +197,22 @@
             $("#form").css("display","block");
         })
 
+        $(document).on('click','.izvestaj',function(e){
+		e.preventDefault();
+		var confirmed=confirm("Da li zelite da kreirate izvestaj");
+		var url=$(this).attr('href')
+		var item=$(this)
+		if(confirmed){
+			$.ajax({
+				url:url,
+				type:'POST',
+				success:function(){
+					alert("Kreiran izvestaj");
+				}
+			})
+		}
+	})
+        
         function highlightRow(row){
             //ne reagujemo na klik na header tabele, samo obicne redove
             //this sadrzi red na koji se kliknulo
@@ -305,6 +321,7 @@
                 <td class="pocetno-stanje-vred">${ robnaKartica.pocetnoStanjeVr }</td>
                 <td><a href="/robnaKartica/${ robnaKartica.id }/analitika">Analitika</a></td>
                 <td><a href="/robnaKartica/${ robnaKartica.id }/nivelacija">Nivelacija</a></td>
+                <td><a class="izvestaj" href="/robnaKartica/${ robnaKartica.id }/izvestaj">Izvestaj</a></td>
                 
             </tr>
         </c:forEach>
