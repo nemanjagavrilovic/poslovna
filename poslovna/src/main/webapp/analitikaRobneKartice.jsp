@@ -5,7 +5,9 @@
 <head>
 </head>
 <body>
-
+	<h2>Analitike robne kartice</h2>
+	<h4>Preduzece: ${ robnaKartica.magacin.preduzece.naziv }</h4>
+	<h4>Magacin: ${ robnaKartica.magacin.naziv }</h4>
 	<table border="1">
 		<thead>
 			<tr>
@@ -20,7 +22,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			<c:forEach items="${robnaKartica.analitike}" var="analitika">
+			<c:forEach items="${ analitikeSortirane }" var="analitika">
 				<tr>
 					<td>${analitika.rbr }</td>
 					<td>${analitika.vrstaPrometa}</td>
