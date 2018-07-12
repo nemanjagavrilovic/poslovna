@@ -18,6 +18,7 @@ import poslovna.informatika.poslovna.model.PopisniDokument;
 import poslovna.informatika.poslovna.model.PoslovnaGodina;
 import poslovna.informatika.poslovna.model.RobnaKartica;
 import poslovna.informatika.poslovna.model.SmerPrometa;
+import poslovna.informatika.poslovna.model.StavkaDokumenta;
 import poslovna.informatika.poslovna.model.StavkaPopisa;
 import poslovna.informatika.poslovna.model.VrstaPrometa;
 import poslovna.informatika.poslovna.service.AnalitikaMagKarticeService;
@@ -25,6 +26,7 @@ import poslovna.informatika.poslovna.service.PopisnaKomisijaService;
 import poslovna.informatika.poslovna.service.PopisniDokumentService;
 import poslovna.informatika.poslovna.service.PoslovnaGodinaService;
 import poslovna.informatika.poslovna.service.RobnaKarticaService;
+import poslovna.informatika.poslovna.service.StavkaDokumentaService;
 
 @RestController
 @RequestMapping(value = "/popisniDokument")
@@ -40,6 +42,8 @@ public class PopisniDokumentKontroler {
 	private RobnaKarticaService robnaKarticaService;
 	@Autowired
 	private AnalitikaMagKarticeService analitikaMagKarticeService;
+	@Autowired
+	private StavkaDokumentaService stavkaDokumentaService;
 	@Autowired
 	private PopisniDokumentDTOtoPopisniDokument dokumentDTOtopopisniDokument;
 
@@ -73,17 +77,31 @@ public class PopisniDokumentKontroler {
 				System.out.println("kartica: " + rk.getRoba().getId());
 				if(sp.getRoba().getId()==rk.getRoba().getId()){
 					if(sp.getKolicinaPoKartici() != sp.getKolicinaPoPopisu()) {
-						rk.obradiTransfer(sp.getKolicinaPoKartici(), 0.0f, rk.getCena(), null);
+						rk.setUkupnaKol(sp.getKolicinaPoPopisu());
+						rk.setUkupnaVr(rk.getCena()*rk.getUkupnaKol());
+						
+						System.out.println("poslato: " + rk.getUkupnaKol());
 						RobnaKartica retKartica = robnaKarticaService.save(rk);
 						
+						System.out.println("vraceno: " + retKartica.getUkupnaKol());
 						AnalitikaMagKartice analitikaMagKartice = new AnalitikaMagKartice();
 						analitikaMagKartice.setRobnaKartica(retKartica);
 						analitikaMagKartice.setVrstaPrometa(VrstaPrometa.KOR);
-						if(sp.getKolicinaPoKartici() < rk.getUkupnaKol()) {
+		
+						if(sp.getKolicinaPoKartici() > rk.getUkupnaKol()) {
 							analitikaMagKartice.setSmerPrometa(SmerPrometa.U);
 						} else {
 							analitikaMagKartice.setSmerPrometa(SmerPrometa.I);
 						}
+						
+						StavkaDokumenta stavka=new StavkaDokumenta();
+						stavka.setVrednost(retKartica.getCena());
+						stavka.setKolicina(0);
+						stavka.setCena(0);
+						stavka=stavkaDokumentaService.save(stavka);
+						analitikaMagKartice.setStavkaDokumenta(stavka);
+						analitikaMagKartice.setUkupnaKol(rk.getUkupnaKol());
+						analitikaMagKartice.setUkupnaVr(rk.getUkupnaVr());
 						
 						AnalitikaMagKartice retAnalitika = analitikaMagKarticeService.save(analitikaMagKartice);
 						

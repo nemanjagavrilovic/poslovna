@@ -115,6 +115,7 @@ public class PrometniDokumentController {
 			robnaKartica.obradiTransfer(stavka.getKolicina(), stavka.getVrednost(), stavka.getCena(), prometniDokument.getVrsta());
 			analitikaMagKartice.setUkupnaVr(robnaKartica.getUkupnaVr());
 			analitikaMagKartice.setUkupnaKol(robnaKartica.getUkupnaKol());
+			analitikaMagKartice.setRbr(robnaKartica.getAnalitike().size() + 1);
 			analitikaMagKarticeService.save(analitikaMagKartice);
 			robnaKartica.getAnalitike().add(analitikaMagKartice);
 			robnaKarticaService.save(robnaKartica);
