@@ -1,6 +1,11 @@
 package poslovna.informatika.poslovna.controller;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +19,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.jasperreports.view.JasperViewer;
 import poslovna.informatika.poslovna.converters.MagacinDTOtoMagacin;
 import poslovna.informatika.poslovna.dto.MagacinDTO;
 import poslovna.informatika.poslovna.model.Magacin;
@@ -99,5 +113,26 @@ public class MagacinController {
 		
 		return new ResponseEntity<List<Roba>>(roba,HttpStatus.OK);
 	}
-
+/*
+	@RequestMapping(value="/izvestaj/{id}",method=RequestMethod.POST)
+	public ResponseEntity<String> izvestaj(@PathVariable("id") Long id){
+		try {
+			Connection conn;
+			conn =
+				       DriverManager.getConnection("jdbc:mysql://localhost:3306/poslovna?useSSL=false&" +
+				                                   "user=root&password=admin");
+			HashMap map = new HashMap();
+			map.put("idMagacina", id);
+            JasperReport jasReport = (JasperReport) JRLoader.loadObjectFromFile("C:/Users/nenad/git/poslovna/poslovna/src/main/resources/listaLagera.jasper");
+            JasperPrint jasPrint = JasperFillManager.fillReport(jasReport, map, conn);
+            File pdf = File.createTempFile("output.", ".pdf");
+			JasperExportManager.exportReportToPdfStream(jasPrint, new FileOutputStream(pdf));
+			System.out.println("Temp file : " + pdf.getAbsolutePath());
+		}catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		return new ResponseEntity<String>("ok",HttpStatus.OK);
+		}
+	*/
+	
 }

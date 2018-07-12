@@ -305,3 +305,19 @@ $(document).on('click','.delete',function(e){
 		})
 	}
 })
+
+$(document).on('click','.izvestaj',function(e){
+	e.preventDefault();
+	var confirmed=confirm("Da li zelite da kreirate izvestaj");
+	var url=$(this).attr('href')
+	var item=$(this)
+	if(confirmed){
+		$.ajax({
+			url:url,
+			type:'POST',
+			success:function(){
+				alert("Kreiran izvestaj");
+			}
+		})
+	}
+})
