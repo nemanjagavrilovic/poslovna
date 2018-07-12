@@ -20,6 +20,7 @@ import poslovna.informatika.poslovna.dto.PrometniDokumentDTO;
 import poslovna.informatika.poslovna.model.AnalitikaMagKartice;
 import poslovna.informatika.poslovna.model.Magacin;
 import poslovna.informatika.poslovna.model.PoslovnaGodina;
+import poslovna.informatika.poslovna.model.PoslovniPartner;
 import poslovna.informatika.poslovna.model.PrometniDokument;
 import poslovna.informatika.poslovna.model.RobnaKartica;
 import poslovna.informatika.poslovna.model.SmerPrometa;
@@ -67,7 +68,8 @@ public class PrometniDokumentController {
 	@RequestMapping(value="/save",method=RequestMethod.POST)
 	public ResponseEntity<PrometniDokument> save(@RequestBody PrometniDokumentDTO dokument,HttpServletRequest request){
 		
-		
+		Magacin magacin=magacinService.findOne(dokument.getMagacin());
+		PoslovniPartner pp=poslovniPartner.findByPib(dokument.getPoslovniPartner());
 		PrometniDokument prometniDokument=prometniDokumentConverter.convert(dokument);
 		Calendar cal = Calendar.getInstance();
 		prometniDokument.setDatumForimranja(cal.getTime());
@@ -78,6 +80,10 @@ public class PrometniDokumentController {
 		for(StavkaDokumenta stavka:prometniDokument.getStavkeDokumenta()){
 			stavkaDokumentaService.update(prometniDokument, stavka.getId());
 		}
+		magacin.getPrometniDokumenti().add(prometniDokument);
+		pp.getDokumenti().add(prometniDokument);
+		poslovniPartner.save(pp);
+		magacinService.save(magacin);
 		return new ResponseEntity<PrometniDokument>(prometniDokument,HttpStatus.OK);
 	}
 	@RequestMapping(value="/all/{id}",method=RequestMethod.GET)

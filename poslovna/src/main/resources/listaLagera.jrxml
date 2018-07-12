@@ -9,7 +9,6 @@
      magacin.`id` AS magacin_id,
      magacin.`naziv` AS magacin_naziv,
      magacin.`preduzece_id` AS magacin_preduzece_id,
-     magacin.`radnik_id` AS magacin_radnik_id,
      robna_kartica.`id` AS robna_kartica_id,
      robna_kartica.`cena` AS robna_kartica_cena,
      robna_kartica.`pocetno_stanje_kol` AS robna_kartica_pocetno_stanje_kol,
@@ -20,8 +19,8 @@
      robna_kartica.`promet_ulaza_vr` AS robna_kartica_promet_ulaza_vr,
      robna_kartica.`ukupna_kol` AS robna_kartica_ukupna_kol,
      robna_kartica.`ukupna_vr` AS robna_kartica_ukupna_vr,
-     robna_kartica.`poslovna_godina_id` AS robna_kartica_poslovna_godina_id,
      robna_kartica.`magacin_id` AS robna_kartica_magacin_id,
+     robna_kartica.`poslovna_godina_id` AS robna_kartica_poslovna_godina_id,
      robna_kartica.`roba_id` AS robna_kartica_roba_id,
      roba.`id` AS roba_id,
      roba.`naziv` AS roba_naziv,
@@ -39,7 +38,6 @@ WHERE
 	<field name="magacin_id" class="java.lang.Long"/>
 	<field name="magacin_naziv" class="java.lang.String"/>
 	<field name="magacin_preduzece_id" class="java.lang.Long"/>
-	<field name="magacin_radnik_id" class="java.lang.Long"/>
 	<field name="robna_kartica_id" class="java.lang.Long"/>
 	<field name="robna_kartica_cena" class="java.lang.Float"/>
 	<field name="robna_kartica_pocetno_stanje_kol" class="java.lang.Float"/>
@@ -50,8 +48,8 @@ WHERE
 	<field name="robna_kartica_promet_ulaza_vr" class="java.lang.Float"/>
 	<field name="robna_kartica_ukupna_kol" class="java.lang.Float"/>
 	<field name="robna_kartica_ukupna_vr" class="java.lang.Float"/>
-	<field name="robna_kartica_poslovna_godina_id" class="java.lang.Long"/>
 	<field name="robna_kartica_magacin_id" class="java.lang.Long"/>
+	<field name="robna_kartica_poslovna_godina_id" class="java.lang.Long"/>
 	<field name="robna_kartica_roba_id" class="java.lang.Long"/>
 	<field name="roba_id" class="java.lang.Long"/>
 	<field name="roba_naziv" class="java.lang.String"/>
