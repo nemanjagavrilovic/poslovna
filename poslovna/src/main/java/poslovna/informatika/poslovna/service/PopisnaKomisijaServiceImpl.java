@@ -1,5 +1,7 @@
 package poslovna.informatika.poslovna.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,12 @@ public class PopisnaKomisijaServiceImpl implements PopisnaKomisijaService {
 	public PopisnaKomisija findById(Long id) {
 		// TODO Auto-generated method stub
 		return popisnaKomisijaRepository.findOne(id);
+	}
+
+	@Override
+	public List<PopisnaKomisija> findAll() {
+		// TODO Auto-generated method stub
+		return popisnaKomisijaRepository.findAll();
 	}
 
 }
