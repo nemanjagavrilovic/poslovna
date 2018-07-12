@@ -129,17 +129,6 @@
             highlightRow(this)
         });
 
-        function convertDate(stamp){
-            var a=new Date(stamp);
-            var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-            var year = a.getFullYear();
-            var month = months[a.getMonth()];
-            var date = a.getDate();
-
-            var time = date + '.' + month + '.' + year+'.' ;
-            return time;
-
-        }
 
         $(document).on("click", '#magacinZoomTable tr', function(event) {
             if(!$(this).hasClass("header")){
@@ -269,6 +258,29 @@
             item.addClass("highlighted");
             sync(item);
         }
+
+        function otvoriIzmeniModal(id, cena) {
+            $("#izmeniKarticuButton").attr('onclick', 'izmeniKarticu(' + id + ')');
+            $("#cenaIzmeniInput").val(cena);
+            $("#izmeniModal").modal('toggle');
+        }
+
+        function izmeniKarticu(id) {
+            let data = {
+                cena: $("#cenaIzmeniInput").val()
+            }
+
+            $.ajax({
+                url: '/robnaKartica/' + id,
+                type: 'PATCH',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: function (data) {
+                    alert("Izmenjena robna kartica!");
+                    $('#izmeniModal').modal('toggle');
+                }
+            });
+        }
     </script>
 </head>
 <body onload="init()">
@@ -303,6 +315,7 @@
                 <td class="cena">${ robnaKartica.cena }</td>
                 <td class="pocetno-stanje-kol">${ robnaKartica.pocetnoStanjeKol }</td>
                 <td class="pocetno-stanje-vred">${ robnaKartica.pocetnoStanjeVr }</td>
+                <td><a onclick="otvoriIzmeniModal(${ robnaKartica.id }, ${ robnaKartica.cena })">Izmeni</a></td>
                 <td><a href="/robnaKartica/${ robnaKartica.id }/analitika">Analitika</a></td>
                 <td><a href="/robnaKartica/${ robnaKartica.id }/nivelacija">Nivelacija</a></td>
                 
@@ -344,7 +357,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-
+                <h3>Nova magacinska kartica</h3>
             </div>
             <div id="form">
                 <form id="inputForm" style="display:block;">
@@ -415,7 +428,7 @@
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-                Magacini
+                Roba
             </div>
             <div class="modal-body">
                 <table style = "padding:2em" id = "robaZoomTable">
@@ -428,6 +441,29 @@
                 <div class="modal-footer">
                     <input id="izaberiRobuZoom" onclick="izaberiRobuZoom()" type = "button" value = "Izaberi"/>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="izmeniModal" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                Izmeni robnu karticu
+            </div>
+            <div class="modal-body">
+                <table>
+                    <tr>
+                        <td>Cena:</td>
+                        <td><input type="text" id="cenaIzmeniInput"></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="modal-footer">
+                <input id="izmeniKarticuButton" type = "button" value = "Izaberi"/>
             </div>
         </div>
     </div>

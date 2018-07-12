@@ -9,10 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import poslovna.informatika.poslovna.model.AnalitikaMagKartice;
 import poslovna.informatika.poslovna.model.Magacin;
@@ -138,5 +135,13 @@ public class RobnaKarticaController {
 		robnaKarticaService.save(robnaKartica);
 
 		return "forward:/analitikaRobneKartice.jsp";
+	}
+
+	@RequestMapping(value = "/{id}", method = RequestMethod.PATCH)
+	private ResponseEntity edit(@PathVariable("id") Long id, @RequestBody RobnaKartica newRobnaKartica) {
+		RobnaKartica robnaKartica = robnaKarticaService.findById(id);
+		robnaKartica.setCena(newRobnaKartica.getCena());
+		robnaKarticaService.save(robnaKartica);
+		return new ResponseEntity(HttpStatus.OK);
 	}
 }
