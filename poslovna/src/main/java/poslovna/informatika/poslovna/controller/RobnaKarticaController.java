@@ -19,6 +19,8 @@ import poslovna.informatika.poslovna.model.SmerPrometa;
 import poslovna.informatika.poslovna.model.StavkaDokumenta;
 import poslovna.informatika.poslovna.model.VrstaPrometa;
 import poslovna.informatika.poslovna.service.*;
+import poslovna.informatika.poslovna.validation.RobnaKarticaValidator;
+import poslovna.informatika.poslovna.validation.Validator;
 
 @Controller
 @RequestMapping("/robnaKartica")
@@ -74,11 +76,19 @@ public class RobnaKarticaController {
 	}
 
 	@RequestMapping(method=RequestMethod.POST)
-	public ResponseEntity<RobnaKartica> create(@RequestBody RobnaKartica robnaKartica) {
+	public ResponseEntity create(@RequestBody RobnaKartica robnaKartica) {
 		Magacin magacin = magacinService.findOne(robnaKartica.getMagacin().getId());
 		Roba roba = robaServis.findOne(robnaKartica.getRoba().getId());
+		if(robnaKarticaService.findByMagacinAndRoba(magacin, roba) != null) {
+		    return new ResponseEntity("Vec postoji robna kartica za robu u izabranom magacinu.", HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+        robnaKartica.setPoslovnaGodina(poslovnaGodinaService.findActive(true));
 		robnaKartica.setMagacin(magacin);
 		robnaKartica.setRoba(roba);
+        Validator robnaKarticaValidator = new RobnaKarticaValidator(robnaKartica);
+		if(!robnaKarticaValidator.test()) {
+		    return new ResponseEntity(robnaKarticaValidator.getResults(), HttpStatus.UNPROCESSABLE_ENTITY);
+        }
 		AnalitikaMagKartice analitikaMagKartice = new AnalitikaMagKartice();
 		analitikaMagKartice.setSmerPrometa(SmerPrometa.U);
 		analitikaMagKartice.setVrstaPrometa(VrstaPrometa.PS);
@@ -90,7 +100,6 @@ public class RobnaKarticaController {
 		analitikaMagKartice.setUkupnaKol(robnaKartica.getPocetnoStanjeKol());
 		analitikaMagKartice.setUkupnaVr(robnaKartica.getPocetnoStanjeVr());
 		analitikaMagKartice.setStavkaDokumenta(stavka);
-		robnaKartica.setPoslovnaGodina(poslovnaGodinaService.findActive(false));
 		robnaKartica=robnaKarticaService.save(robnaKartica);
 		analitikaMagKartice.setRobnaKartica(robnaKartica);
 		analitikaMagKartice.setRbr(1);
@@ -132,6 +141,7 @@ public class RobnaKarticaController {
 		analitikaMagKartice.setStavkaDokumenta(stavka);
 		analitikaMagKartice.setUkupnaKol(robnaKartica.getUkupnaKol());
 		analitikaMagKartice.setUkupnaVr(robnaKartica.getUkupnaVr());
+		analitikaMagKartice.setRbr(robnaKartica.getAnalitike().size()+1);
 		analitikaMagKarticeService.save(analitikaMagKartice);
 		robnaKartica.addAnalitika(analitikaMagKartice);
 		robnaKarticaService.save(robnaKartica);

@@ -59,7 +59,7 @@ public class PopisniDokumentKontroler {
 
 		popisnaKomisijaService.save(komisija);
 
-		PoslovnaGodina pg = poslovnaGodinaService.findActive(false);
+		PoslovnaGodina pg = poslovnaGodinaService.findActive(true);
 
 		retDokument.setPoslovnaGodina(pg);
 		popisniDokumentService.save(retDokument);
