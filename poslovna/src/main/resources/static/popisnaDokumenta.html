@@ -1,0 +1,209 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<script src="scripts/jquery-3.2.1.min.js"></script>
+<script src="scripts/tether.min.js"></script>
+<script src="scripts/bootstrap.min.js"></script>
+<script src="scripts/functions.js"></script>
+<link rel="stylesheet" type="text/css" href="stylesheets/design.css">
+<link rel="stylesheet" href="stylesheets/bootstrap.min.css">
+<meta charset="UTF-8">
+<title>Popisna Dokumenta</title>
+<script>
+var id = -1;
+	$(document)
+			.ready(
+					function() {
+						var url = window.location.href;
+						var magacin_id = url.substring(
+								url.lastIndexOf('#') + 1, url.length);
+						if(url.lastIndexOf('#') != -1){
+						$
+								.ajax(
+										{
+											url : "http://localhost:9000/popisniDokument/getAll/"
+													+ magacin_id
+										})
+								.then(
+										function(data) {
+											for (i = 0; i < data.length; i++) {
+												newRow = "<tr>"
+														+ "<td class =\"id\">"
+														+ data[i].id
+														+ "<td class=\"brojPopisa\">"
+														+ data[i].brojPopisa
+														+ "</td>"
+														+ "<td class=\"datum\">"
+														+ data[i].datum
+														+ "</td>"
+														+ "<td class=\"komisija\">"+data[i].komisija.id+"</td>"
+														+ "</tr>"
+												$("#dataTable").append(newRow)
+
+											}
+										});
+						} 
+						
+						else{
+							$
+							.ajax(
+									{
+										url : "http://localhost:9000/popisniDokument/getAll"
+									})
+							.then(
+									function(data) {
+										for (i = 0; i < data.length; i++) {
+											newRow = "<tr>"
+													+ "<td class =\"id\">"
+													+ data[i].id
+													+ "<td class=\"brojPopisa\">"
+													+ data[i].brojPopisa
+													+ "</td>"
+													+ "<td class=\"datum\">"
+													+ data[i].datum
+													+ "</td>"
+													+ "<td class=\"komisija\">"+data[i].komisija.id+"</td>"
+													+ "</tr>"
+											$("#dataTable").append(newRow)
+
+										}
+									});
+						}
+						
+						$("#nextForm").click(function(){
+							var highlighted = $(".highlighted");
+							console.log(highlighted);
+							index =  $("tr").index(highlighted);
+							index+=1;
+							
+							item = $("tr:nth-child(" + index + ")");
+							
+							 id=item.find(".id").html();
+							console.log(id)
+							$("#inputModal").modal('toggle')
+							
+					        });
+	
+						
+
+						
+						$("#first").click(function() {
+							goFirst()
+						});
+
+						$("#next").click(function() {
+							goNext()
+						});
+
+						$("#last").click(function() {
+							goLast()
+						});
+
+						$("#prev").click(function() {
+							goPrev()
+						});
+
+							$(document).on("click", "tr", function(event) {
+		highlightRow(this)
+	});
+							
+					});
+
+	
+	function izaberi(){
+		
+		 $("#inputModal").modal('toggle');
+		var highlighted = $(".highlighted");
+		console.log(highlighted);
+		index =  $("tr").index(highlighted);
+		index-=2;
+		
+		item = $("tr:nth-child(" + index + ")");
+		
+		var ime=item.find(".ime").html();
+		var prezime=item.find(".prezime").html();
+		
+		var radnik = ime + " " + prezime;
+		console.log(radnik)
+		var selectname=$("#hiddenValue").val()
+		$("#"+selectname+" option").each(function(){
+			if($(this).text()==radnik){
+				$(this).prop("selected","selected");
+			}
+		});
+	}
+
+	function sync(item) {
+		oznaka = item.find(".code").html()
+		naziv = item.find(".name").html()
+		id = item.find(".idCell").html()
+		$("#oznaka").val(oznaka);
+		$("#naziv").val(naziv);
+		$("#id").val(id);
+	}
+	function goToStavke() {
+		
+	window.top.location = "stavkePopisa.html#"+id;
+	}
+	function goToKomisija(){
+	window.top.location = "popisnaKomisja.html#"+id
+	}
+	
+	
+	
+</script>
+
+</head>
+<body>
+	<div class="formContainer">
+		<ul>
+			<li class="group-start"><a href="searchModal"
+				data-toggle="modal" data-target="#searchModal"><img
+					src="images/search.gif" /></a></li>
+			<li><a href="#" id="refresh"><img src="images/refresh.gif" /></a></li>
+			<li class="group-start"><a href="#" id="help"><img
+					src="images/help.gif" /></a></li>
+			<li class="group-start"><a id="first"><img
+					src="images/first.gif" /></a></li>
+			<li><a id="prev"><img src="images/prev.gif" /></a></li>
+			<li><a id="next"><img src="images/next.gif" /></a></li>
+			<li><a id="last"><img src="images/last.gif" /></a></li>
+			<li class="group-start"><a href="#inputModal"
+				data-toggle="modal" data-target="#inputModal"><img
+					src="images/add.gif" /></a></li>
+			<li><a id="nextForm"><img src="images/nextform.gif" /></a></li>
+		</ul>
+
+		<h1>Stavke popisa</h1>
+		<table id="dataTable" class="table">
+			<tr class="header">
+				<th>Id</th>
+				<th>Broj popisa</th>
+				<th>Datum popisa</th>
+				<th>Komisija</th>
+
+			</tr>
+		</table>
+		<div class="modal fade" id="inputModal" tabindex="-1" role="dialog">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="exampleModalLabel">Gde zelite da predjete?</h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <button type="button" class="btn btn-primary" onClick="goToStavke()">Stavke popisa</button>
+		        <button type="button" class="btn btn-primary" onClick="goToKomisija()">Komisija</button>
+		      </div>
+		      <div class="modal-footer">
+		     	
+		      </div>
+		      
+		    </div>
+		  </div>
+		</div>
+		
+</body>
+</html>
