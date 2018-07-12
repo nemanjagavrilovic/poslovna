@@ -28,10 +28,7 @@ public class PoslovnaGodinaKontroler {
         if(poslovnaGodina.getGodina() == null) {
             return new ResponseEntity("Morate izabrati godinu.", HttpStatus.UNPROCESSABLE_ENTITY);
         }
-        List<PoslovnaGodina> sveGodine = poslovnaGodinaService.findAll();
-        if(sveGodine.stream().anyMatch(e -> DateUtil.sameYear(e.getGodina(), poslovnaGodina.getGodina()))) {
-            return new ResponseEntity("Vec postoji ta poslovna godina.", HttpStatus.UNPROCESSABLE_ENTITY);
-        }
+
         PoslovnaGodina staraGodina = poslovnaGodinaService.findActive(true);
         if(staraGodina != null) {
             staraGodina.setAktivna(false);

@@ -53,5 +53,10 @@ public class RobnaKarticaServiceImpl implements RobnaKarticaService {
 		return robnaKarticaRepository.findByMagacinAndPoslovnaGodina(magacin,pg);
 	}
 
+	@Override
+	public RobnaKartica findByMagacinAndRoba(Magacin magacin, Roba roba) {
+		return robnaKarticaRepository.findByMagacinAndRoba(magacin, roba);
+	}
+
 }
 

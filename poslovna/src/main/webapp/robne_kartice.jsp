@@ -120,7 +120,7 @@
                 dataType: 'json',
                 data: JSON.stringify(data),
                 success: function (data) {
-                    alert("Dodata robna kartica!")
+                    alert(data.responseText);
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     alert(jqXHR.responseText);
@@ -159,6 +159,7 @@
         }
 
         function sync(item){
+            let godina = item.find(".godina").html();
             let roba = item.find(".roba").html();
             let magacin = item.find(".magacin").html();
             let pocetnoStanjeVred = item.find(".pocetno-stanje-vred").html();
@@ -171,6 +172,7 @@
             let ukupnoVred = item.find(".ukupna-vr").html();
             let cena = item.find(".cena").html();
 
+            $("#godinaPanel").val(godina);
             $("#magacinPanel").val(magacin);
             $("#robaPanel").val(roba);
             $("#pocetnoStanjeVrPanel").val(pocetnoStanjeVred);
@@ -347,6 +349,7 @@
         <tbody>
         <c:forEach items="${ robneKartice }" var="robnaKartica">
             <tr>
+                <td class="godina">${ robnaKartica.poslovnaGodina.godina }</td>
                 <td class="magacin">${ robnaKartica.magacin.naziv }</td>
                 <td class="roba">${ robnaKartica.roba.naziv }</td>
                 <td class="cena">${ robnaKartica.cena }</td>
@@ -417,6 +420,10 @@
             <tr>
                 <td><label for="ukupnaVrPanel">Ukupna vr.</label></td>
                 <td><input type="text" name="ukupnaVrPanel" id="ukupnaVrPanel" disabled /></td>
+            </tr>
+            <tr>
+                <td><label for="godinaPanel">Poslovna godina</label></td>
+                <td><input type="text" name="godinaPanel" id="godinaPanel" disabled /></td>
             </tr>
         </table>
     </div>
