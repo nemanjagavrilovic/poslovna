@@ -195,10 +195,7 @@ public class RobnaKartica implements Serializable {
 			prometUlazaVr += kolicina*prosecnaCena;
 			izracunajUkupno();
 		}
-		else if(vrstaPrDokumenta.toString().equals("MM")) {
-			//TODO
-			izracunajUkupno();
-		}
+		
 		
 
 	}
@@ -236,12 +233,16 @@ public class RobnaKartica implements Serializable {
 			prometUlazaVr -= kolicina*prosecnaCena;
 			izracunajUkupno();
 		}
-		else if(vrstaPrDokumenta.toString().equals("MM")) {
-			//TODO
-			izracunajUkupno();
-		}
-		
 
 	}
-
+	public void smanjenjeMM(float kolicina, float vrednost, float prosecnaCena, VrstaPrDokumenta vrstaPrDokumenta){
+		
+		ukupnaKol-=kolicina;
+		ukupnaVr-=prosecnaCena*kolicina;
+	}
+	public void povecanjeMM(float kolicina, float vrednost, float prosecnaCena, VrstaPrDokumenta vrstaPrDokumenta){
+		
+		ukupnaKol+=kolicina;
+		ukupnaVr+=prosecnaCena*kolicina;
+	}
 }

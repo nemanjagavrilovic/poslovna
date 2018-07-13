@@ -87,7 +87,7 @@
                                 }));
 
                                 //dodaj magacine u zoom tablu
-                                $("#magacinZoomTable").append('<tr><td class="naziv">' + magacin.naziv +'</td><td class="preduzece">' + magacin.preduzece.naziv + '</td><td class="idCell">'+ magacin.id +'</td></tr>')
+                                $("#magacinZoomTable").append('<tr><td class="naziv">' + magacin.naziv +'</td><td class="idCell">'+ magacin.id +'</td></tr>')
                             })
                         }
                     });
@@ -314,6 +314,16 @@
                 }
             });
         }
+            function nivelacija(id){
+            	$.ajax({
+            		url:'/robnaKartica/'+id+'/nivelacija',
+            		type:'GET',
+            		success:function(data){
+            			alert('Uradjena nivelacija!')
+            		}
+            	})
+            }
+        
     </script>
 </head>
 <body onload="init()">
@@ -333,6 +343,7 @@
     <table id="dokumenti" border="1">
 
         <tr class="header">
+        	<th>Godina</th>
             <th>Magacin</th>
             <th>Roba</th>
             <th>Cena</th>
@@ -363,7 +374,7 @@
                 <td class="ukupna-vr">${ robnaKartica.ukupnaVr }</td>
                 <td><a onclick="otvoriIzmeniModal(${ robnaKartica.id }, ${ robnaKartica.cena })">Izmeni</a></td>
                 <td><a href="/robnaKartica/${ robnaKartica.id }/analitika">Analitika</a></td>
-                <td><a href="/robnaKartica/${ robnaKartica.id }/nivelacija">Nivelacija</a></td>
+                <td><a href="#" onclick="nivelacija(${robnaKartica.id})">Nivelacija</a></td>
                 <td><a class="izvestaj" href="/robnaKartica/${ robnaKartica.id }/izvestaj">Izvestaj</a></td>
                 
             </tr>
@@ -487,7 +498,7 @@
                 <table style = "padding:2em" id = "magacinZoomTable">
                     <tr class = "header">
                         <th>Naziv</th>
-                        <th>Firma</th>
+                       
                     </tr>
 
                 </table>

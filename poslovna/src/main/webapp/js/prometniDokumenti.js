@@ -121,7 +121,9 @@ $(document).on('click','#add',function(event){
 			"vrsta":$("#vrsta option:selected").val(),
 			"stavke":stavke,
 			"poslovniPartner":$("#partner option:selected").attr('id'),
-			"magacin":$("#magacin option:selected").attr('id')
+			"magacin":$("#magacin option:selected").attr('id'),
+			"magacin2":$("#magacin2 option:selected").attr('id')
+			
 		})
 		$.ajax({
 			url:'http://localhost:9000/prometniDokument/save',
@@ -418,4 +420,30 @@ function storno(id) {
         }
     })
 }
+$(document).on('change',"#vrsta",function(){
+	var selected=$("#vrsta option:selected").val()
+	if(selected=="MM"){
+		$.ajax({
+			url:'/magacin/allM',
+			type:'GET',
+			contentType:'application/json',
+			async:false,
+			success:function(data){
+					$("#magacin2").empty();
+					$.each(data,function(index,magacin){
+						$("#magacin2").append('<option selected id="'+magacin.id+'">'+magacin.naziv+'</option>')
+						
+						})
+					}
+				})
+			
+		
+		$("#poslovniDIV").css("display","none");
+		$("#magacin2DIV").css("display","block")
+	}else{
+		$("#poslovniDIV").css("display","block");
+		$("#magacin2DIV").css("display","none");
+
+	}
+})
 

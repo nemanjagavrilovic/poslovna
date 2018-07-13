@@ -105,7 +105,7 @@ public class RobnaKarticaController {
 		analitikaMagKartice.setSmerPrometa(SmerPrometa.U);
 		analitikaMagKartice.setVrstaPrometa(VrstaPrometa.PS);
 		StavkaDokumenta stavka=new StavkaDokumenta();
-		if(!karticaSaIstomRobom.getPoslovnaGodina().getGodina().equals(poslovnaGodinaService.findActive(true))) {
+		if(karticaSaIstomRobom!=null && !karticaSaIstomRobom.getPoslovnaGodina().getGodina().equals(poslovnaGodinaService.findAkivna(true))) {
 			stavka.setVrednost(karticaSaIstomRobom.getUkupnaVr());
 			stavka.setKolicina(karticaSaIstomRobom.getUkupnaKol());
 			stavka=stavkaDokumentaService.save(stavka);
@@ -200,10 +200,10 @@ public class RobnaKarticaController {
 			Connection conn;
 			conn =
 				       DriverManager.getConnection("jdbc:mysql://localhost:3306/poslovna?useSSL=false&" +
-				                                   "user=root&password=admin");
+				                                   "user=root&password=malizvornik95");
 			HashMap map = new HashMap();
 			map.put("idRobneKartice", id);
-            JasperReport jasReport = (JasperReport) JRLoader.loadObjectFromFile("C:/Users/nenad/git/poslovna/poslovna/src/main/resources/magacinska kartica sa analitikom.jasper");
+            JasperReport jasReport = (JasperReport) JRLoader.loadObjectFromFile("C:/Users/Nemanja/git/poslovna/poslovna/src/main/resources/magacinska kartica sa analitikom.jasper");
             JasperPrint jasPrint = JasperFillManager.fillReport(jasReport, map, conn);
             File pdf = File.createTempFile("output.", ".pdf");
 			JasperExportManager.exportReportToPdfStream(jasPrint, new FileOutputStream(pdf));

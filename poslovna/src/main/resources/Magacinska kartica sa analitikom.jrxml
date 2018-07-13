@@ -37,12 +37,19 @@
      preduzece.`pib` AS preduzece_pib,
      preduzece.`adresa` AS preduzece_adresa,
      preduzece.`naziv` AS preduzece_naziv,
-     preduzece.`mesto_id` AS preduzece_mesto_id
+     preduzece.`mesto_id` AS preduzece_mesto_id,
+     stavka_dokumenta.`id` AS stavka_dokumenta_id,
+     stavka_dokumenta.`cena` AS stavka_dokumenta_cena,
+     stavka_dokumenta.`kolicina` AS stavka_dokumenta_kolicina,
+     stavka_dokumenta.`vrednost` AS stavka_dokumenta_vrednost,
+     stavka_dokumenta.`dokument` AS stavka_dokumenta_dokument,
+     stavka_dokumenta.`roba_id` AS stavka_dokumenta_roba_id
 FROM
      `robna_kartica` robna_kartica INNER JOIN `analitika_mag_kartice` analitika_mag_kartice ON robna_kartica.`id` = analitika_mag_kartice.`robna_kartica_id`
      INNER JOIN `poslovna_godina` poslovna_godina ON robna_kartica.`poslovna_godina_id` = poslovna_godina.`id`
      INNER JOIN `magacin` magacin ON robna_kartica.`magacin_id` = magacin.`id`
      INNER JOIN `preduzece` preduzece ON magacin.`preduzece_id` = preduzece.`id`
+     INNER JOIN `stavka_dokumenta` stavka_dokumenta ON analitika_mag_kartice.`stavka_dokumenta_id` = stavka_dokumenta.`id`
 WHERE
      robna_kartica.`id` = $P{idRobneKartice}]]>
 	</queryString>
@@ -78,6 +85,12 @@ WHERE
 	<field name="preduzece_adresa" class="java.lang.String"/>
 	<field name="preduzece_naziv" class="java.lang.String"/>
 	<field name="preduzece_mesto_id" class="java.lang.Long"/>
+	<field name="stavka_dokumenta_id" class="java.lang.Long"/>
+	<field name="stavka_dokumenta_cena" class="java.lang.Float"/>
+	<field name="stavka_dokumenta_kolicina" class="java.lang.Float"/>
+	<field name="stavka_dokumenta_vrednost" class="java.lang.Float"/>
+	<field name="stavka_dokumenta_dokument" class="java.lang.Long"/>
+	<field name="stavka_dokumenta_roba_id" class="java.lang.Long"/>
 	<variable name="sumUkupno" class="java.lang.Float" calculation="Sum">
 		<variableExpression><![CDATA[$F{robna_kartica_ukupna_vr}]]></variableExpression>
 		<initialValueExpression><![CDATA[0]]></initialValueExpression>
@@ -86,24 +99,46 @@ WHERE
 		<variableExpression><![CDATA[$F{robna_kartica_cena}]]></variableExpression>
 		<initialValueExpression><![CDATA[0]]></initialValueExpression>
 	</variable>
-	<variable name="sumKolUl" class="java.lang.Float" calculation="Sum">
-		<variableExpression><![CDATA[$F{robna_kartica_promet_ulaza_kol}]]></variableExpression>
-		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	<variable name="vrsta" class="java.lang.String">
+		<variableExpression><![CDATA[($F{analitika_mag_kartice_vrsta_prometa}.equals( 0 ) ? "PR" :
+    ($F{analitika_mag_kartice_vrsta_prometa}.equals( 1 )) ? "OT" :
+            ($F{analitika_mag_kartice_vrsta_prometa}.equals( 2 )) ? "MM" :
+                 ($F{analitika_mag_kartice_vrsta_prometa}.equals( 3 )) ? "NI" :
+    ($F{analitika_mag_kartice_vrsta_prometa}.equals( 4 )) ? "PS" : "KOR")]]></variableExpression>
 	</variable>
-	<variable name="sumKolIzlaz" class="java.lang.Float" calculation="Sum">
-		<variableExpression><![CDATA[$F{robna_kartica_promet_izlaza_kol}]]></variableExpression>
-		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	<variable name="smer" class="java.lang.String">
+		<variableExpression><![CDATA[($F{analitika_mag_kartice_smer_prometa}.equals( 0 ) ? "U" : "I")]]></variableExpression>
 	</variable>
-	<variable name="sumKolUk" class="java.lang.Float" calculation="Sum">
+	<variable name="kolUlaz" class="java.lang.Float">
+		<variableExpression><![CDATA[($F{analitika_mag_kartice_smer_prometa}.equals(0) ? $F{stavka_dokumenta_kolicina} : 0)]]></variableExpression>
+	</variable>
+	<variable name="kolIzlaz" class="java.lang.Float">
+		<variableExpression><![CDATA[($F{analitika_mag_kartice_smer_prometa}.equals(1) ? $F{stavka_dokumenta_kolicina} : 0)]]></variableExpression>
+	</variable>
+	<variable name="vrUlaz" class="java.lang.Float">
+		<variableExpression><![CDATA[($F{analitika_mag_kartice_smer_prometa}.equals(0) ? $F{stavka_dokumenta_vrednost} : 0)]]></variableExpression>
+	</variable>
+	<variable name="vrIzlaza" class="java.lang.Float">
+		<variableExpression><![CDATA[($F{analitika_mag_kartice_smer_prometa}.equals(1) ? $F{stavka_dokumenta_vrednost} : 0)]]></variableExpression>
+	</variable>
+	<variable name="kolUUkupno" class="java.lang.Float" calculation="Sum">
 		<variableExpression><![CDATA[$F{robna_kartica_ukupna_kol}]]></variableExpression>
 		<initialValueExpression><![CDATA[0]]></initialValueExpression>
 	</variable>
-	<variable name="sumVrUl" class="java.lang.Float" calculation="Sum">
-		<variableExpression><![CDATA[$F{robna_kartica_promet_ulaza_vr}]]></variableExpression>
+	<variable name="kolUlazaUkupno" class="java.lang.Float" calculation="Sum">
+		<variableExpression><![CDATA[$V{kolUlaz}]]></variableExpression>
 		<initialValueExpression><![CDATA[0]]></initialValueExpression>
 	</variable>
-	<variable name="sumVrIzlaz" class="java.lang.Float" calculation="Sum">
-		<variableExpression><![CDATA[$F{robna_kartica_promet_izlaza_vr}]]></variableExpression>
+	<variable name="kolIzlazaUkupno" class="java.lang.Float" calculation="Sum">
+		<variableExpression><![CDATA[$V{kolIzlaz}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="vrUlazaUkupno" class="java.lang.Float" calculation="Sum">
+		<variableExpression><![CDATA[$V{vrUlaz}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="vrednostIzlazaUkupno" class="java.lang.Float" calculation="Sum">
+		<variableExpression><![CDATA[$V{vrIzlaza}]]></variableExpression>
 		<initialValueExpression><![CDATA[0]]></initialValueExpression>
 	</variable>
 	<pageHeader>
@@ -227,44 +262,44 @@ WHERE
 				<textFieldExpression><![CDATA[$F{analitika_mag_kartice_rbr}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="19" y="0" width="49" height="20" uuid="e8d3dd07-5b6a-4ed6-b7c1-8ad5f3d9ba85"/>
-				<textFieldExpression><![CDATA[$F{analitika_mag_kartice_vrsta_prometa}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="120" y="0" width="48" height="20" uuid="570b1552-2543-47d7-958c-8a969a049cfe"/>
-				<textFieldExpression><![CDATA[$F{analitika_mag_kartice_smer_prometa}]]></textFieldExpression>
-			</textField>
-			<textField>
 				<reportElement x="68" y="0" width="52" height="20" uuid="b618f588-8502-4ed7-b02d-3cb1001afe4a"/>
 				<textFieldExpression><![CDATA[$F{analitika_mag_kartice_stavka_dokumenta_id}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="168" y="0" width="49" height="20" uuid="94b327ab-8761-4bf6-af66-ffeb32388366"/>
-				<textFieldExpression><![CDATA[$F{robna_kartica_promet_ulaza_kol}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="217" y="0" width="49" height="20" uuid="a562b6fa-3a83-4cc6-a9c4-2dd38fb8198c"/>
-				<textFieldExpression><![CDATA[$F{robna_kartica_promet_izlaza_kol}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="266" y="0" width="64" height="20" uuid="056f6cc7-8d83-4b98-87e1-44d911e992cd"/>
 				<textFieldExpression><![CDATA[$F{robna_kartica_ukupna_kol}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="330" y="0" width="45" height="20" uuid="de82a86e-a5cc-4950-a957-166d06767ab8"/>
-				<textFieldExpression><![CDATA[$F{robna_kartica_cena}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="375" y="0" width="47" height="20" uuid="66d1e734-b83c-4dc3-9375-b56fd02d3a43"/>
-				<textFieldExpression><![CDATA[$F{robna_kartica_promet_ulaza_vr}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="422" y="0" width="46" height="20" uuid="ba345c47-1590-48d4-a317-17d54d46fff5"/>
-				<textFieldExpression><![CDATA[$F{robna_kartica_promet_izlaza_vr}]]></textFieldExpression>
-			</textField>
-			<textField>
 				<reportElement x="468" y="0" width="87" height="20" uuid="91af0f4c-d2de-4bd7-80d1-40868979b201"/>
 				<textFieldExpression><![CDATA[$F{robna_kartica_ukupna_vr}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="20" y="0" width="48" height="20" uuid="df81c377-f89e-405c-ae8a-087dc2eed9ff"/>
+				<textFieldExpression><![CDATA[$V{vrsta}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="120" y="0" width="48" height="20" uuid="b9f3dafd-c3e5-4b29-a90e-50ef31e4fb88"/>
+				<textFieldExpression><![CDATA[$V{smer}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="330" y="3" width="45" height="20" uuid="1f8940b2-7fcf-4a1d-9fc5-72ba3e6341f9"/>
+				<textFieldExpression><![CDATA[$F{stavka_dokumenta_cena}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="170" y="0" width="47" height="20" uuid="a83cdc2f-63cc-40fe-b3b6-d45322079fdc"/>
+				<textFieldExpression><![CDATA[$V{kolUlaz}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="217" y="0" width="49" height="20" uuid="a66fa485-6daf-4aa5-9553-ca62b124e420"/>
+				<textFieldExpression><![CDATA[$V{kolIzlaz}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="375" y="3" width="47" height="20" uuid="5875e400-ccac-4d25-b0be-75c8486a75ff"/>
+				<textFieldExpression><![CDATA[$V{vrUlaz}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="422" y="3" width="46" height="20" uuid="b092042f-6b7e-4b81-953f-ea507abcba1a"/>
+				<textFieldExpression><![CDATA[$V{vrIzlaza}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
@@ -283,24 +318,24 @@ WHERE
 				<text><![CDATA[Ukupno:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="170" y="0" width="47" height="20" uuid="67858b0d-4de3-4471-8748-b7f692738ac4"/>
-				<textFieldExpression><![CDATA[$V{sumKolUl}]]></textFieldExpression>
+				<reportElement x="266" y="0" width="64" height="20" uuid="241d98f1-1f45-4700-8692-a1867ff18d68"/>
+				<textFieldExpression><![CDATA[$V{kolUUkupno}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="217" y="0" width="49" height="20" uuid="327a9004-10ea-4632-845e-1bc2d85f67e4"/>
-				<textFieldExpression><![CDATA[$V{sumKolIzlaz}]]></textFieldExpression>
+				<reportElement x="170" y="0" width="47" height="20" uuid="918f3662-138f-427c-a48d-c573d070173c"/>
+				<textFieldExpression><![CDATA[$V{kolUlazaUkupno}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="266" y="0" width="64" height="20" uuid="e6cd5763-171d-45f1-a522-01e861361a65"/>
-				<textFieldExpression><![CDATA[$V{sumKolUk}]]></textFieldExpression>
+				<reportElement x="217" y="0" width="49" height="20" uuid="c7bce750-89f7-4728-b48e-e12556d4b2e8"/>
+				<textFieldExpression><![CDATA[$V{kolIzlazaUkupno}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="375" y="0" width="47" height="20" uuid="a186429f-41d9-4b7f-8c67-7894fba24e19"/>
-				<textFieldExpression><![CDATA[$V{sumVrUl}]]></textFieldExpression>
+				<reportElement x="375" y="0" width="47" height="20" uuid="4cca7d72-0d90-4399-a5c8-24f2d62203d8"/>
+				<textFieldExpression><![CDATA[$V{vrUlazaUkupno}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="421" y="0" width="47" height="20" uuid="9eff7f35-257e-484c-8d64-623384b13e17"/>
-				<textFieldExpression><![CDATA[$V{sumVrIzlaz}]]></textFieldExpression>
+				<reportElement x="422" y="0" width="46" height="20" uuid="6aad6f89-34cf-491f-8188-fa07ff623dd3"/>
+				<textFieldExpression><![CDATA[$V{vrednostIzlazaUkupno}]]></textFieldExpression>
 			</textField>
 		</band>
 	</lastPageFooter>
