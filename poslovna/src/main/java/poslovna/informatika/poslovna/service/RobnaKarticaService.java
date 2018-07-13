@@ -17,5 +17,6 @@ public interface RobnaKarticaService {
 	public RobnaKartica findById(Long id);
 	List<RobnaKartica> findByMagacinAndPoslovnaGodina(Magacin magacin, PoslovnaGodina pg);
 	RobnaKartica findByMagacinAndRoba(Magacin magacin, Roba roba);
-	
+
+	List<RobnaKartica> findByPoslovnaGodina(PoslovnaGodina poslovnaGodina);
 }

@@ -58,8 +58,13 @@ public class RobnaKarticaServiceImpl implements RobnaKarticaService {
 		return robnaKarticaRepository.findByMagacinAndRoba(magacin, roba);
 	}
 
+	@Override
+	public List<RobnaKartica> findByPoslovnaGodina(PoslovnaGodina poslovnaGodina) {
+		return robnaKarticaRepository.findByPoslovnaGodina(poslovnaGodina);
+	}
 
-	
+
+
 
 }
 

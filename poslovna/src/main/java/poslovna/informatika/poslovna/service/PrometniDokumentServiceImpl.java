@@ -44,7 +44,7 @@ public class PrometniDokumentServiceImpl implements PrometniDokumentService{
 
 	@Override
 	public List<PrometniDokument> findByStatusAndPoslovnaGodina(StatusDokumenta status, PoslovnaGodina poslovnaGodina) {
-		return prometniDokumentRepository.findByStatusAnAndPoslovnaGodina(status, poslovnaGodina);
+		return prometniDokumentRepository.findByStatusAndPoslovnaGodina(status, poslovnaGodina);
 	}
 
 }

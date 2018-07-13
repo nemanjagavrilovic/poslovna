@@ -18,5 +18,5 @@ public interface PoslovnaGodinaRepository extends JpaRepository<PoslovnaGodina,L
 
 		List<PoslovnaGodina> findAll();
 
-		List<PoslovnaGodina> findById(Long id);
+		PoslovnaGodina findById(Long id);
 }

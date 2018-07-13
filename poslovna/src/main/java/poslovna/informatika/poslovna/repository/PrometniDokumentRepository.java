@@ -12,5 +12,5 @@ public interface PrometniDokumentRepository extends PagingAndSortingRepository<P
 
 	public List<PrometniDokument> findByMagacin(Magacin magacin);
 	public List<PrometniDokument> findByStatusAndVrstaAndMagacinAndPoslovniPartner(StatusDokumenta status,VrstaPrDokumenta vrsta,Magacin magacin,PoslovniPartner partner);
-	List<PrometniDokument> findByStatusAnAndPoslovnaGodina(StatusDokumenta status, PoslovnaGodina poslovnaGodina);
+	List<PrometniDokument> findByStatusAndPoslovnaGodina(StatusDokumenta status, PoslovnaGodina poslovnaGodina);
 }

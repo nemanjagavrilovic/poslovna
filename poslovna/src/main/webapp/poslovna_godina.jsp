@@ -191,7 +191,13 @@
                 <td class="godina">${ godina.godina }</td>
                 <td class="zakljucena">${ godina.zakljucena }</td>
                 <td class="aktivna">${ godina.aktivna }</td>
-                <td><a onclick="zakljuciGodinu(${ godina.id })">Zakljuci</a></td>
+                <c:if test="${ godina.zakljucena }">
+                    <td>Zakljucena</td>
+                </c:if>
+                <c:if test="${ !godina.zakljucena }">
+                    <td><a onclick="zakljuciGodinu(${ godina.id })">Zakljuci</a></td>
+                </c:if>
+
             </tr>
         </c:forEach>
         </tbody>

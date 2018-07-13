@@ -31,7 +31,7 @@ public class PoslovnaGodinaServiceImpl implements PoslovnaGodinaService{
 
 	@Override
 	public PoslovnaGodina findById(Long id) {
-		return null;
+		return poslovnaGodinaRepository.findById(id);
 	}
 
 	@Override
