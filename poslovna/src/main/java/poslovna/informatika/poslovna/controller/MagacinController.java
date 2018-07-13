@@ -115,7 +115,8 @@ public class MagacinController {
 		Magacin magacin = magacinService.findById(id);
 		
 		for(RobnaKartica rk : magacin.getRobneKartice()) {
-			roba.add(rk.getRoba());
+			if(rk.getPoslovnaGodina().isAktivna())
+				roba.add(rk.getRoba());
 		}
 		
 		return new ResponseEntity<List<Roba>>(roba,HttpStatus.OK);

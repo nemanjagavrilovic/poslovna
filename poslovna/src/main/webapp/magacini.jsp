@@ -50,6 +50,7 @@
 						<td><a href="../prometniDokument/all/${magacin.id}">Dokumenti</a></td>
 						<td><a href="/robnaKartica/index/${ magacin.id }">Robne kartice</a></td>
 						<td><a class="izvestaj" href="/magacin/izvestaj/${ magacin.id }">Izvestaj</a></td>
+						<td><a  href='../popis.html# ${magacin.id}'>Popis</a></td>
 						
 					</tr>
 				</c:forEach>
