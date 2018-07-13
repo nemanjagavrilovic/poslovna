@@ -64,6 +64,20 @@
             highlightRow(this)
         });
 
+        function zakljuciGodinu(id) {
+            $.ajax({
+                url: '/poslovnaGodina/' + id + '/zakljuci',
+                type: 'POST',
+                success: function (data) {
+                    alert("Godina uspesno zakljucena!")
+                    window.location.reload();
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    alert(jqXHR.responseText);
+                }
+            });
+        }
+
         function sync(item){
             let godina = item.find(".godina").html();
             let zakljucena = item.find(".zakljucena").html();
@@ -151,6 +165,7 @@
 </head>
 <body onload="init()">
 <div>
+    <c:import url = "./navbar.jsp"/>
     <ul>
         <li class="group-start"><a href="searchModal" data-toggle="modal" data-target="#searchModal"><img src="../../images/search.gif" /></a></li>
         <li><a href="#" id="refresh"><img src="../../images/refresh.gif" /></a></li>
@@ -177,6 +192,13 @@
                 <td class="godina">${ godina.godina }</td>
                 <td class="zakljucena">${ godina.zakljucena }</td>
                 <td class="aktivna">${ godina.aktivna }</td>
+                <c:if test="${ godina.zakljucena }">
+                    <td>Zakljucena</td>
+                </c:if>
+                <c:if test="${ !godina.zakljucena }">
+                    <td><a onclick="zakljuciGodinu(${ godina.id })">Zakljuci</a></td>
+                </c:if>
+
             </tr>
         </c:forEach>
         </tbody>

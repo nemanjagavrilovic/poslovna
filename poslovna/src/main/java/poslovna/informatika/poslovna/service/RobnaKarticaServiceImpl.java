@@ -1,6 +1,7 @@
 package poslovna.informatika.poslovna.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -57,6 +58,29 @@ public class RobnaKarticaServiceImpl implements RobnaKarticaService {
 	public RobnaKartica findByMagacinAndRoba(Magacin magacin, Roba roba) {
 		return robnaKarticaRepository.findByMagacinAndRoba(magacin, roba);
 	}
+
+	@Override
+	public List<RobnaKartica> findByPoslovnaGodina(PoslovnaGodina poslovnaGodina) {
+		return robnaKarticaRepository.findByPoslovnaGodina(poslovnaGodina);
+	}
+
+	@Override
+	public List<RobnaKartica> findByMagacinNameAndRobaName(String magacinIme, String robaIme) {
+		List<RobnaKartica> robneKartice = robnaKarticaRepository.findAll();
+		if(magacinIme != null && !magacinIme.isEmpty()) {
+			robneKartice = robneKartice.stream()
+					.filter(e -> e.getMagacin().getNaziv().toLowerCase().contains(magacinIme.toLowerCase()))
+					.collect(Collectors.toList());
+		}
+		if(robaIme != null && !robaIme.isEmpty()) {
+			robneKartice = robneKartice.stream()
+					.filter(e -> e.getRoba().getNaziv().toLowerCase().contains(robaIme.toLowerCase()))
+					.collect(Collectors.toList());
+		}
+
+		return robneKartice;
+	}
+
 
 }
 

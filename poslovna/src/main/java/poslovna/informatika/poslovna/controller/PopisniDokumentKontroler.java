@@ -1,6 +1,12 @@
 package poslovna.informatika.poslovna.controller;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,6 +17,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
 import poslovna.informatika.poslovna.converters.PopisniDokumentDTOtoPopisniDokument;
 import poslovna.informatika.poslovna.dto.PopisniDokumentDTO;
 import poslovna.informatika.poslovna.model.AnalitikaMagKartice;
@@ -68,7 +79,6 @@ public class PopisniDokumentKontroler {
 
 		retDokument.setPoslovnaGodina(pg);
 		popisniDokumentService.save(retDokument);
-
 		doUpdate(retDokument, pg);
 		return new ResponseEntity<PopisniDokument>(popisniDokument, HttpStatus.OK);
 	}
@@ -131,5 +141,47 @@ public class PopisniDokumentKontroler {
 		return new ResponseEntity<List<PopisniDokument>>(dokumenti, HttpStatus.OK);
 	}
 
-
+	@RequestMapping(value = "/search", method = RequestMethod.POST)
+	public ResponseEntity<List<PopisniDokument>> search(@RequestBody PopisniDokument pd) {
+		
+		List<PopisniDokument> dokumenti = popisniDokumentService.findAll();
+		if(pd.getDatum() !=null) {
+			System.out.println(pd.getDatum());
+			dokumenti=dokumenti.stream().filter(e -> e.getDatum().compareTo(pd.getDatum())<=0).collect(Collectors.toList());
+		}
+		if(pd.getPoslovnaGodine() != null) {
+			
+				dokumenti=dokumenti.stream().filter(e -> e.getPoslovnaGodine().getGodina().compareTo(pd.getPoslovnaGodine().getGodina())<=0).collect(Collectors.toList());
+				
+		}
+		
+		if(pd.getBrojPopisa()!=-1) {
+			System.out.println("USAO");
+			Long id = new Long(pd.getBrojPopisa());
+			Magacin magacin = magacinService.findById(id);
+			dokumenti=dokumenti.stream().filter(e -> e.getMagacin().getId().equals(magacin.getId())).collect(Collectors.toList());
+		}
+		
+		return new ResponseEntity<List<PopisniDokument>>(dokumenti, HttpStatus.OK);
+	}
+	@RequestMapping(value="/izvestaj/{id}",method=RequestMethod.POST)
+	public ResponseEntity<String> izvestaj(@PathVariable("id") Long id){
+		try {
+			Connection conn;
+			conn =
+				       (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/poslovna?useSSL=false&" +
+				                                   "user=root&password=admin");
+			HashMap map = new HashMap();
+			map.put("idPopisnogDokumenta", id);
+            JasperReport jasReport = (JasperReport) JRLoader.loadObjectFromFile("C:/Users/nenad/git/poslovna/poslovna/src/main/resources/popisniDokument.jasper");
+            JasperPrint jasPrint = JasperFillManager.fillReport(jasReport, map, conn);
+            File pdf = File.createTempFile("output.", ".pdf");
+			JasperExportManager.exportReportToPdfStream(jasPrint, new FileOutputStream(pdf));
+			System.out.println("Temp file : " + pdf.getAbsolutePath());
+		}catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		return new ResponseEntity<String>("ok",HttpStatus.OK);
+		}
+	
 }

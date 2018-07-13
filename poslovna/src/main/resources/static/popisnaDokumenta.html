@@ -38,6 +38,7 @@ var id = -1;
 														+ data[i].datum
 														+ "</td>"
 														+ "<td class=\"komisija\">"+data[i].komisija.id+"</td>"
+														+"<td><a class=\"izvestaj\" href=\"/popisniDokument/izvestaj/"+data[i].id+"\">Izvestaj</a></td>"
 														+ "</tr>"
 												$("#dataTable").append(newRow)
 
@@ -53,6 +54,7 @@ var id = -1;
 									})
 							.then(
 									function(data) {
+										console.log(data)
 										for (i = 0; i < data.length; i++) {
 											newRow = "<tr>"
 													+ "<td class =\"id\">"
@@ -61,16 +63,38 @@ var id = -1;
 													+ data[i].brojPopisa
 													+ "</td>"
 													+ "<td class=\"datum\">"
-													+ data[i].datum
+													+ convertDate(data[i].datum)
 													+ "</td>"
 													+ "<td class=\"komisija\">"+data[i].komisija.id+"</td>"
+													+"<td><a class=\"izvestaj\" href=\"/popisniDokument/izvestaj/"+data[i].id+"\">Izvestaj</a></td>"
 													+ "</tr>"
 											$("#dataTable").append(newRow)
 
 										}
 									});
 						}
-						
+						$.ajax({
+							url : "http://localhost:9000/magacin/allM/"
+						}).then(
+								function(data) {
+									console.log(data)
+									for (i = 0; i < data.length; i++) {
+										newRow = "<tr>"
+
+										+ "<td class=\"ime\">" + data[i].ime
+												+ "</td>"
+												+ "<td class=\"prezime\">"
+												+ data[i].prezime + "</td>"
+												+ "</tr>"
+										$("#radnici").append(newRow);
+										$("#magacinSearch").append(
+												"<option value=\""+data[i].id+"\">"
+														
+														+ data[i].naziv
+														+ "</option>")
+
+									}
+								});
 						$("#nextForm").click(function(){
 							var highlighted = $(".highlighted");
 							console.log(highlighted);
@@ -85,7 +109,53 @@ var id = -1;
 							
 					        });
 	
-						
+						$("#search").click(function(){
+							console.log($("#dateSearch").val())	
+							console.log($("#poslovnaGodinaSearch").val())
+							var magacin = {id: $("#magacinSearch").val()};
+							var dokument;
+							if($("#magacinSearch").val()==""){
+							 dokument = JSON.stringify({
+								"poslovnaGodina" : $("#poslovnaGodinaSearch").val(),
+								"datum" : $("#dateSearch").val(),
+								"brojPopisa" : -1
+							});
+							} else {
+								 dokument = JSON.stringify({
+										"poslovnaGodina" : $("#poslovnaGodinaSearch").val(),
+										"datum" : $("#dateSearch").val(),
+										"brojPopisa" :$("#magacinSearch").val()
+									});
+							}
+							console.log(dokument)
+							$("#dataTable").find("tr:not(:first)").remove();
+							$.ajax({
+								url: "/popisniDokument/search",
+								type: "POST",
+								data: dokument,
+								//saljemo json i ocekujemo json nazad
+								contentType: "application/json",
+								datatype: 'json',
+								success: function(data) {
+									for (i = 0; i < data.length; i++) {
+										newRow = "<tr>"
+												+ "<td class =\"id\">"
+												+ data[i].id
+												+ "<td class=\"brojPopisa\">"
+												+ data[i].brojPopisa
+												+ "</td>"
+												+ "<td class=\"datum\">"
+												+ convertDate(data[i].datum)
+												+ "</td>"
+												+ "<td class=\"komisija\">"+data[i].komisija.id+"</td>"
+												+"<td><a class=\"izvestaj\" href=\"/popisniDokument/izvestaj/"+data[i].id+"\">Izvestaj</a></td>"
+												+ "</tr>"
+										$("#dataTable").append(newRow)
+
+									}
+								}
+						});
+						});
 
 						
 						$("#first").click(function() {
@@ -104,6 +174,7 @@ var id = -1;
 							goPrev()
 						});
 
+						
 							$(document).on("click", "tr", function(event) {
 		highlightRow(this)
 	});
@@ -149,13 +220,43 @@ var id = -1;
 	function goToKomisija(){
 	window.top.location = "popisnaKomisja.html#"+id
 	}
-	
-	
+	function convertDate(stamp){
+		if(stamp!=null){
+			var a=new Date(stamp);
+			var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+			var year = a.getFullYear();
+			var month = months[a.getMonth()];
+			var date = a.getDate();
+			  
+			var time = date + '.' + month + '.' + year+'.' ;
+			return time;
+		}else{
+			return ""
+		}
+	}
+
+	$(document).on('click','.izvestaj',function(e){
+		e.preventDefault();
+		var confirmed=confirm("Da li zelite da kreirate izvestaj");
+		var url=$(this).attr('href')
+		var item=$(this)
+		if(confirmed){
+			$.ajax({
+				url:url,
+				type:'POST',
+				success:function(){
+					alert("Kreiran izvestaj");
+				}
+			})
+		}
+	})
+
 	
 </script>
 
 </head>
 <body>
+	<div w3-include-html="navbar.html" style="width: 100%"></div>
 	<div class="formContainer">
 		<ul>
 			<li class="group-start"><a href="searchModal"
@@ -182,6 +283,7 @@ var id = -1;
 				<th>Broj popisa</th>
 				<th>Datum popisa</th>
 				<th>Komisija</th>
+				<th>Izvestaji</th>
 
 			</tr>
 		</table>
@@ -203,7 +305,41 @@ var id = -1;
 		      
 		    </div>
 		  </div>
+		  <div class="modal fade" id="searchModal" tabindex="-1" role="dialog">
+		 <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="exampleModalLabel">Pretraga gradova</h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <form id="editForm">
+		      <div class="modal-body">
+					<input type="hidden" name="idSearch" id="idSearch" />
+				<p>
+					<label for="datum">Datum do</label> <input type="date" name="dateSearch"
+						id="dateSearch" />
+					
+					
+				</p>
+				<p><label for="poslovnaGodina">Poslovna godina do</label> <input type="date" name="dateSearch"
+						id="poslovnaGodinaSearch" /></p>	
+				<p><label for="magacin">Magacin</label> <select id="magacinSearch">
+				<option value=""></option></select></p>	
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+		        <button type="button" class="btn btn-primary" id="search">Pretrazi</button>
+		      </div>
+		      </form>
+		    </div>
+		  </div>
 		</div>
 		
+		</div>
+	<script>
+        includeHTML();
+	</script>
 </body>
 </html>

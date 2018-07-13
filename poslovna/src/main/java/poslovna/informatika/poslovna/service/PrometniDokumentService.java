@@ -2,11 +2,7 @@ package poslovna.informatika.poslovna.service;
 
 import java.util.List;
 
-import poslovna.informatika.poslovna.model.Magacin;
-import poslovna.informatika.poslovna.model.PoslovniPartner;
-import poslovna.informatika.poslovna.model.PrometniDokument;
-import poslovna.informatika.poslovna.model.StatusDokumenta;
-import poslovna.informatika.poslovna.model.VrstaPrDokumenta;
+import poslovna.informatika.poslovna.model.*;
 
 public interface PrometniDokumentService {
 
@@ -15,4 +11,5 @@ public interface PrometniDokumentService {
 	public PrometniDokument findById(Long id);
 	public List<PrometniDokument> findAll();
 	public List<PrometniDokument> findByStatusAndVrstaAndMagacinAndPoslovniPartner(StatusDokumenta status,VrstaPrDokumenta vrsta,Magacin magacin,PoslovniPartner partner);
+	List<PrometniDokument> findByStatusAndPoslovnaGodina(StatusDokumenta status, PoslovnaGodina poslovnaGodina);
 }

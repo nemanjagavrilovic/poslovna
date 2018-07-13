@@ -7,6 +7,7 @@ import java.sql.DriverManager;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -221,5 +222,12 @@ public class RobnaKarticaController {
 		robnaKartica.setCena(newRobnaKartica.getCena());
 		robnaKarticaService.save(robnaKartica);
 		return new ResponseEntity(HttpStatus.OK);
+	}
+
+	@RequestMapping(value="/search", method = RequestMethod.GET)
+	private String search(@RequestParam("magacin") String magacinIme, @RequestParam("roba") String robaIme, HttpServletRequest request) {
+		List<RobnaKartica> robneKartice = robnaKarticaService.findByMagacinNameAndRobaName(magacinIme, robaIme);
+		request.setAttribute("robneKartice", robneKartice);
+		return "forward:/robne_kartice.jsp";
 	}
 }

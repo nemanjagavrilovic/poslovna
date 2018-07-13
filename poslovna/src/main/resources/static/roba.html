@@ -333,6 +333,7 @@ table tr.zoomHighlighted{
 
 </head>
 <body>
+<div w3-include-html="navbar.html" style="width: 100%"></div>
 	<div class="formContainer">
 			<ul>
 				<li class="group-start"><a href="searchModal" data-toggle="modal" data-target="#searchModal"><img src="images/search.gif" /></a></li>
@@ -457,7 +458,7 @@ table tr.zoomHighlighted{
 		 <div class="modal-dialog" role="document">
 		    <div class="modal-content">
 		      <div class="modal-header">
-		        <h5 class="modal-title" id="exampleModalLabel">Pretraga gradova</h5>
+		        <h5 class="modal-title" id="exampleModalLabel">Pretraga robe</h5>
 		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 		          <span aria-hidden="true">&times;</span>
 		        </button>
@@ -588,5 +589,8 @@ table tr.zoomHighlighted{
 	    </div>
 	   </div>
 </div>
+	<script>
+        includeHTML();
+	</script>
 </body>
 </html>

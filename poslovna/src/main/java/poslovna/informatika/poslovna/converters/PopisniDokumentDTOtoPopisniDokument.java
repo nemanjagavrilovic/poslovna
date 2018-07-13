@@ -1,6 +1,7 @@
 package poslovna.informatika.poslovna.converters;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import poslovna.informatika.poslovna.model.PopisniDokument;
 import poslovna.informatika.poslovna.model.StavkaPopisa;
 import poslovna.informatika.poslovna.service.MagacinService;
 import poslovna.informatika.poslovna.service.PopisnaKomisijaService;
+import poslovna.informatika.poslovna.service.PopisniDokumentService;
 import poslovna.informatika.poslovna.service.StavkaPopisaService;
 
 @Component
@@ -20,6 +22,8 @@ public class PopisniDokumentDTOtoPopisniDokument implements Converter<PopisniDok
 	
 	@Autowired
 	private MagacinService magacinService;
+	@Autowired
+	private PopisniDokumentService popisniDokumentService;
 	@Autowired 
 	private PopisnaKomisijaService komisijaService;
 	@Autowired
@@ -31,7 +35,9 @@ public class PopisniDokumentDTOtoPopisniDokument implements Converter<PopisniDok
 		
 		PopisniDokument popisniDokument= new PopisniDokument() ;
 			
-		popisniDokument.setBrojPopisa(0);
+		popisniDokument.setDatum(new Date());
+		List<PopisniDokument> dokumenti = popisniDokumentService.findAll();
+		popisniDokument.setBrojPopisa(dokumenti.size()+1);
 		popisniDokument.setMagacin(magacinService.findById(source.getMagacin()));
 		popisniDokument.setKomisija(komisijaService.findById(source.getKomisija()));
 		List<StavkaPopisa> stavke = new ArrayList<StavkaPopisa>();

@@ -323,10 +323,19 @@
             		}
             	})
             }
+
+            function pretrazi() {
+                let magacin = $("#magacinSearchInput").val();
+                let roba = $("#robaSearchInput").val();
+
+                window.location.href = '/robnaKartica/search?magacin=' + magacin + '&roba=' + roba;
+
+            }
         
     </script>
 </head>
 <body onload="init()">
+<c:import url = "./navbar.jsp"/>
 <div>
     <ul>
         <li class="group-start"><a href="searchModal" data-toggle="modal" data-target="#searchModal"><img src="../../images/search.gif" /></a></li>
@@ -554,5 +563,33 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="searchModal" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                Pretrazi
+            </div>
+            <div class="modal-body">
+                <table>
+                    <tr>
+                        <td>Magacin:</td>
+                        <td><input type="text" id="magacinSearchInput"></td>
+                    </tr>
+                    <tr>
+                        <td>Roba</td>
+                        <td><input type="text" id="robaSearchInput"></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="modal-footer">
+                <input id="pretraziButton" onclick="pretrazi()" type = "button" value = "Izaberi"/>
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>

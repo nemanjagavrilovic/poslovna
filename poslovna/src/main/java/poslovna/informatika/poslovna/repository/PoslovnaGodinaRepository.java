@@ -11,10 +11,12 @@ import java.util.List;
 public interface PoslovnaGodinaRepository extends JpaRepository<PoslovnaGodina,Long> {
 
 		PoslovnaGodina findByZakljucena(boolean zakljucena);
+
 		PoslovnaGodina findByAktivna(boolean aktivna);
-	
 
 		PoslovnaGodina save(PoslovnaGodina poslovnaGodina);
 
 		List<PoslovnaGodina> findAll();
+
+		PoslovnaGodina findById(Long id);
 }

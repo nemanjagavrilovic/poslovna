@@ -19,7 +19,7 @@
 	
 </head>
 <body>
-
+<c:import url = "./navbar.jsp"/>
 	<div>
 	<ul>
 			<ul>
@@ -31,7 +31,7 @@
 				<li><a id="next"><img src="../images/next.gif" /></a></li>
 				<li><a id="last"><img src="../images/last.gif" /></a></li>
 				<li class="group-start" onclick="find()"id="novi"><a href="#inputModal" data-toggle="modal" data-target="#inputModal"><img src="../images/add.gif" /></a></li>
-				<li class="group-start"><a  href="../prometniDokument/all" id="nextform"><img src="../images/nextform.gif" /></a></li>
+				<li class="group-start"><a  href="nextModal" id="search" data-toggle="modal" data-target="#nextModal"><img src="../images/nextform.gif" /></a></li>
 		</ul>
 		
 	</ul>
@@ -50,6 +50,8 @@
 						<td><a href="../prometniDokument/all/${magacin.id}">Dokumenti</a></td>
 						<td><a href="/robnaKartica/index/${ magacin.id }">Robne kartice</a></td>
 						<td><a class="izvestaj" href="/magacin/izvestaj/${ magacin.id }">Izvestaj</a></td>
+						<td><button onClick="redirect(${ magacin.id })">Add</button></td>
+					
 						
 					</tr>
 				</c:forEach>
@@ -115,6 +117,24 @@
 		      </form>
 		      </div>
 	
+		    </div>
+		  </div>
+		</div>
+	</div>
+	<div class="modal"  id="nextModal"  role="dialog">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="exampleModalLabel">Izaberite tabelu:</h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+			<div id="form">
+			<ul>
+				<li><a href="../prometniDokument/all/" id="nextform">Prometni dokumenti</a></li>
+				<li><a href="../popisnaDokumenta.html#" id="nextform">Popisni dokumenti</a></li>
+				</ul>
 		    </div>
 		  </div>
 		</div>

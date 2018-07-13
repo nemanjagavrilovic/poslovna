@@ -24,4 +24,6 @@ public interface RobnaKarticaRepository extends PagingAndSortingRepository<Robna
 	List<RobnaKartica> findByMagacinAndPoslovnaGodina(Magacin magacin, PoslovnaGodina pg);
 
 	RobnaKartica findByMagacinAndRoba(Magacin magacin, Roba roba);
+
+	List<RobnaKartica> findByPoslovnaGodina(PoslovnaGodina poslovnaGodina);
 }

@@ -5,11 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import poslovna.informatika.poslovna.model.Magacin;
-import poslovna.informatika.poslovna.model.PoslovniPartner;
-import poslovna.informatika.poslovna.model.PrometniDokument;
-import poslovna.informatika.poslovna.model.StatusDokumenta;
-import poslovna.informatika.poslovna.model.VrstaPrDokumenta;
+import poslovna.informatika.poslovna.model.*;
 import poslovna.informatika.poslovna.repository.PrometniDokumentRepository;
 @Service
 public class PrometniDokumentServiceImpl implements PrometniDokumentService{
@@ -44,6 +40,11 @@ public class PrometniDokumentServiceImpl implements PrometniDokumentService{
 		// TODO Auto-generated method stub
 		return prometniDokumentRepository.findByStatusAndVrstaAndMagacinAndPoslovniPartner(status,vrsta,magacin,partner);
 		
+	}
+
+	@Override
+	public List<PrometniDokument> findByStatusAndPoslovnaGodina(StatusDokumenta status, PoslovnaGodina poslovnaGodina) {
+		return prometniDokumentRepository.findByStatusAndPoslovnaGodina(status, poslovnaGodina);
 	}
 
 }

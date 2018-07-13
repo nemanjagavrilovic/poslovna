@@ -266,6 +266,7 @@
 
 </head>
 <body>
+<div w3-include-html="navbar.html" style="width: 100%"></div>
 	<div class="formContainer">
 		<ul>
 			<li class="group-start"><a href="searchModal" data-toggle="modal" data-target="#searchModal"><img src="images/search.gif" /></a></li>
@@ -279,7 +280,7 @@
 			<li><a id="nextForm"><img src="images/nextform.gif" /></a></li>
 		</ul>
 
-		<h1>Države</h1>
+		<h1>Jedinice mere</h1>
 		<table id="dataTable" class="table">
 			<tr class="header">
 				<th>Naziv</th>
@@ -304,7 +305,7 @@
 		  <div class="modal-dialog" role="document">
 		    <div class="modal-content">
 		      <div class="modal-header">
-		        <h5 class="modal-title" id="exampleModalLabel">Nova država</h5>
+		        <h5 class="modal-title" id="exampleModalLabel">Nova jedinica mere</h5>
 		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 		          <span aria-hidden="true">&times;</span>
 		        </button>
@@ -330,7 +331,7 @@
 		  <div class="modal-dialog" role="document">
 		    <div class="modal-content">
 		      <div class="modal-header">
-		        <h5 class="modal-title" id="exampleModalLabel">Pretraga država</h5>
+		        <h5 class="modal-title" id="exampleModalLabel">Pretraga jedinica mera</h5>
 		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 		          <span aria-hidden="true">&times;</span>
 		        </button>
@@ -356,7 +357,7 @@
 		  <div class="modal-dialog" role="document">
 		    <div class="modal-content">
 		      <div class="modal-header">
-		        <h5 class="modal-title" id="exampleModalLabel">Izmena države</h5>
+		        <h5 class="modal-title" id="exampleModalLabel">Izmena jedinice mere</h5>
 		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 		          <span aria-hidden="true">&times;</span>
 		        </button>
@@ -377,56 +378,9 @@
 		    </div>
 		  </div>
 		</div>
-		
-		<div class="modal fade" id="nextformModal" tabindex="-1" role="dialog">
-		 <div class="modal-dialog" role="document">
-		    <div class="modal-content">
-		      <div class="modal-header">
-		        <h5 class="modal-title" id="exampleModalLabel">Nova drÅ¾ava</h5>
-		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-		          <span aria-hidden="true">&times;</span>
-		        </button>
-		      </div>
-		      
-		      <div class="modal-dialog">
-		      <!-- Modal content-->
-		      <div class="modal-content">
-		      <div class="modal-header">
-		      	Roba
-		      </div>
-		      <div class="modal-body">
-			    <table style = "padding:2em" id = "zoomTable">
-				<tr class = "header">
-					<th>Naziv</th>
-					<th>Grupa roba</th>
-				</tr>
-		
-				</table>
-			</div>
-	      </div>
-	    </div>
-		      
-		      <form id="nextformForm">
-		      <div class="modal-body">
-					<input type="hidden" name="id" id="id" />
-				<p>
-					<label for="naziv">Naziv</label> <input type="text" name="namenextform"
-						id="nazivnextform" />
-				</p>
-				<p>
-					<label for="naziv">Grupa roba</label> 
-					<select name="drzava" id="drzavaSelect">
-					</select>
-				</p>	
-		      </div>
-		      <div class="modal-footer">
-		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
-		        <button type="button" class="btn btn-primary" id="addCity">Potvrda</button>
-		      </div>
-		      </form>
-		    </div>
-		  </div>
-		</div>
-		
+	</div>
+		<script>
+            includeHTML();
+		</script>
 </body>
 </html>
