@@ -110,7 +110,10 @@ $(document).on('click','#add',function(event){
 		"radnici":radnici
 	
 	})
-	
+	if(radnici.length==0){
+		alert('Morate dodati radnika')
+		return;
+	}
 	$.ajax({
 		url:"/magacin/save",
 		type:"POST",
@@ -299,7 +302,12 @@ $(document).on('click','#searchButton',function(e){
 $(document).on('click','#nextform',function(e){
 	e.preventDefault();
 	var url=$(this).attr('href');
-	url=url+'/'+$('#id').val()
+	
+	if($('#id').val()==""){
+		alert('Izaberite magacin')
+		return
+	}
+	url=url+$('#id').val()
 			window.location.href = url;
 	})
 

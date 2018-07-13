@@ -112,7 +112,10 @@ public class PrometniDokumentController {
 	@RequestMapping(value="/{id}/proknjizi", method=RequestMethod.POST)
 	public ResponseEntity proknjizi(@PathVariable("id") Long id) {
 		PrometniDokument prometniDokument = prometniDokumentService.findById(id);
-		
+		if(prometniDokument.getPoslovnaGodina().isZakljucena()==true){
+			return new ResponseEntity(HttpStatus.BAD_REQUEST);
+
+		}
 		if(prometniDokument.getVrsta().equals(VrstaPrDokumenta.MM)){
 			medjumagacinskiPromet(prometniDokument,"knjizenje");
 			return new ResponseEntity(HttpStatus.OK);
@@ -148,6 +151,10 @@ public class PrometniDokumentController {
 	@RequestMapping(value="/{id}/storno", method=RequestMethod.POST)
 	public ResponseEntity storno(@PathVariable("id") Long id) {
 		PrometniDokument prometniDokument = prometniDokumentService.findById(id);
+		if(prometniDokument.getPoslovnaGodina().isZakljucena()==true){
+			return new ResponseEntity(HttpStatus.BAD_REQUEST);
+
+		}
 		if(prometniDokument.getVrsta().equals(VrstaPrDokumenta.MM)){
 			medjumagacinskiPromet(prometniDokument,"storno");
 			return new ResponseEntity(HttpStatus.OK);
