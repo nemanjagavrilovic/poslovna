@@ -110,7 +110,10 @@ $(document).on('click','#add',function(event){
 		"radnici":radnici
 	
 	})
-	
+	if(radnici.length==0){
+		alert('Morate dodati radnika')
+		return;
+	}
 	$.ajax({
 		url:"/magacin/save",
 		type:"POST",
@@ -120,7 +123,7 @@ $(document).on('click','#add',function(event){
 		success:function(data){
 			let row='<tr><td class="idCell">'+data.id+'</td><td class="naziv">'+data.naziv+'</td><td><a class="edit" href="../magacin/'+data.id+'">Edit</a>'
 			+'</td>'
-			+'<td><a href="../prometniDokument/all/'+data.id+'">Dokumenti</a></td><td><a href="/robnaKartica/index/'+data.id+'">Robne kartice</a></td><td><a class="izvestaj" href="/magacin/izvestaj/'+data.id+'">Izvestaj</a></td></tr>'
+			+'<td><a href="../prometniDokument/all/'+data.id+'">Dokumenti</a></td><td><a href="/robnaKartica/index/'+data.id+'">Robne kartice</a></td><td><a class="izvestaj" href="/magacin/izvestaj/'+data.id+'">Izvestaj</a></td><td><a  href="../popis.html#'+data.id+'">Popis</a></td></tr>'
 			
 			$("#magacini").append(row)
 		}
@@ -289,7 +292,7 @@ $(document).on('click','#searchButton',function(e){
 		success:function(data){
 			$("#magacini").find("tr:not(:first)").remove();
 			$.each(data,function(index,magacin){
-				let row='<tr><td class="naziv">'+magacin.naziv+'</td><td><a class="edit" href="../magacin/'+magacin.id+'">Edit</a></td><td><a href="../prometniDokument/all/'+magacin.id+'">Dokumenti</a></td><td><a class="izvestaj" href="/magacin/izvestaj/'+magacin.id+'">Izvestaj</a></td></tr>'
+				let row='<tr><td class="naziv">'+magacin.naziv+'</td><td><a class="edit" href="../magacin/'+magacin.id+'">Edit</a></td><td><a href="../prometniDokument/all/'+magacin.id+'">Dokumenti</a></td><td><a class="izvestaj" href="/magacin/izvestaj/'+magacin.id+'">Izvestaj</a></td><td><a  href="../popis.html#'+magacin.id+'">Popis</a></td></tr>'
 					$("#magacini").append(row)
 		
 			})
@@ -299,7 +302,12 @@ $(document).on('click','#searchButton',function(e){
 $(document).on('click','#nextform',function(e){
 	e.preventDefault();
 	var url=$(this).attr('href');
-	url=url+'/'+$('#id').val()
+	
+	if($('#id').val()==""){
+		alert('Izaberite magacin')
+		return
+	}
+	url=url+$('#id').val()
 			window.location.href = url;
 	})
 
