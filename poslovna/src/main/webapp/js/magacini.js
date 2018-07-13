@@ -23,7 +23,7 @@ $(document).on('click','#novi',function(){
 	$("#searchButton").css("display","none");
 	$("#add").css("display","block");
 	$.ajax({
-		url:'/radnici/unemployed',
+		url:'/api/radnici/unemployed',
 		type:'GET',
 		contentType:'application/json',
 		success:function(data){
@@ -130,6 +130,18 @@ $(document).on('click','#add',function(event){
 $(document).on("click", ".edit", function(event){
 				
 					event.preventDefault(); 
+					$.ajax({
+						url:'/api/radnici/unemployed',
+						type:'GET',
+						contentType:'application/json',
+						success:function(data){
+							$("#radnici").empty();
+							$.each(data,function(index,radnik){
+								$("#radnici").append('<option id="'+radnik.id+'">'+radnik.ime+" "+radnik.prezime+'</option>')
+								
+							})
+						}
+					})
 					$("#editButton").css("display","block");
 					$("#searchButton").css("display","none");
 					$("#add").css("display","none");

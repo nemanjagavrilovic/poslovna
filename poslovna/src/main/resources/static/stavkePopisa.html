@@ -81,8 +81,77 @@
 									});
 						}
 						
+						$.ajax({
+							url : "http://localhost:9000/api/jedinicaMere/getJedinicaMere"
+						}).then(
+								function(data) {
+									console.log(data)
+									for (i = 0; i < data.length; i++) {
+										newRow = "<tr>"
+
+										+ "<td class=\"ime\">" + data[i].ime
+												+ "</td>"
+												+ "<td class=\"prezime\">"
+												+ data[i].prezime + "</td>"
+												+ "</tr>"
+										$("#radnici").append(newRow);
+										$("#jedinicaMereSearch").append(
+												"<option value=\""+data[i].id+"\">"
+														
+														+ data[i].naziv
+														+ "</option>")
+
+									}
+								});
 						
-	
+						
+						$("#search").click(function(){
+							var jedinicaMere={id:$("#jedinicaMereSearch").val(), naziv:$("#jedinicaMereSearch option:selected").text()}
+							var roba = {"naziv": $("#nazivSearch").val(), "jedinicaMere":jedinicaMere};
+							
+							var stavka;
+							
+							 stavka = JSON.stringify({
+								"kolicinaPoPopisu" : $("#kolPoPopisuSearch").val(),
+								"kolicinaPoKartici" : $("#kolPoKarticiSearch").val(),
+								"roba" : roba
+							
+							});
+							console.log(stavka)
+							$("#dataTable").find("tr:not(:first)").remove();
+							$.ajax({
+								url: "/stavkaPopisa/search",
+								type: "POST",
+								data: stavka,
+								//saljemo json i ocekujemo json nazad
+								contentType: "application/json",
+								datatype: 'json',
+								success: function(data) {
+									console.log(data);
+									for (i = 0; i < data.length; i++) {
+										newRow = "<tr>"
+											+ "<td class = \"id\">"
+											+ data[i].roba.id
+											+ "</td>"
+											+ "<td class = \"jedinicamere\">"
+											+ data[i].roba.naziv
+											+ "</td>"
+											+ "<td class = \"naziv\">"
+											+ data[i].roba.jedinicaMere.naziv
+											+ "<td class=\"kolicinapokartici\">"
+											+ data[i].kolicinaPoKartici
+											+ "</td>"
+											+ "<td class=\"kolicinapopopisu\">"
+											+ data[i].kolicinaPoPopisu
+											+ "</td>"
+												+ "</tr>"
+										$("#dataTable").append(newRow)
+
+									}
+								}
+						});
+						});
+
 
 						
 						$("#first").click(function() {
@@ -181,5 +250,39 @@
 
 			</tr>
 		</table>
+		 <div class="modal fade" id="searchModal" tabindex="-1" role="dialog">
+		 <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="exampleModalLabel">Pretraga gradova</h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <form id="editForm">
+		      <div class="modal-body">
+					<input type="hidden" name="idSearch" id="idSearch" />
+				<p>
+					<label for="nazivrobe">NazivRobe</label> <input type="text" name="dateSearch"
+						id="nazivSearch" />
+					
+					
+				</p>
+				<p><label for="kolPoKartici">Kolicina po kartici do</label> <input type="number" name="dateSearch"
+						id="kolPoKarticiSearch" /></p>
+				<p><label for="kolPoPopisu">Kolicina po popisu do</label> <input type="number" name="dateSearch"
+						id="kolPoPopisuSearch" /></p>		
+				<p><label for="jedmere">Jedinica mere</label> <select id="jedinicaMereSearch">
+				<option value=""></option></select></p>	
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+		        <button type="button" class="btn btn-primary" id="search">Pretrazi</button>
+		      </div>
+		      </form>
+		    </div>
+		  </div>
+		</div>
+		
 </body>
 </html>

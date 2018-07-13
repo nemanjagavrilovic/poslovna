@@ -28,7 +28,9 @@
 										+ "<img src='images/remove.gif'/></a></td>"
 										+ "</tr>"
 								$("#dataTable").append(newRow)
+								
 							}
+							
 						});
 				$("#first").click(function(){
 					goFirst()
@@ -145,6 +147,87 @@
 					$('#searchModal').modal('toggle');
 				});
 				
+				
+				$("#nextform").click(function(){
+					//pripremamo JSON koji cemo poslati
+	 				naziv = $(".highlighted").find(".name").html()
+	  				id = $(".highlighted").find(".idCell").html()
+	  				console.log(id);
+					formData = JSON.stringify({
+						id:$(".highlighted").find(".idCell").html(),
+			            naziv:$(".highlighted").find(".name").html(),
+			        });
+
+					$.ajax({
+						url: "/api/mesto/getPoslovniPartnerMesto",
+						type: "POST",
+						data: formData,
+						//saljemo json i ocekujemo json nazad
+						contentType: "application/json",
+						datatype: 'json',
+						success: function(data) {
+							$("#nextTable").find("tr:not(:first)").remove();
+							$("#mestoSelect").find("option").remove();
+							for(i = 0; i < data.length; i++){
+								console.log(data[i]);
+								newRow = 
+										"<tr>"
+										+ "<td class=\"name\">" + data[i].naziv + "</td>"
+										+ "<td class=\"tip\">" + data[i].tip + "</td>"
+										+ "<td class=\"pib\">" + data[i].pib + "</td>"
+										+ "<td class=\"adresa\">" + data[i].adresa +"</td>"
+										+ "<td class=\"mesto\">" + data[i].mesto.naziv +"</td>"
+										+ "</tr>"
+								$("#nextTable").append(newRow)
+							  }
+							newOption = "<option class=\"idCell\" value=\"" + data[0].mesto.id + "\">"
+							+ data[0].mesto.naziv + "</option>" 
+							$("#mestoSelect").append(newOption)
+						  }
+						});
+					$("#nextformModal").modal('toggle');
+					//$('#mestoSelect selected').val(naziv);
+				});
+				
+				$("#dodajPoslovniPartner").click(function(){	
+					
+					var m = { id: $("#nextformForm [name='mestoSelect']").val(), naziv:$("#nextformForm [name='mestoSelect'] option:selected").text()};
+					formData = JSON.stringify({
+						tip:$("#nextformForm [name='tipSelectNext'] option:selected").text(),
+    	                naziv:$("#nextformForm [name='nazivNext']").val(),
+    	                pib:$("#nextformForm [name='pibNext']").val(),
+    	                adresa:$("#nextformForm [name='adresaNext']").val(),
+    	                mesto:m
+
+    	            });
+
+					$.ajax({
+						url: "http://localhost:9000/api/mesto/addPoslovniPartner",
+						type: "POST",
+						data: formData,
+						//saljemo json i ocekujemo json nazad
+						contentType: "application/json",
+						datatype: 'json',
+						success: function(data) {
+							$("#nextTable").find("tr:not(:first)").remove();
+							for(i = 0; i < data.length; i++){
+								console.log(data[i]);
+								newRow = 
+										"<tr>"
+										+ "<td class=\"name\">" + data[i].naziv + "</td>"
+										+ "<td class=\"tip\">" + data[i].tip + "</td>"
+										+ "<td class=\"pib\">" + data[i].pib + "</td>"
+										+ "<td class=\"adresa\">" + data[i].adresa +"</td>"
+										+ "<td class=\"mesto\">" + data[i].mesto.naziv +"</td>"
+										+ "</tr>"
+								$("#nextTable").append(newRow)
+						  	}
+						}
+				
+					});
+					$("#nextformModal").modal('toggle');
+				});
+			});
 				$(document).on("click", ".remove", function(event){
 					//ne salji get zahtev
 					event.preventDefault(); 
@@ -183,18 +266,18 @@
 					        }
 						});
 				});
-			});
-	
+		
 	$(document).on("click", '#dataTable tr', function(event) {
 		highlightRow(this)
 	});
 	function sync(item){
 	    naziv = item.find(".name").html()
 	    ptt=item.find(".ptt").html()
+	    id = item.find(".idCell").html()
 
 	    $("#naziv").val(naziv);
 	    $("#ptt").val(ptt);
-
+		$("#id").val(id);
 	}
 				
 </script>
@@ -211,7 +294,7 @@
 				<li><a id="next"><img src="images/next.gif" /></a></li>
 				<li><a id="last"><img src="images/last.gif" /></a></li>
 				<li class="group-start"><a href="#inputModal" data-toggle="modal" data-target="#inputModal"><img src="images/add.gif" /></a></li>
-				<li class="group-start"><a href="#" id="nextform"><img src="images/nextform.gif" /></a></li>
+				<li class="group-start"><a id="nextform"><img src="images/nextform.gif" /></a></li>
 			</ul>
 
 		<h1>Mesto</h1>
@@ -331,6 +414,73 @@
 		  </div>
 		</div>
 </div>
+
+<div class="modal fade" id="nextformModal" tabindex="-1" role="dialog">
+		 <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="exampleModalLabel"></h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      
+		      <div class="modal-dialog">
+		      <!-- Modal content-->
+		      <div class="modal-content">
+		      <div class="modal-header">
+		      	Poslovni Partner
+		      </div>
+		      <div class="modal-body">
+			    <table style = "padding:2em" id = "nextTable">
+				<tr class = "header">
+					<th>Naziv</th>
+					<th>Tip</th>
+					<th>PIB</th>
+					<th>Adresa</th>
+					<th>Mesto</th>
+				</tr>
+		
+				</table>
+			</div>
+	      </div>
+	    </div>
+		      
+		      <form id="nextformForm">
+		      <div class="modal-body">
+					<input type="hidden" name="id" id="id" />
+				<p>
+					<label>Naziv</label> <input type="text" name="nazivNext"
+						id="nazivNext" />
+				</p>
+				<p>
+					<label>Tip </label><select id="tipSelectNext" name="tipSelectNext">
+						<option value="KUPAC">KUPAC</option>
+						<option value="DOBAVLJAC">DOBAVLJAC</option>
+						<option value="KUPACIDOBAVLJAC">KUPACIDOBAVLJAC</option>
+					</select>
+				</p>
+				<p>
+					<label>PIB</label> <input type="text" name="pibNext"
+						id="pibNext" />
+				</p>
+				<p>
+					<label >Adresa</label> <input type="text" name="adresaNext"
+						id="adresaNext" />
+				</p>
+				<p>
+					<label >Mesto</label> <select name="mestoSelect"
+						id="mestoSelect" ></select>
+				</p>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+		        <button type="button" class="btn btn-primary" id="dodajPoslovniPartner">Dodaj</button>
+		      </div>
+		      </form>
+		    </div>
+		  </div>
+		</div>
 
 </body>
 </html>

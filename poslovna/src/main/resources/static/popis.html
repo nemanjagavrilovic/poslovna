@@ -93,7 +93,7 @@
 							$(document).on("click", "tr", function(event) {
 		highlightRow(this)
 	});
-
+					});
 	
 	function izaberi(){
 		
@@ -101,7 +101,7 @@
 		var highlighted = $(".highlighted");
 		console.log(highlighted);
 		index =  $("tr").index(highlighted);
-		index-=2;
+		index-=1;
 		
 		item = $("tr:nth-child(" + index + ")");
 		

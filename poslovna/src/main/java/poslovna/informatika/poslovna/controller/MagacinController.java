@@ -66,10 +66,15 @@ public class MagacinController {
 		Magacin newMagacin=magacinService.findOne(magacin.getId());
 		newMagacin.setNaziv(magacin.getNaziv());
 		newMagacin.setRadnici(magacin.getRadnici());
+		for(Radnik radnik:magacin.getRadnici()){
+			radniciService.update(null, radnik.getId());
+			
+		}
 		for(Radnik radnik:newMagacin.getRadnici()){
 			radniciService.update(newMagacin, radnik.getId());
 			
 		}
+		
 		magacinService.save(newMagacin);
 		return new ResponseEntity<Magacin>(newMagacin,HttpStatus.OK);
 	}

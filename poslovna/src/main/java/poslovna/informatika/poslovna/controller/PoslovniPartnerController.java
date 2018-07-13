@@ -66,16 +66,18 @@ public class PoslovniPartnerController {
 	public ResponseEntity<List<PoslovniPartner>> searchPartner(@RequestBody PoslovniPartner pp) {
 		List<PoslovniPartner> partneri=poslovniPartnerService.findAll();
 		
-		System.out.println(pp.getNaziv());
 		if(!pp.getNaziv().equals(""))
 			partneri= partneri.stream().filter(e->e.getNaziv().toUpperCase().contains(pp.getNaziv().toUpperCase())).collect(Collectors.toList());
-		System.out.println(pp.getTip());
+		
 		if(pp.getTip() != null)
 			partneri= partneri.stream().filter(e->e.getTip().equals(pp.getTip())).collect(Collectors.toList());
-		System.out.println(pp.getPIB());
+	
 		if(pp.getPIB() !=0)
 			partneri= partneri.stream().filter(e->e.getPIB()==pp.getPIB()).collect(Collectors.toList());
-		System.out.println(pp.getMesto());
+		
+		if(!pp.getAdresa().equals("")){
+			partneri= partneri.stream().filter(e->e.getAdresa().toUpperCase().contains(pp.getAdresa().toUpperCase())).collect(Collectors.toList());
+		}
 		if(pp.getMesto() != null){
 			partneri= partneri.stream().filter(e->e.getMesto().getNaziv().equals(pp.getMesto().getNaziv())).collect(Collectors.toList());
 		}
