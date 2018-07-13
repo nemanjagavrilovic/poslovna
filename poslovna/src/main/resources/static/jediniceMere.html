@@ -19,6 +19,7 @@
 							for (i = 0; i < data.length; i++) {
 								newRow = 
 									"<tr>"
+										
 										+ "<td class=\"name\">" + data[i].naziv + "</td>"
 										+ "<td><a class=\"edit\" href='/api/jedinicaMere/" + data[i].id + "'>" 
 										+ "<img src='images/edit.gif'/></a></td>"
@@ -290,7 +291,7 @@
 		<div class="panel">
 			<p>
 				<form>
-					<input type="hidden" name="id" id="id" />
+					<input type="hidden"  name="id" id="id" />
 					<p>
 						<label for="naziv">Naziv</label> <input size="50" type="text" name="name"
 							id="naziv" disabled/>

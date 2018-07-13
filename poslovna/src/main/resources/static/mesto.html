@@ -19,6 +19,7 @@
 						function(data) {
 							for (i = 0; i < data.length; i++) {
 								newRow = "<tr>"
+										+"<td class=\"id\" style=\"display:none;\">" + data[i].id + "</td>"
 										+ "<td class=\"name\">" + data[i].naziv + "</td>"
 										+ "<td class=\"ptt\">" + data[i].ptt + "</td>"
 									
@@ -66,6 +67,7 @@
 						datatype: 'json',
 						success: function(data) {
 							newRow = "<tr>"
+							+"<td class=\"id\" style=\"display:none;\">" + data.id + "</td>"
 							+ "<td class=\"name\">" + data.naziv + "</td>"
 							+ "<td class=\"ptt\">" + data.ptt + "</td>"	
 							+ "<td><a class=\"edit\" href='/api/mesto/" + data.id + "'>" 
@@ -77,6 +79,8 @@
 						  }
 						});
 					$('#inputModal').modal('toggle');
+					document.getElementById('inputForm').reset();
+					
 				});
 			
 				$("#edit").click(function(){
@@ -100,6 +104,7 @@
 
 							for (i = 0; i < data.length; i++) {
 								newRow = "<tr>"
+										+"<td class=\"id\" style=\"display:none;\">" + data[i].id + "</td>"
 										+ "<td class=\"name\">" + data[i].naziv + "</td>"
 										+ "<td class=\"ptt\">" + data[i].ptt + "</td>"
 										+ "<td><a class=\"edit\" href='/api/mesto/" + data[i].id + "'>" 
@@ -133,6 +138,7 @@
 
 							for (i = 0; i < data.length; i++) {
 								newRow = "<tr>"
+										+"<td class=\"id\" style=\"display:none;\">" + data[i].id + "</td>"
 										+ "<td class=\"name\">" + data[i].naziv + "</td>"
 										+ "<td class=\"ptt\">" + data[i].ptt + "</td>"
 										+ "<td><a class=\"edit\" href='/api/mesto/" + data[i].id + "'>" 
@@ -151,10 +157,10 @@
 				$("#nextform").click(function(){
 					//pripremamo JSON koji cemo poslati
 	 				naziv = $(".highlighted").find(".name").html()
-	  				id = $(".highlighted").find(".idCell").html()
+	  				id = $(".highlighted").find(".id").html()
 	  				console.log(id);
 					formData = JSON.stringify({
-						id:$(".highlighted").find(".idCell").html(),
+						id:$(".highlighted").find(".id").html(),
 			            naziv:$(".highlighted").find(".name").html(),
 			        });
 
@@ -180,8 +186,8 @@
 										+ "</tr>"
 								$("#nextTable").append(newRow)
 							  }
-							newOption = "<option class=\"idCell\" value=\"" + data[0].mesto.id + "\">"
-							+ data[0].mesto.naziv + "</option>" 
+							newOption = "<option class=\"idCell\" value=\"" + id + "\">"
+							+ naziv + "</option>" 
 							$("#mestoSelect").append(newOption)
 						  }
 						});
@@ -226,6 +232,7 @@
 				
 					});
 					$("#nextformModal").modal('toggle');
+					document.getElementById('nextformForm').reset();
 				});
 			});
 				$(document).on("click", ".remove", function(event){
@@ -240,9 +247,13 @@
 						$.ajax({
 				        	url: url,
 				        	type: "DELETE",
-				        	success: function(){
+				        	success: function(data){
 				        		//ukloni i na strani 
+				        		if(data != ""){
 								tr_parent.remove()
+				        		}else{
+				        			alert("Poslovni partner ili radnik su iz ovog mesta pa se ne moze obrisati");
+				        		}
 					        }
 						});
 					}

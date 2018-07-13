@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import poslovna.informatika.poslovna.model.Mesto;
 import poslovna.informatika.poslovna.model.PoslovniPartner;
+import poslovna.informatika.poslovna.model.Radnik;
 import poslovna.informatika.poslovna.service.MestoService;
 import poslovna.informatika.poslovna.service.PoslovniPartnerService;
+import poslovna.informatika.poslovna.service.RadniciService;
 
 @RestController
 @RequestMapping(value = "/api/mesto")
@@ -27,6 +29,9 @@ public class MestoController {
 	@Autowired
 	private PoslovniPartnerService poslovniPartnerService;
 	
+	@Autowired 
+	private RadniciService radniciService;
+	
 	@RequestMapping(method=RequestMethod.POST, consumes="application/json")
 	public ResponseEntity<Mesto> addMesto(@RequestBody Mesto mesto){
 			
@@ -36,7 +41,24 @@ public class MestoController {
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Mesto> delete(@PathVariable Long id) {
-		Mesto deleted = mestoService.delete(id);
+		Mesto deleted = new Mesto();
+		List<PoslovniPartner> partneri = new ArrayList<PoslovniPartner>();
+		List<Radnik> radnici = new ArrayList<Radnik>();
+		partneri= poslovniPartnerService.findAll();
+		radnici= radniciService.findAll();
+		
+		for(PoslovniPartner p:partneri){
+			if(p.getMesto().getId()==id){
+				return new ResponseEntity<>(null, HttpStatus.OK);
+			}
+		}
+		for(Radnik r:radnici){
+			if(r.getMesto().getId()==id){
+				return new ResponseEntity<>(null, HttpStatus.OK);
+			}
+		}
+		
+		deleted= mestoService.delete(id);
 		return new ResponseEntity<>(deleted, HttpStatus.OK);
 	}
 	
@@ -93,7 +115,7 @@ public class MestoController {
 		List<PoslovniPartner> poslovniPartneri = poslovniPartnerService.findAll();
 		List<PoslovniPartner> temp = new ArrayList<PoslovniPartner>();
 		for(int i = 0 ; i < poslovniPartneri.size(); i++){
-			if (mesto.getNaziv().equals(poslovniPartneri.get(i).getMesto().getNaziv()))
+			if (mesto.getId()==poslovniPartneri.get(i).getMesto().getId())
 				temp.add(poslovniPartneri.get(i));
 		}
 		

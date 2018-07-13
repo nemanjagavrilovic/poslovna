@@ -32,10 +32,9 @@ public class Radnik implements Serializable{
 	protected String adresa;
 	
 	
-	/*@ManyToOne
-	@JsonIgnore
-	protected Preduzece preduzece;
-*/	
+	@ManyToOne
+	protected Mesto mesto;
+
 	@ManyToOne
 	protected Magacin magacin;
 
@@ -86,6 +85,13 @@ public class Radnik implements Serializable{
 	
 	public void setMagacin(Magacin magacin) {
 		this.magacin = magacin;
+	}
+	public Mesto getMesto() {
+		return mesto;
+	}
+
+	public void setMesto(Mesto mesto) {
+		this.mesto = mesto;
 	}
 	
 }
