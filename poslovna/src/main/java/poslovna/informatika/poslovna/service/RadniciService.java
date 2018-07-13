@@ -11,4 +11,11 @@ public interface RadniciService {
 	public Radnik findById(Long id);
 	public int update(Magacin magacinId,Long radnikId);
 	public List<Radnik> findByMagacin(Magacin magacin);
+	
+	List<Radnik> save(List<Radnik> radnik);
+	Radnik save(Radnik radnik);
+	Radnik delete(Long id);
+	
+	void delete(List<Long> ids);
+	
 }

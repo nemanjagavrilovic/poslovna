@@ -13,8 +13,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import poslovna.informatika.poslovna.model.Mesto;
-
+import poslovna.informatika.poslovna.model.PoslovniPartner;
 import poslovna.informatika.poslovna.service.MestoService;
+import poslovna.informatika.poslovna.service.PoslovniPartnerService;
 
 @RestController
 @RequestMapping(value = "/api/mesto")
@@ -22,6 +23,9 @@ public class MestoController {
 	
 	@Autowired
 	private MestoService mestoService;
+	
+	@Autowired
+	private PoslovniPartnerService poslovniPartnerService;
 	
 	@RequestMapping(method=RequestMethod.POST, consumes="application/json")
 	public ResponseEntity<Mesto> addMesto(@RequestBody Mesto mesto){
@@ -84,6 +88,24 @@ public class MestoController {
 	}
 	
 	
+	@RequestMapping(value="getPoslovniPartnerMesto", method = RequestMethod.POST, consumes="application/json")
+	public ResponseEntity<List<PoslovniPartner>> getPoslovniPartnerMesto(@RequestBody Mesto mesto){
+		List<PoslovniPartner> poslovniPartneri = poslovniPartnerService.findAll();
+		List<PoslovniPartner> temp = new ArrayList<PoslovniPartner>();
+		for(int i = 0 ; i < poslovniPartneri.size(); i++){
+			if (mesto.getNaziv().equals(poslovniPartneri.get(i).getMesto().getNaziv()))
+				temp.add(poslovniPartneri.get(i));
+		}
+		
+		return new ResponseEntity<>(temp, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="addPoslovniPartner", method=RequestMethod.POST, consumes="application/json")
+	public ResponseEntity<PoslovniPartner> addPoslovniPartner(@RequestBody PoslovniPartner partner){
+			
+		PoslovniPartner novpartner = poslovniPartnerService.save(partner);
+		return new ResponseEntity<>(novpartner, HttpStatus.OK);
+	}
 	
 
 }

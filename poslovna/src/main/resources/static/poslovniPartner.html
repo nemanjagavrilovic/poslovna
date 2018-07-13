@@ -297,6 +297,11 @@ table tr.zoomHighlighted{
 					$("#mestoSelectEdit").val(id);
 					$('#mestoModalEdit').modal('toggle');
 				});	
+				$("#mestoPickupEdit").click(function(){
+					id = $(".zoomHighlighted").find(".idCell").html();
+					$("#mestoSelectSearch").val(id);
+					$('#mestoModalEdit').modal('toggle');
+				});	
 					
 			});
 	
