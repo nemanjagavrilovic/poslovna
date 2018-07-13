@@ -39,6 +39,10 @@ public class PrometniDokument implements Serializable{
 
 	@ManyToOne
 	protected PoslovniPartner poslovniPartner;
+
+
+	@ManyToOne
+	protected PoslovnaGodina poslovnaGodina;
 	
 	@OneToMany(mappedBy="dokument")
 	protected List<StavkaDokumenta> stavkeDokumenta;
@@ -125,6 +129,14 @@ public class PrometniDokument implements Serializable{
 
 	public void setStavkeDokumenta(List<StavkaDokumenta> stavkeDokumenta) {
 		this.stavkeDokumenta = stavkeDokumenta;
+	}
+
+	public PoslovnaGodina getPoslovnaGodina() {
+		return poslovnaGodina;
+	}
+
+	public void setPoslovnaGodina(PoslovnaGodina poslovnaGodina) {
+		this.poslovnaGodina = poslovnaGodina;
 	}
 }
 

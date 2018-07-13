@@ -64,6 +64,20 @@
             highlightRow(this)
         });
 
+        function zakljuciGodinu(id) {
+            $.ajax({
+                url: '/poslovnaGodina/' + id + '/zakljuci',
+                type: 'POST',
+                success: function (data) {
+                    alert("Godina uspesno zakljucena!")
+                    window.location.reload();
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    alert(jqXHR.responseText);
+                }
+            });
+        }
+
         function sync(item){
             let godina = item.find(".godina").html();
             let zakljucena = item.find(".zakljucena").html();
@@ -177,6 +191,7 @@
                 <td class="godina">${ godina.godina }</td>
                 <td class="zakljucena">${ godina.zakljucena }</td>
                 <td class="aktivna">${ godina.aktivna }</td>
+                <td><a onclick="zakljuciGodinu(${ godina.id })">Zakljuci</a></td>
             </tr>
         </c:forEach>
         </tbody>

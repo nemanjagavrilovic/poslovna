@@ -30,6 +30,11 @@ public class PoslovnaGodinaServiceImpl implements PoslovnaGodinaService{
 	}
 
 	@Override
+	public PoslovnaGodina findById(Long id) {
+		return null;
+	}
+
+	@Override
 	public PoslovnaGodina findAkivna(boolean aktivna) {
 		// TODO Auto-generated method stub
 		return poslovnaGodinaRepository.findByAktivna(aktivna);
