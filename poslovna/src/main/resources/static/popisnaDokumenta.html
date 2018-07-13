@@ -38,6 +38,7 @@ var id = -1;
 														+ data[i].datum
 														+ "</td>"
 														+ "<td class=\"komisija\">"+data[i].komisija.id+"</td>"
+														+"<td><a class=\"izvestaj\" href=\"/popisniDokument/izvestaj/"+data[i].id+"\">Izvestaj</a></td>"
 														+ "</tr>"
 												$("#dataTable").append(newRow)
 
@@ -65,6 +66,7 @@ var id = -1;
 													+ convertDate(data[i].datum)
 													+ "</td>"
 													+ "<td class=\"komisija\">"+data[i].komisija.id+"</td>"
+													+"<td><a class=\"izvestaj\" href=\"/popisniDokument/izvestaj/"+data[i].id+"\">Izvestaj</a></td>"
 													+ "</tr>"
 											$("#dataTable").append(newRow)
 
@@ -146,6 +148,7 @@ var id = -1;
 												+ convertDate(data[i].datum)
 												+ "</td>"
 												+ "<td class=\"komisija\">"+data[i].komisija.id+"</td>"
+												+"<td><a class=\"izvestaj\" href=\"/popisniDokument/izvestaj/"+data[i].id+"\">Izvestaj</a></td>"
 												+ "</tr>"
 										$("#dataTable").append(newRow)
 
@@ -232,12 +235,28 @@ var id = -1;
 		}
 	}
 
-	
+	$(document).on('click','.izvestaj',function(e){
+		e.preventDefault();
+		var confirmed=confirm("Da li zelite da kreirate izvestaj");
+		var url=$(this).attr('href')
+		var item=$(this)
+		if(confirmed){
+			$.ajax({
+				url:url,
+				type:'POST',
+				success:function(){
+					alert("Kreiran izvestaj");
+				}
+			})
+		}
+	})
+
 	
 </script>
 
 </head>
 <body>
+	<div w3-include-html="navbar.html" style="width: 100%"></div>
 	<div class="formContainer">
 		<ul>
 			<li class="group-start"><a href="searchModal"
@@ -264,6 +283,7 @@ var id = -1;
 				<th>Broj popisa</th>
 				<th>Datum popisa</th>
 				<th>Komisija</th>
+				<th>Izvestaji</th>
 
 			</tr>
 		</table>
@@ -318,6 +338,8 @@ var id = -1;
 		</div>
 		
 		</div>
-		
+	<script>
+        includeHTML();
+	</script>
 </body>
 </html>

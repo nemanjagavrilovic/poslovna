@@ -7,7 +7,7 @@
 
 </head>
 <body>
-	
+	<c:import url = "./navbar.jsp"/>
 		<a href='../magacin/'+${robnaKaritca.magacin.id}>${robnaKaritca.magacin.naziv}</a>
 
 		<div>

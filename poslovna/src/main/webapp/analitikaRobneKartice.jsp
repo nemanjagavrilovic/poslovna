@@ -5,6 +5,7 @@
 <head>
 </head>
 <body>
+<c:import url = "./navbar.jsp"/>
 	<h2>Analitike robne kartice</h2>
 	<h4>Preduzece: ${ robnaKartica.magacin.preduzece.naziv }</h4>
 	<h4>Magacin: ${ robnaKartica.magacin.naziv }</h4>

@@ -1,5 +1,10 @@
 package poslovna.informatika.poslovna.controller;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -12,6 +17,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
 import poslovna.informatika.poslovna.converters.PopisniDokumentDTOtoPopisniDokument;
 import poslovna.informatika.poslovna.dto.PopisniDokumentDTO;
 import poslovna.informatika.poslovna.model.AnalitikaMagKartice;
@@ -154,4 +164,24 @@ public class PopisniDokumentKontroler {
 		
 		return new ResponseEntity<List<PopisniDokument>>(dokumenti, HttpStatus.OK);
 	}
+	@RequestMapping(value="/izvestaj/{id}",method=RequestMethod.POST)
+	public ResponseEntity<String> izvestaj(@PathVariable("id") Long id){
+		try {
+			Connection conn;
+			conn =
+				       (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/poslovna?useSSL=false&" +
+				                                   "user=root&password=admin");
+			HashMap map = new HashMap();
+			map.put("idPopisnogDokumenta", id);
+            JasperReport jasReport = (JasperReport) JRLoader.loadObjectFromFile("C:/Users/nenad/git/poslovna/poslovna/src/main/resources/popisniDokument.jasper");
+            JasperPrint jasPrint = JasperFillManager.fillReport(jasReport, map, conn);
+            File pdf = File.createTempFile("output.", ".pdf");
+			JasperExportManager.exportReportToPdfStream(jasPrint, new FileOutputStream(pdf));
+			System.out.println("Temp file : " + pdf.getAbsolutePath());
+		}catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		return new ResponseEntity<String>("ok",HttpStatus.OK);
+		}
+	
 }

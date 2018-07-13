@@ -93,6 +93,14 @@ $(document).on('click','#add',function(event){
 	event.preventDefault();
 	stavke=[]
 	$("#stavke >tbody >tr").each(function(){
+		if($(this).find('.kolicina').html()<0){
+			alert('Kolicina mora biti veca od 0')
+			return
+		}
+		if($(this).find('.cena').html()<0){
+			alert('Cena mora biti veca od 0')
+			return
+		}
 		var roba=$(this).find('.roba').html()
 		var kolicina=$(this).find('.kolicina').html()
 		var cena=$(this).find('.cena').html()
@@ -117,6 +125,10 @@ $(document).on('click','#add',function(event){
 			}
 		})
 	})
+	if(stavke.length==0){
+		alert('Morate dodati stavku')
+		return
+	}
 		var dokument=JSON.stringify({
 			"vrsta":$("#vrsta option:selected").val(),
 			"stavke":stavke,
@@ -407,6 +419,9 @@ function proknjizi(id) {
         contentType:'application/json',
         success:function(data){
             alert("Uspesno proknjizeno!");
+        },
+        error:function(data){
+        	alert('Poslovna godina dokumenta je zakljucena')
         }
     })
 }
@@ -417,7 +432,10 @@ function storno(id) {
         contentType:'application/json',
         success:function(data){
             alert("Uspesno stornirano!");
-        }
+        },
+    error:function(data){
+    	alert('Poslovna godina dokumenta je zakljucena')
+    }
     })
 }
 $(document).on('change',"#vrsta",function(){

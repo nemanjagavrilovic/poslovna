@@ -2,7 +2,9 @@ package poslovna.informatika.poslovna.controller;
 
 import java.io.File;
 import java.io.FileOutputStream;
+
 import java.sql.Connection;
+
 import java.sql.DriverManager;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -75,11 +77,12 @@ public class MagacinController {
 		Magacin magacin=magacinDTOtoMagacin.convert(magacinDTO);
 		Magacin newMagacin=magacinService.findOne(magacin.getId());
 		newMagacin.setNaziv(magacin.getNaziv());
-		newMagacin.setRadnici(magacin.getRadnici());
-		for(Radnik radnik:magacin.getRadnici()){
+		for(Radnik radnik:newMagacin.getRadnici()){
 			radniciService.update(null, radnik.getId());
 			
 		}
+		newMagacin.setRadnici(magacin.getRadnici());
+		
 		for(Radnik radnik:newMagacin.getRadnici()){
 			radniciService.update(newMagacin, radnik.getId());
 			
@@ -113,7 +116,8 @@ public class MagacinController {
 		Magacin magacin = magacinService.findById(id);
 		
 		for(RobnaKartica rk : magacin.getRobneKartice()) {
-			roba.add(rk.getRoba());
+			if(rk.getPoslovnaGodina().isAktivna())
+				roba.add(rk.getRoba());
 		}
 		
 		return new ResponseEntity<List<Roba>>(roba,HttpStatus.OK);
@@ -124,7 +128,7 @@ public class MagacinController {
 		try {
 			Connection conn;
 			conn =
-				       DriverManager.getConnection("jdbc:mysql://localhost:3306/poslovna?useSSL=false&" +
+				       (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/poslovna?useSSL=false&" +
 				                                   "user=root&password=admin");
 			HashMap map = new HashMap();
 			map.put("idMagacina", id);

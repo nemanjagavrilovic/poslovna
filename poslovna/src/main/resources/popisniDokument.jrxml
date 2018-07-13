@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="popisniDokument" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="72d4a12f-6bba-4a6e-9ef1-d40a2d28a138">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="idPopisnogDokumenta" class="java.lang.Long"/>
+	<queryString>
+		<![CDATA[SELECT
+     popisni_dokument.`id` AS popisni_dokument_id,
+     popisni_dokument.`broj_popisa` AS popisni_dokument_broj_popisa,
+     popisni_dokument.`datum` AS popisni_dokument_datum,
+     popisni_dokument.`komisija_id` AS popisni_dokument_komisija_id,
+     popisni_dokument.`magacin_id` AS popisni_dokument_magacin_id,
+     popisni_dokument.`poslovna_godina_id` AS popisni_dokument_poslovna_godina_id,
+     magacin.`id` AS magacin_id,
+     magacin.`naziv` AS magacin_naziv,
+     magacin.`preduzece_id` AS magacin_preduzece_id,
+     stavka_popisa.`id` AS stavka_popisa_id,
+     stavka_popisa.`kolicina_po_kartici` AS stavka_popisa_kolicina_po_kartici,
+     stavka_popisa.`kolicina_po_popisu` AS stavka_popisa_kolicina_po_popisu,
+     stavka_popisa.`roba_id` AS stavka_popisa_roba_id,
+     popisni_dokument_stavke.`popisni_dokument_id` AS popisni_dokument_stavke_popisni_dokument_id,
+     popisni_dokument_stavke.`stavke_id` AS popisni_dokument_stavke_stavke_id,
+     poslovna_godina.`id` AS poslovna_godina_id,
+     poslovna_godina.`aktivna` AS poslovna_godina_aktivna,
+     poslovna_godina.`godina` AS poslovna_godina_godina,
+     poslovna_godina.`zakljucena` AS poslovna_godina_zakljucena,
+     roba.`id` AS roba_id,
+     roba.`naziv` AS roba_naziv,
+     roba.`grupa_id` AS roba_grupa_id,
+     roba.`jedinica_mere_id` AS roba_jedinica_mere_id,
+     jedinica_mere.`id` AS jedinica_mere_id,
+     jedinica_mere.`naziv` AS jedinica_mere_naziv
+FROM
+     `magacin` magacin INNER JOIN `popisni_dokument` popisni_dokument ON magacin.`id` = popisni_dokument.`magacin_id`
+     INNER JOIN `popisni_dokument_stavke` popisni_dokument_stavke ON popisni_dokument.`id` = popisni_dokument_stavke.`popisni_dokument_id`
+     INNER JOIN `poslovna_godina` poslovna_godina ON popisni_dokument.`poslovna_godina_id` = poslovna_godina.`id`
+     INNER JOIN `stavka_popisa` stavka_popisa ON popisni_dokument_stavke.`stavke_id` = stavka_popisa.`id`
+     INNER JOIN `roba` roba ON stavka_popisa.`roba_id` = roba.`id`
+     INNER JOIN `jedinica_mere` jedinica_mere ON roba.`jedinica_mere_id` = jedinica_mere.`id`
+WHERE
+     popisni_dokument.`id` = $P{idPopisnogDokumenta}]]>
+	</queryString>
+	<field name="popisni_dokument_id" class="java.lang.Long"/>
+	<field name="popisni_dokument_broj_popisa" class="java.lang.Integer"/>
+	<field name="popisni_dokument_datum" class="java.sql.Timestamp"/>
+	<field name="popisni_dokument_komisija_id" class="java.lang.Long"/>
+	<field name="popisni_dokument_magacin_id" class="java.lang.Long"/>
+	<field name="popisni_dokument_poslovna_godina_id" class="java.lang.Long"/>
+	<field name="magacin_id" class="java.lang.Long"/>
+	<field name="magacin_naziv" class="java.lang.String"/>
+	<field name="magacin_preduzece_id" class="java.lang.Long"/>
+	<field name="stavka_popisa_id" class="java.lang.Long"/>
+	<field name="stavka_popisa_kolicina_po_kartici" class="java.lang.Float"/>
+	<field name="stavka_popisa_kolicina_po_popisu" class="java.lang.Float"/>
+	<field name="stavka_popisa_roba_id" class="java.lang.Long"/>
+	<field name="popisni_dokument_stavke_popisni_dokument_id" class="java.lang.Long"/>
+	<field name="popisni_dokument_stavke_stavke_id" class="java.lang.Long"/>
+	<field name="poslovna_godina_id" class="java.lang.Long"/>
+	<field name="poslovna_godina_aktivna" class="java.lang.Boolean"/>
+	<field name="poslovna_godina_godina" class="java.sql.Timestamp"/>
+	<field name="poslovna_godina_zakljucena" class="java.lang.Boolean"/>
+	<field name="roba_id" class="java.lang.Long"/>
+	<field name="roba_naziv" class="java.lang.String"/>
+	<field name="roba_grupa_id" class="java.lang.Long"/>
+	<field name="roba_jedinica_mere_id" class="java.lang.Long"/>
+	<field name="jedinica_mere_id" class="java.lang.Long"/>
+	<field name="jedinica_mere_naziv" class="java.lang.String"/>
+	<title>
+		<band height="67" splitType="Stretch">
+			<textField>
+				<reportElement x="524" y="0" width="31" height="20" uuid="f58c44a4-74a0-43e2-b832-55ac84eb05b4"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="487" y="0" width="37" height="20" uuid="9c83da7d-7aa3-4af2-b733-cd2e9e64ce6c"/>
+				<text><![CDATA[Strana]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="487" y="20" width="68" height="20" uuid="048635a7-bbec-4b7b-b800-8482af962e01"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="448" y="20" width="39" height="20" uuid="897b0f99-84ae-4b66-b725-37a31f8e7671"/>
+				<text><![CDATA[Datum]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="216" y="20" width="121" height="20" uuid="1c6b59f9-2d61-4941-ad1b-10466cf794cc"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[Popisni dokument]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="124" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="74" width="100" height="20" uuid="86089810-be06-4240-a1b8-c63bba26b021"/>
+				<textFieldExpression><![CDATA[$F{popisni_dokument_broj_popisa}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="54" width="100" height="20" uuid="3b6b1a3f-b91c-4a12-9809-a565dc109701"/>
+				<text><![CDATA[Broj popisa]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="100" y="74" width="100" height="20" uuid="3cdfdec7-ce3f-4775-a3c0-6b81a4e076f3"/>
+				<textFieldExpression><![CDATA[$F{popisni_dokument_datum}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="100" y="54" width="100" height="20" uuid="31237f23-b0e8-4a49-9cd5-420aa44b30ea"/>
+				<text><![CDATA[Datum]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="200" y="74" width="100" height="20" uuid="5a5eded4-f212-4d05-aca8-782fe54abcb4"/>
+				<textFieldExpression><![CDATA[$F{magacin_naziv}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="200" y="54" width="100" height="20" uuid="c8441258-8d29-483d-9332-2a5483119cb0"/>
+				<text><![CDATA[Magacin]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="300" y="74" width="100" height="20" uuid="e3913e48-3c60-4438-80ec-489631d594e4"/>
+				<textFieldExpression><![CDATA[$F{poslovna_godina_godina}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="300" y="54" width="100" height="20" uuid="65c2c556-f332-442d-aa21-79fa903c8ae7"/>
+				<text><![CDATA[Poslovna godina]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="104" width="24" height="20" uuid="2a9da950-9cb7-4c1e-b611-4fbc7c38aabd"/>
+				<text><![CDATA[Id]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="24" y="104" width="100" height="20" uuid="5585adac-3793-42cb-a566-8b0543e26051"/>
+				<text><![CDATA[Kolicina po kartici]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="124" y="104" width="100" height="20" uuid="68520903-42bd-4475-86f6-5ce4b9c77fbd"/>
+				<text><![CDATA[Kolicina po popisu]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="224" y="104" width="100" height="20" uuid="fd5f1ba2-fa1a-438d-97b5-015f4daa044a"/>
+				<text><![CDATA[Roba naziv]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="324" y="104" width="100" height="20" uuid="2f2fc24a-dc50-46cf-8cfc-e33d293c0c9c"/>
+				<text><![CDATA[Jedinica mere]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="94" width="555" height="1" uuid="5b6393ad-c444-471b-ad2a-51bf68e22700"/>
+			</line>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="21" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="24" height="20" uuid="00be6917-229f-48a8-a286-23003c63dd7b"/>
+				<textFieldExpression><![CDATA[$F{stavka_popisa_id}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="24" y="0" width="100" height="20" uuid="19b061ac-5efa-4751-9980-be2d31d0cf63"/>
+				<textFieldExpression><![CDATA[$F{stavka_popisa_kolicina_po_kartici}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="124" y="0" width="100" height="20" uuid="5e158afd-47b5-4d29-9764-e8231c580a11"/>
+				<textFieldExpression><![CDATA[$F{stavka_popisa_kolicina_po_popisu}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="224" y="0" width="100" height="20" uuid="5f9edd18-6681-4760-a8c2-3be9259a3351"/>
+				<textFieldExpression><![CDATA[$F{roba_naziv}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="324" y="0" width="100" height="20" uuid="f34d5b54-e038-4c95-96d8-a6b00547e666"/>
+				<textFieldExpression><![CDATA[$F{jedinica_mere_naziv}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

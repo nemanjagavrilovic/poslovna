@@ -43,7 +43,7 @@
 										});
 
 						$.ajax({
-							url : "http://localhost:9000/radnici/all/"
+							url : "http://localhost:9000/api/radnici/all/"
 						}).then(
 								function(data) {
 									for (i = 0; i < data.length; i++) {
@@ -135,6 +135,7 @@
 	function Popis(){
 		var url = window.location.href;
 		var magacin_id = url.substring(url.lastIndexOf('#') + 1, url.length);
+		console.log(magacin_id)
 		var stavke = [];
 		var kolicine = [];
 		var data = $("#dataTable tr");
@@ -192,6 +193,7 @@
 						$.each(data,function(index){
 							roba.push(data[index].id);
 						});
+						
 						var PopisniDokumentDTO = JSON.stringify({
 							"magacin": magacin_id,
 							"roba" : roba,
@@ -219,6 +221,7 @@
 
 </head>
 <body>
+<div w3-include-html="navbar.html" style="width: 100%"></div>
 	<div class="formContainer">
 		<ul>
 			<li class="group-start"><a href="searchModal"
@@ -294,6 +297,8 @@
 	<button type="button" class="btn btn-primary" data-dismiss="modal"
 		onClick="Popis()">Popisi</button>
 
-
+	<script>
+        includeHTML();
+	</script>
 </body>
 </html>
