@@ -170,10 +170,10 @@ public class PopisniDokumentKontroler {
 			Connection conn;
 			conn =
 				       (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/poslovna?useSSL=false&" +
-				                                   "user=root&password=admin");
+				                                   "user=root&password=malizvornik95");
 			HashMap map = new HashMap();
 			map.put("idPopisnogDokumenta", id);
-            JasperReport jasReport = (JasperReport) JRLoader.loadObjectFromFile("C:/Users/nenad/git/poslovna/poslovna/src/main/resources/popisniDokument.jasper");
+            JasperReport jasReport = (JasperReport) JRLoader.loadObjectFromFile("C:/Users/Nemanja/git/poslovna/poslovna/src/main/resources/popisniDokument.jasper");
             JasperPrint jasPrint = JasperFillManager.fillReport(jasReport, map, conn);
             File pdf = File.createTempFile("output.", ".pdf");
 			JasperExportManager.exportReportToPdfStream(jasPrint, new FileOutputStream(pdf));

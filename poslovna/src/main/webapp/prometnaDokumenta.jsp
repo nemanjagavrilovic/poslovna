@@ -29,7 +29,7 @@
 				<li><a id="next"><img src="../../images/next.gif" /></a></li>
 				<li><a id="last"><img src="../../images/last.gif" /></a></li>
 				<li class="group-start" onclick="find()"id="novi"><a href="#inputModal" data-toggle="modal" data-target="#inputModal"><img src="../../images/add.gif" /></a></li>
-				<li class="group-start"><a href="#" id="nextform"><img src="../../images/nextform.gif" /></a></li>
+				<li class="group-start"><a href="../../stavkaDokumenta/" id="nextform"><img src="../../images/nextform.gif" /></a></li>
 		</ul>
 		
 		<table id="dokumenti" border="1">
@@ -47,6 +47,7 @@
 			<tbody>
 				<c:forEach items="${prometniDokumenti}" var="dokument">
 					<tr>
+						<td class="idCell">${dokument.id }</td>
 						<td class="rbr">${dokument.redniBr}</td>
 						<td class="datumFormiranja">${dokument.datumFormiranja}</td>
 						<td class="datumKnjizenja">${dokument.datumKnjizenja}</td>

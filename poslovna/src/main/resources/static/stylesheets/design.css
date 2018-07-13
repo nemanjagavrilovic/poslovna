@@ -26,7 +26,7 @@ div.panel{
 }
 
 td.idCell{
- 	visibility: hidden; 
+ 	display: none; 
  	max-width: 0px;
 }
 

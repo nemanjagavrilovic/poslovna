@@ -41,6 +41,9 @@
       <li class="nav-item">
            <a class="nav-item nav-link" href="/poslovniPartner.html">Poslovni partneri</a>
       </li>
+      <li class="nav-item">
+         <a class="nav-item nav-link" href="/poslovnaGodina/index">Poslovna godina</a>
+      </li>
     </ul>
     </div>
 </nav>

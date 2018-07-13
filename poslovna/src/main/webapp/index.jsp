@@ -50,6 +50,18 @@
     <li>
     <a class="nav-item nav-link" href="/popisnaDokumenta.html">Popisna dokumenta</a>
     </li>
+    <li >
+        <a class="nav-item nav-link" href="/mesto.html">Mesta</a>
+     </li>
+     <li>
+            <a class="nav-item nav-link" href="/radnici.html">Radnici</a>
+      </li>
+      <li>
+           <a class="nav-item nav-link" href="/poslovniPartner.html">Poslovni partneri</a>
+      </li>
+      <li >
+         <a class="nav-item nav-link" href="/poslovnaGodina/index">Poslovna godina</a>
+      </li>
 </ul>
 <h1>Preduzece</h1>
 </body>

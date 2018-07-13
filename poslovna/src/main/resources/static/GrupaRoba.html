@@ -19,6 +19,7 @@
 							for (i = 0; i < data.length; i++) {
 								newRow = 
 									"<tr>"
+										+ "<td class=\"idCell\">"+data[i].id+"</td>"
 										+ "<td class=\"name\">" + data[i].naziv + "</td>"
 										+ "<td><a class=\"edit\" href='/api/grupaRoba/" + data[i].id + "'>" 
 										+ "<img src='images/edit.gif'/></a></td>"
@@ -75,6 +76,7 @@
 						success: function(data) {
 							newRow = 
 									"<tr>"
+										+ "<td class=\"idCell\">"+data.id+"</td>"
 										+ "<td class=\"name\">" + data.naziv + "</td>"
 										+ "<td><a class=\"edit\" href='/api/grupaRoba/" + data.id + "'>" 
 										+ "<img src='images/edit.gif'/></a></td>"
@@ -107,6 +109,7 @@
 							for(i = 0; i < data.length; i++){
 							newRow = 
 									"<tr>"
+										+ "<td class=\"idCell\">"+data[i].id+"</td>"
 										+ "<td class=\"name\">" + data[i].naziv + "</td>"
 										+ "<td><a class=\"edit\" href='/api/grupaRoba/" + data[i].id + "'>"
 										+ "<img src='images/edit.gif'/></a></td>"
@@ -140,6 +143,7 @@
 							for(i = 0; i < data.length; i++){
 							newRow = 
 									"<tr>"
+										+ "<td class=\"idCell\">"+data[i].id+"</td>"
 										+ "<td class=\"name\">" + data[i].naziv + "</td>"
 										+ "<td><a class=\"edit\" href='/api/grupaRoba/" + data[i].id + "'>"
 										+ "<img src='images/edit.gif'/></a></td>"
@@ -163,7 +167,7 @@
 			            naziv:$(".highlighted").find(".name").html(),
 			        });
 
-					if(naziv == ""){
+					if(naziv != ""){
 					$.ajax({
 						url: "/api/roba/getRobuOdGrupeRobe",
 						type: "POST",
@@ -184,7 +188,7 @@
 										+ "</tr>"
 								$("#zoomTable").append(newRow)
 							  }
-							newOption = "<option value=\"" + naziv + "\">" + naziv + "</option>";
+							newOption = "<option value=\"" + id + "\">" + naziv + "</option>";
 							$("#drzavaSelect").append(newOption);
 						  }
 						});

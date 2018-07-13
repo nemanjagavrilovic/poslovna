@@ -464,4 +464,18 @@ $(document).on('change',"#vrsta",function(){
 
 	}
 })
+$(document).on('click','#nextform',function(e){
+	e.preventDefault();
+	
+	id = $(".highlighted").find(".idCell").html()
+	var url=$(this).attr('href');
+	if(id!=""){
+		url=url+id
+		window.location.href = url;
+	}else{
+		alert('Selektujte red')
+	}
+})
+	
+
 

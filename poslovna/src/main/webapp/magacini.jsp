@@ -50,7 +50,7 @@
 						<td><a href="../prometniDokument/all/${magacin.id}">Dokumenti</a></td>
 						<td><a href="/robnaKartica/index/${ magacin.id }">Robne kartice</a></td>
 						<td><a class="izvestaj" href="/magacin/izvestaj/${ magacin.id }">Izvestaj</a></td>
-						<td><button onClick="redirect(${ magacin.id })">Add</button></td>
+						<td><button onClick="redirect(${ magacin.id })">Popis</button></td>
 					
 						
 					</tr>
