@@ -37,7 +37,7 @@
 														+ "<td class = \"naziv\">"
 														+ data.komisija[1].ime + " " + data.komisija[1].prezime
 														+ "</td><td class=\"kolicinapokartici\">"
-														+ data.komisija[2].ime + " " + data.komisija[0].prezime
+														+ data.komisija[2].ime + " " + data.komisija[2].prezime
 														+ "</td>"
 														
 														+ "</tr>"
@@ -79,7 +79,44 @@
 						
 						
 	
+						$("#search").click(function(){
+							var radnik = JSON.stringify({
+								"ime":$("#imeSearch").val(),
+								"prezime":$("#prezimeSearch").val()
+							});
+							console.log(radnik);
+							$("#dataTable").find("tr:not(:first)").remove();
+							$.ajax({
+								url: "/komisija/search",
+								type: "POST",
+								data: radnik,
+								//saljemo json i ocekujemo json nazad
+								contentType: "application/json",
+								datatype: 'json',
+								success: function(data) {
+									console.log(data);
+									for (i = 0; i < data.length; i++) {
+										newRow = "<tr>"
+											+ "<td class = \"id\">"
+											+ data[i].id
+											+ "</td>"
+											+ "<td class = \"jedinicamere\">"
+											+ data[i].komisija[0].ime + " " + data[i].komisija[0].prezime
+											+ "</td>"
+											+ "<td class = \"naziv\">"
+											+ data[i].komisija[1].ime + " " + data[i].komisija[1].prezime
+											+ "</td><td class=\"kolicinapokartici\">"
+											+ data[i].komisija[2].ime + " " + data[i].komisija[0].prezime
+											+ "</td>"
+											
+											+ "</tr>"
+										$("#dataTable").append(newRow)
 
+									}
+								}
+						});
+
+						});
 						
 						$("#first").click(function() {
 							goFirst()
@@ -169,12 +206,42 @@
 		<table id="dataTable" class="table">
 			<tr class="header">
 				<th>Id komisije</th>
-				<th>Predsednik Komisije</th>
-				<th>Clan komisije 1</th>
-				<th>Clan komisije 2</th>
+				<th>Clan 1</th>
+				<th>Clan 2</th>
+				<th>Clan 3</th>
 				
 
 			</tr>
 		</table>
+		 <div class="modal fade" id="searchModal" tabindex="-1" role="dialog">
+		 <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="exampleModalLabel">Pretraga gradova</h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <form id="editForm">
+		      <div class="modal-body">
+					<input type="hidden" name="idSearch" id="idSearch" />
+				<p>
+					<label for="ime">Ime</label> <input type="text" name="imeSearch"
+						id="imeSearch" />
+					
+					
+				</p>
+				<p><label for="prezime">Prezime</label> <input type="text" name="prezimeSearch"
+				id = "prezimeSearch"/>
+				 </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+		        <button type="button" class="btn btn-primary" id="search">Pretrazi</button>
+		      </div>
+		      </form>
+		    </div>
+		  </div>
+		</div>
+		
 </body>
 </html>

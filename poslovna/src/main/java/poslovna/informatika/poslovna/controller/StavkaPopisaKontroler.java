@@ -2,6 +2,7 @@ package poslovna.informatika.poslovna.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -55,6 +56,31 @@ public class StavkaPopisaKontroler {
 	public ResponseEntity<List<StavkaPopisa>> getAll(@PathVariable("id") Long id) {
 		PopisniDokument dokument = popisniDokumentService.findById(id);
 		List<StavkaPopisa> stavke = dokument.getStavke();
+		
+		
+		return new ResponseEntity<>(stavke, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/search", method = RequestMethod.POST)
+	public ResponseEntity<List<StavkaPopisa>> search(@RequestBody StavkaPopisa stavka) {
+	
+		List<StavkaPopisa> stavke = stavkaPopisaService.findAll();
+		
+		if(!stavka.getRoba().getNaziv().equals("")) {
+			stavke = stavke.stream().filter(e -> e.getRoba().getNaziv().toUpperCase().contains(stavka.getRoba().getNaziv().toUpperCase())).collect(Collectors.toList());
+		}
+		if(!stavka.getRoba().getJedinicaMere().getNaziv().equals("")) {
+			stavke = stavke.stream().filter(e -> e.getRoba().getJedinicaMere().getId().equals(stavka.getRoba().getJedinicaMere().getId())).collect(Collectors.toList());
+			
+		}
+		if(stavka.getKolicinaPoKartici()!=0) {
+			stavke = stavke.stream().filter(e -> e.getKolicinaPoKartici()<=stavka.getKolicinaPoKartici()).collect(Collectors.toList());
+			
+		}
+		if(stavka.getKolicinaPoPopisu() != 0) {
+			stavke = stavke.stream().filter(e -> e.getKolicinaPoPopisu()<=stavka.getKolicinaPoPopisu()).collect(Collectors.toList());
+			
+		}
 		
 		
 		return new ResponseEntity<>(stavke, HttpStatus.OK);

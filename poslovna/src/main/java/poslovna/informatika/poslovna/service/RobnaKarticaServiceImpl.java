@@ -58,5 +58,8 @@ public class RobnaKarticaServiceImpl implements RobnaKarticaService {
 		return robnaKarticaRepository.findByMagacinAndRoba(magacin, roba);
 	}
 
+
+	
+
 }
 

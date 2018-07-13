@@ -1,6 +1,7 @@
 package poslovna.informatika.poslovna.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -68,7 +69,6 @@ public class PopisniDokumentKontroler {
 
 		retDokument.setPoslovnaGodina(pg);
 		popisniDokumentService.save(retDokument);
-
 		doUpdate(retDokument, pg);
 		return new ResponseEntity<PopisniDokument>(popisniDokument, HttpStatus.OK);
 	}
@@ -131,5 +131,27 @@ public class PopisniDokumentKontroler {
 		return new ResponseEntity<List<PopisniDokument>>(dokumenti, HttpStatus.OK);
 	}
 
-
+	@RequestMapping(value = "/search", method = RequestMethod.POST)
+	public ResponseEntity<List<PopisniDokument>> search(@RequestBody PopisniDokument pd) {
+		
+		List<PopisniDokument> dokumenti = popisniDokumentService.findAll();
+		if(pd.getDatum() !=null) {
+			System.out.println(pd.getDatum());
+			dokumenti=dokumenti.stream().filter(e -> e.getDatum().compareTo(pd.getDatum())<=0).collect(Collectors.toList());
+		}
+		if(pd.getPoslovnaGodine() != null) {
+			
+				dokumenti=dokumenti.stream().filter(e -> e.getPoslovnaGodine().getGodina().compareTo(pd.getPoslovnaGodine().getGodina())<=0).collect(Collectors.toList());
+				
+		}
+		
+		if(pd.getBrojPopisa()!=-1) {
+			System.out.println("USAO");
+			Long id = new Long(pd.getBrojPopisa());
+			Magacin magacin = magacinService.findById(id);
+			dokumenti=dokumenti.stream().filter(e -> e.getMagacin().getId().equals(magacin.getId())).collect(Collectors.toList());
+		}
+		
+		return new ResponseEntity<List<PopisniDokument>>(dokumenti, HttpStatus.OK);
+	}
 }
