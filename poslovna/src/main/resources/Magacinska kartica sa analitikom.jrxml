@@ -95,10 +95,6 @@ WHERE
 		<variableExpression><![CDATA[$F{robna_kartica_ukupna_vr}]]></variableExpression>
 		<initialValueExpression><![CDATA[0]]></initialValueExpression>
 	</variable>
-	<variable name="sumCena" class="java.lang.Float" calculation="Sum">
-		<variableExpression><![CDATA[$F{robna_kartica_cena}]]></variableExpression>
-		<initialValueExpression><![CDATA[0]]></initialValueExpression>
-	</variable>
 	<variable name="vrsta" class="java.lang.String">
 		<variableExpression><![CDATA[($F{analitika_mag_kartice_vrsta_prometa}.equals( 0 ) ? "PR" :
     ($F{analitika_mag_kartice_vrsta_prometa}.equals( 1 )) ? "OT" :
@@ -266,14 +262,6 @@ WHERE
 				<textFieldExpression><![CDATA[$F{analitika_mag_kartice_stavka_dokumenta_id}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="266" y="0" width="64" height="20" uuid="056f6cc7-8d83-4b98-87e1-44d911e992cd"/>
-				<textFieldExpression><![CDATA[$F{robna_kartica_ukupna_kol}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="468" y="0" width="87" height="20" uuid="91af0f4c-d2de-4bd7-80d1-40868979b201"/>
-				<textFieldExpression><![CDATA[$F{robna_kartica_ukupna_vr}]]></textFieldExpression>
-			</textField>
-			<textField>
 				<reportElement x="20" y="0" width="48" height="20" uuid="df81c377-f89e-405c-ae8a-087dc2eed9ff"/>
 				<textFieldExpression><![CDATA[$V{vrsta}]]></textFieldExpression>
 			</textField>
@@ -301,26 +289,22 @@ WHERE
 				<reportElement x="422" y="3" width="46" height="20" uuid="b092042f-6b7e-4b81-953f-ea507abcba1a"/>
 				<textFieldExpression><![CDATA[$V{vrIzlaza}]]></textFieldExpression>
 			</textField>
+			<textField>
+				<reportElement x="270" y="0" width="60" height="20" uuid="5e870f88-b40b-4c6e-b052-3741bd317700"/>
+				<textFieldExpression><![CDATA[$F{analitika_mag_kartice_ukupna_kol}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="468" y="3" width="87" height="20" uuid="f51e33f2-5654-4a16-9c0b-ee350f9359bc"/>
+				<textFieldExpression><![CDATA[$F{analitika_mag_kartice_ukupna_vr}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 	<lastPageFooter>
 		<band height="50">
-			<textField>
-				<reportElement x="468" y="0" width="87" height="20" uuid="f125e47e-d337-46ce-9764-89e7e0399e83"/>
-				<textFieldExpression><![CDATA[$V{sumUkupno}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="330" y="0" width="45" height="20" uuid="5c9d672f-8cc6-416b-892a-753412cdf09a"/>
-				<textFieldExpression><![CDATA[$V{sumCena}]]></textFieldExpression>
-			</textField>
 			<staticText>
 				<reportElement x="0" y="0" width="68" height="20" uuid="a425328d-840e-4034-9d70-33c084442d2b"/>
 				<text><![CDATA[Ukupno:]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="266" y="0" width="64" height="20" uuid="241d98f1-1f45-4700-8692-a1867ff18d68"/>
-				<textFieldExpression><![CDATA[$V{kolUUkupno}]]></textFieldExpression>
-			</textField>
 			<textField>
 				<reportElement x="170" y="0" width="47" height="20" uuid="918f3662-138f-427c-a48d-c573d070173c"/>
 				<textFieldExpression><![CDATA[$V{kolUlazaUkupno}]]></textFieldExpression>

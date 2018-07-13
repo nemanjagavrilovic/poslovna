@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import poslovna.informatika.poslovna.model.GrupaRoba;
+import poslovna.informatika.poslovna.model.Roba;
 import poslovna.informatika.poslovna.service.GrupaRobaServis;
+import poslovna.informatika.poslovna.service.RobaServis;
 
 
 @RestController
@@ -23,6 +25,8 @@ public class GrupaRobaKontroler {
 	@Autowired
 	private GrupaRobaServis grupaRobaServis;
 	
+	@Autowired
+	private RobaServis robaServis;
 	
 	@RequestMapping(value = "getGrupaRoba", method = RequestMethod.GET)
 	public ResponseEntity<List<GrupaRoba>> getCountries() {
@@ -48,6 +52,11 @@ public class GrupaRobaKontroler {
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<GrupaRoba> delete(@PathVariable Long id) {
+		for(Roba r: robaServis.findAll()){
+			if(r.getGrupa().getId().equals(id)){
+				return new ResponseEntity<>(null, HttpStatus.OK);
+			}
+		}
 		GrupaRoba deleted = grupaRobaServis.delete(id);
 		return new ResponseEntity<>(deleted, HttpStatus.OK);
 	}

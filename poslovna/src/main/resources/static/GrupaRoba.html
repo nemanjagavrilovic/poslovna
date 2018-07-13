@@ -155,14 +155,15 @@
 				
 				$("#nextForm").click(function(){
 					//pripremamo JSON koji cemo poslati
+					naziv = ""
 	 				naziv = $(".highlighted").find(".name").html()
 	  				id = $(".highlighted").find(".idCell").html()
-	  				console.log(id);
 					formData = JSON.stringify({
 						id:$(".highlighted").find(".idCell").html(),
 			            naziv:$(".highlighted").find(".name").html(),
 			        });
 
+					if(naziv == ""){
 					$.ajax({
 						url: "/api/roba/getRobuOdGrupeRobe",
 						type: "POST",
@@ -171,6 +172,7 @@
 						contentType: "application/json",
 						datatype: 'json',
 						success: function(data) {
+							$("#drzavaSelect").find("option").remove();
 							$("#zoomTable").find("tr:not(:first)").remove();
 							for(i = 0; i < data.length; i++){
 								console.log(data[i]);
@@ -182,10 +184,17 @@
 										+ "</tr>"
 								$("#zoomTable").append(newRow)
 							  }
+							newOption = "<option value=\"" + naziv + "\">" + naziv + "</option>";
+							$("#drzavaSelect").append(newOption);
 						  }
 						});
+					
 					$('#nextformModal').modal('toggle');
+					}else{
+						alert("Niste selektovali red u tabeli");
+					}
 				});
+				
 				
 				$("#addCity").click(function(){
 					//pripremamo JSON koji cemo poslati
@@ -239,10 +248,14 @@
 			$.ajax({
 	        	url: url,
 	        	type: "DELETE",
-	        	success: function(){
+	        	success: function(data){
 	        		//ukloni i na strani 
-					tr_parent.remove()
-		        }
+	        		if(data == ""){
+	        			alert("Ne mozete izbrisati grupu robe kojoj pripada neka roba");
+	        		}else{
+						tr_parent.remove()
+	        		}
+	        	}
 			});
 		}
 	});
@@ -293,7 +306,7 @@
 			<li><a id="nextForm"><img src="images/nextform.gif" /></a></li>
 		</ul>
 
-		<h1>Države</h1>
+		<h1>Grupa roba</h1>
 		<table id="dataTable" class="table">
 			<tr class="header">
 				<th>Naziv</th>
@@ -305,7 +318,7 @@
 		<div class="panel">
 			<p>
 				<form>
-					<input type="hidden" name="id" id="id" />
+					<input type="hidden" class="idCell" name="id" id="id" />
 					<p>
 						<label for="naziv">Naziv</label> <input size="50" type="text" name="name"
 							id="naziv" disabled/>
@@ -344,7 +357,7 @@
 		  <div class="modal-dialog" role="document">
 		    <div class="modal-content">
 		      <div class="modal-header">
-		        <h5 class="modal-title" id="exampleModalLabel">Pretraga država</h5>
+		        <h5 class="modal-title" id="exampleModalLabel">Pretraga grupa roba</h5>
 		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 		          <span aria-hidden="true">&times;</span>
 		        </button>
@@ -370,7 +383,7 @@
 		  <div class="modal-dialog" role="document">
 		    <div class="modal-content">
 		      <div class="modal-header">
-		        <h5 class="modal-title" id="exampleModalLabel">Izmena države</h5>
+		        <h5 class="modal-title" id="exampleModalLabel">Izmena grupe robe</h5>
 		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 		          <span aria-hidden="true">&times;</span>
 		        </button>

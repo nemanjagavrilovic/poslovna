@@ -1,6 +1,11 @@
 package poslovna.informatika.poslovna.controller;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +19,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
 import poslovna.informatika.poslovna.converters.MagacinDTOtoMagacin;
 import poslovna.informatika.poslovna.dto.MagacinDTO;
 import poslovna.informatika.poslovna.model.Magacin;
@@ -108,7 +118,7 @@ public class MagacinController {
 		
 		return new ResponseEntity<List<Roba>>(roba,HttpStatus.OK);
 	}
-/*
+
 	@RequestMapping(value="/izvestaj/{id}",method=RequestMethod.POST)
 	public ResponseEntity<String> izvestaj(@PathVariable("id") Long id){
 		try {
@@ -128,6 +138,6 @@ public class MagacinController {
 			}
 		return new ResponseEntity<String>("ok",HttpStatus.OK);
 		}
-	*/
+	
 	
 }
