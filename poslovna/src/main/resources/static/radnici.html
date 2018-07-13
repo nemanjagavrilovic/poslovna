@@ -8,8 +8,7 @@
 <link rel="stylesheet" type="text/css" href="stylesheets/design.css">
 <link rel="stylesheet" href="stylesheets/bootstrap.min.css">
 <meta charset="UTF-8">
-<title>Poslovni parnter</title>
-
+<title>Radnici</title>
 <style>
 table tr.zoomHighlighted{
 	background: #89C4F4;	
@@ -19,57 +18,22 @@ table tr.zoomHighlighted{
 	$(document).ready(
 			function() {
 				$.ajax({
-					url : "http://localhost:9000/api/poslovniPartner/getPoslovniPartner"
+					url : "http://localhost:9000/api/radnici/getRadnici"
 				}).then(
 						function(data) {
 							for (i = 0; i < data.length; i++) {
 								newRow = "<tr>"
-										+ "<td class=\"name\">" + data[i].naziv + "</td>"
-										+ "<td class=\"tip\">" + data[i].tip + "</td>"
-										+ "<td class=\"pib\">" + data[i].pib + "</td>"
-										+ "<td class=\"adresa\">" + data[i].adresa +"</td>"
-										+ "<td class=\"mesto\">" + data[i].mesto.naziv +"</td>"
-										+ "<td><a class=\"edit\" href='/api/poslovniPartner/" + data[i].id + "'>" 
+										+ "<td class=\"ime\">" + data[i].ime + "</td>"
+										+ "<td class=\"prezime\">" + data[i].prezime + "</td>"
+										+ "<td class=\"adresa\">" + data[i].adresa + "</td>"
+										
+										+ "<td><a class=\"edit\" href='/api/radnici/" + data[i].id + "'>" 
 										+ "<img src='images/edit.gif'/></a></td>"
-										+ "<td><a class=\"remove\" href='/api/poslovniPartner/" + data[i].id + "'>" 
+										+ "<td><a class=\"remove\" href='/api/radnici/" + data[i].id + "'>" 
 										+ "<img src='images/remove.gif'/></a></td>"
 										+ "</tr>"
 								$("#dataTable").append(newRow)
 							}
-						});
-				
-				
-				$.ajax({
-					url : "http://localhost:9000/api/mesto/getMesto"
-				}).then(
-						function(data) {
-							for (i = 0; i < data.length; i++) {
-								newOption = "<option value=\"" + data[i].id + "\">"
-								+ data[i].naziv + "</option>" 
-								$("#mestoSelect").append(newOption)
-								
-								newOption = "<option value=\"" + data[i].id + "\">"
-								+ data[i].naziv + "</option>" 
-								$("#mestoSelectEdit").append(newOption)
-								
-								newOption = "<option value=\"" + data[i].id + "\">"
-								+ data[i].naziv + "</option>" 
-								$("#mestoSelectSearch").append(newOption)
-								
-								newRow = "<tr>"
-								+ "<td class=\"name\">" + data[i].naziv + "</td>"
-								+ "<td class=\"idCell\">" + data[i].id + "</td>"
-								  "</tr>"
-								 $("#zoomTable").append(newRow)
-								 
-								 newRow = "<tr>"
-								+ "<td class=\"name\">" + data[i].naziv + "</td>"
-								+ "<td class=\"idCell\">" + data[i].id + "</td>"
-								  "</tr>"
-								 $("#zoomTableEdit").append(newRow)
-								 
-							}
-
 						});
 						
 				
@@ -92,19 +56,17 @@ table tr.zoomHighlighted{
 				$("#add").click(function(){
 					//pripremamo JSON koji cemo poslati
     	            
-					var m = { id: $("#inputForm [name='mestoSelect']").val(), naziv:$("#inputForm [name='mestoSelect'] option:selected").text()};
+				
 					
 					formData = JSON.stringify({
-						tip:$("#inputForm [name='tipSelect'] option:selected").text(),
-    	                naziv:$("#inputForm [name='name']").val(),
-    	                pib:$("#inputForm [name='pib']").val(),
+						ime:$("#inputForm [name='ime']").val(),
+    	                prezime:$("#inputForm [name='prezime']").val(),
     	                adresa:$("#inputForm [name='adresa']").val(),
-    	                mesto:m
 
     	            });
 
 					$.ajax({
-						url: "/api/poslovniPartner",
+						url: "/api/radnici",
 						type: "POST",
 						data: formData,
 						//saljemo json i ocekujemo json nazad
@@ -112,14 +74,12 @@ table tr.zoomHighlighted{
 						datatype: 'json',
 						success: function(data) {
 							newRow = "<tr>"
-							+ "<td class=\"name\">" + data.naziv + "</td>"
-							+ "<td class=\"tip\">" + data.tip + "</td>"
-							+ "<td class=\"pib\">" + data.pib + "</td>"
-							+ "<td class=\"adresa\">" + data.adresa +"</td>"
-							+ "<td class=\"mesto\">" + data.mesto.naziv +"</td>"				
-							+ "<td><a class=\"edit\" href='/api/poslovniPartner/" + data.id + "'>" 
+							+ "<td class=\"ime\">" + data.ime + "</td>"
+							+ "<td class=\"prezime\">" + data.prezime + "</td>"
+							+ "<td class=\"adresa\">" + data.adresa + "</td>"				
+							+ "<td><a class=\"edit\" href='/api/radnici/" + data.id + "'>" 
 							+ "<img src='images/edit.gif'/></a></td>"
-							+ "<td><a class=\"remove\" href='/api/poslovniPartner/" + data.id + "'>" 
+							+ "<td><a class=\"remove\" href='/api/radnici/" + data.id + "'>" 
 							+ "<img src='images/remove.gif'/></a></td>"
 							+ "</tr>"
 							$("#dataTable").append(newRow)
@@ -131,20 +91,18 @@ table tr.zoomHighlighted{
 				$("#edit").click(function(){
 					//pripremamo JSON koji cemo poslati
 
-					var m = { id: $("#editForm [name='mestoSelectEdit']").val(), naziv:$("#editForm [name='mestoSelectEdit'] option:selected").text()};
+					
 
 					formData = JSON.stringify({
 						id:$("#editModal [name='idEdit']").val(),
-						tip:$("#editForm [name='tipSelectEdit'] option:selected").text(),
-    	                naziv:$("#editForm [name='nameEdit']").val(),             
-    	                pib:$("#editForm [name='pibEdit']").val(),
+						ime:$("#editForm [name='imeEdit']").val(),
+    	                prezime:$("#editForm [name='prezimeEdit']").val(),             
     	                adresa:$("#editForm [name='adresaEdit']").val(),
-    	                mesto:m
     	            });
 					
 					$("#dataTable").find("tr:not(:first)").remove();
 					$.ajax({
-						url: "/api/poslovniPartner/edit",
+						url: "/api/radnici/edit",
 						type: "POST",
 						data: formData,
 						//saljemo json i ocekujemo json nazad
@@ -154,14 +112,12 @@ table tr.zoomHighlighted{
 
 							for (i = 0; i < data.length; i++) {
 								newRow = "<tr>"
-										+ "<td class=\"name\">" + data[i].naziv + "</td>"
-										+ "<td class=\"tip\">" + data[i].tip + "</td>"
-										+ "<td class=\"pib\">" + data[i].pib + "</td>"
+										+ "<td class=\"ime\">" + data[i].ime + "</td>"
+										+ "<td class=\"prezime\">" + data[i].prezime + "</td>"
 										+ "<td class=\"adresa\">" + data[i].adresa +"</td>"
-										+ "<td class=\"mesto\">" + data[i].mesto.naziv +"</td>"
-										+ "<td><a class=\"edit\" href='/api/poslovniPartner/" + data[i].id + "'>" 
+										+ "<td><a class=\"edit\" href='/api/radnici/" + data[i].id + "'>" 
 										+ "<img src='images/edit.gif'/></a></td>"
-										+ "<td><a class=\"remove\" href='/api/poslovniPartner/" + data[i].id + "'>" 
+										+ "<td><a class=\"remove\" href='/api/radnici/" + data[i].id + "'>" 
 										+ "<img src='images/remove.gif'/></a></td>"
 										+ "</tr>"
 								$("#dataTable").append(newRow)
@@ -175,48 +131,20 @@ table tr.zoomHighlighted{
 				
 				$("#search").click(function(){
 					//pripremamo JSON koji cemo poslati
-					var m = { id: $("#searchModal [name='mestoSelectSearch']").val(), naziv:$("#searchModal [name='mestoSelectSearch'] option:selected").text()};
-					
-					if($("#searchModal [name='tipSelectSearch'] option:selected").text()=="" && $("#searchModal [name='mestoSelectSearch'] option:selected").text()==""){
+			
+				
 					formData = JSON.stringify({
 						
-						naziv:$("#searchModal [name='nazivSearch']").val(),
-    	                pib:$("#searchModal [name='pibSearch']").val(),
+						ime:$("#searchModal [name='imeSearch']").val(),
+    	               	prezime:$("#searchModal [name='prezimeSearch']").val(),
     	                adresa:$("#searchModal [name='adresaSearch']").val(),
     	               
     	            });
-				}
-				else if($("#searchModal [name='tipSelectSearch'] option:selected").text()==""){
-						formData = JSON.stringify({
-							
-							naziv:$("#searchModal [name='nazivSearch']").val(),
-	    	                pib:$("#searchModal [name='pibSearch']").val(),
-	    	                adresa:$("#searchModal [name='adresaSearch']").val(),
-	    	                mesto:m
-	    	            });
-					}
-				else if($("#searchModal [name='mestoSelectSearch'] option:selected").text()==""){
-					formData = JSON.stringify({
-						tip:$("#searchModal [name='tipSelectSearch'] option:selected").text(),
-						naziv:$("#searchModal [name='nazivSearch']").val(),
-    	                pib:$("#searchModal [name='pibSearch']").val(),
-    	                adresa:$("#searchModal [name='adresaSearch']").val(),
-    	               
-    	            });
-				}else{
-					formData = JSON.stringify({
-						tip:$("#searchModal [name='tipSelectSearch'] option:selected").text(),
-						naziv:$("#searchModal [name='nazivSearch']").val(),
-    	                pib:$("#searchModal [name='pibSearch']").val(),
-    	                adresa:$("#searchModal [name='adresaSearch']").val(),
-    	                mesto:m
-    	            });
-				}
 					console.log(formData);
 					
 					$("#dataTable").find("tr:not(:first)").remove();
 					$.ajax({
-						url: "/api/poslovniPartner/search",
+						url: "/api/radnici/search",
 						type: "POST",
 						data: formData,
 						//saljemo json i ocekujemo json nazad
@@ -226,14 +154,13 @@ table tr.zoomHighlighted{
 
 							for (i = 0; i < data.length; i++) {
 								newRow = "<tr>"
-										+ "<td class=\"name\">" + data[i].naziv + "</td>"
-										+ "<td class=\"tip\">" + data[i].tip + "</td>"
-										+ "<td class=\"pib\">" + data[i].pib + "</td>"
+										+ "<td class=\"ime\">" + data[i].ime + "</td>"
+										+ "<td class=\"prezime\">" + data[i].prezime + "</td>"
 										+ "<td class=\"adresa\">" + data[i].adresa +"</td>"
-										+ "<td class=\"mesto\">" + data[i].mesto.naziv +"</td>"
-										+ "<td><a class=\"edit\" href='/api/poslovniPartner/" + data[i].id + "'>" 
+							
+										+ "<td><a class=\"edit\" href='/api/radnici/" + data[i].id + "'>" 
 										+ "<img src='images/edit.gif'/></a></td>"
-										+ "<td><a class=\"remove\" href='/api/poslovniPartner/" + data[i].id + "'>" 
+										+ "<td><a class=\"remove\" href='/api/radnici/" + data[i].id + "'>" 
 										+ "<img src='images/remove.gif'/></a></td>"
 										+ "</tr>"
 								$("#dataTable").append(newRow)
@@ -274,33 +201,14 @@ table tr.zoomHighlighted{
 				        	type: "GET",
 				        	success: function(data){
 				        		$("#idEdit").val(data.id);
-				        		$("#nazivEdit").val(data.naziv);
-				        		$("#tipSelectEdit").val(data.tip);
-				        		$("#pibEdit").val(data.pib);
+				        		$("#imeEdit").val(data.ime);
+				        		$("#prezimeEdit").val(data.prezime);
 				        		$("#adresaEdit").val(data.adresa);
-				        		$("#mestoSelectEdit").val(data.mesto.id);
 				        		
 				        		$('#editModal').modal('toggle');
 				        		
 					        }
 						});
-				});
-				
-				$("#mestoPickup").click(function(){
-					id = $(".zoomHighlighted").find(".idCell").html();
-					$("#mestoSelect").val(id);
-					$('#mestoModal').modal('toggle');
-				});		
-				
-				$("#mestoPickupEdit").click(function(){
-					id = $(".zoomHighlighted").find(".idCell").html();
-					$("#mestoSelectEdit").val(id);
-					$('#mestoModalEdit').modal('toggle');
-				});	
-				$("#mestoPickupEdit").click(function(){
-					id = $(".zoomHighlighted").find(".idCell").html();
-					$("#mestoSelectSearch").val(id);
-					$('#mestoModalEdit').modal('toggle');
 				});	
 					
 			});
@@ -309,7 +217,7 @@ table tr.zoomHighlighted{
 		highlightRow(this)
 	});
 	
-	$(document).on("click", '#zoomTable tr', function(event) {
+/*	$(document).on("click", '#zoomTable tr', function(event) {
 		 if(!$(this).hasClass("header")){
 		 	$(".zoomHighlighted").removeClass("zoomHighlighted");
 		 	$(this).addClass("zoomHighlighted");
@@ -323,27 +231,24 @@ table tr.zoomHighlighted{
 		  }
 	});
 	
-	
+	*/
 	function sync(item){
-	    naziv = item.find(".name").html()
-	    mesto = item.find(".mesto").html()
-	    tip = item.find(".tip").html()
-	    pib = item.find(".pib").html()
+	    ime = item.find(".ime").html()
+	    magacin = item.find(".magacin").html()
+	    prezime = item.find(".prezime").html()
 	    adresa = item.find(".adresa").html()
 
 
-	    $("#naziv").val(naziv);
-	    $("#mesto").val(mesto);
-	    $("#tip").val(tip);
-	    $("#pib").val(pib);
+	    $("#ime").val(ime);
+	    $("#magacin").val(magacin);
+	    $("#prezime").val(prezime);
 	    $("#adresa").val(adresa);
 	}
 </script>
 
-
 </head>
-<body>
 
+<body>
 <div class="formContainer">
 			<ul>
 				<li class="group-start"><a href="searchModal" data-toggle="modal" data-target="#searchModal"><img src="images/search.gif" /></a></li>
@@ -357,14 +262,12 @@ table tr.zoomHighlighted{
 				<li class="group-start"><a href="#" id="nextform"><img src="images/nextform.gif" /></a></li>
 			</ul>
 
-		<h1>Poslovni partner</h1>
+		<h1>Radnici</h1>
 		<table id="dataTable" class="table">
 			<tr class="header">
-				<th>Naziv</th>
-				<th>Tip</th>
-				<th>PIB</th>
+				<th>Ime</th>
+				<th>Prezime</th>
 				<th>Aresa</th>
-				<th>Mesto</th>
 				<th></th>
 				<th></th>
 			</tr>
@@ -375,24 +278,16 @@ table tr.zoomHighlighted{
 				<form>
 					<input type="hidden" name="id" id="id" />
 					<p>
-						<label for="naziv">Naziv</label> <input type="text" name="naziv"
-							id="naziv" disabled />
+						<label>Ime</label> <input type="text" name="ime"
+							id="ime" disabled />
 					</p>
 					<p>
-						<label for="tip">Tip</label> <input type="text" name="tip"
-							id="tip" disabled />
-					</p>
-					<p>
-						<label >PIB</label> <input type="text" name="pib"
-							id="pib" disabled />
+						<label >Prezime</label> <input type="text" name="prezime"
+							id="prezime" disabled />
 					</p>
 					<p>
 						<label >Adresa</label> <input type="text" name="adresa"
 							id="adresa" disabled />
-					</p>
-					<p>
-						<label >Mesto</label> <input type="text" name="mesto"
-							id="mesto" disabled />
 					</p>
 				</form>
 			</p>
@@ -402,7 +297,7 @@ table tr.zoomHighlighted{
 		 <div class="modal-dialog" role="document">
 		    <div class="modal-content">
 		      <div class="modal-header">
-		        <h5 class="modal-title" id="exampleModalLabel">Novi poslovni partner</h5>
+		        <h5 class="modal-title" id="exampleModalLabel">Novi radnik</h5>
 		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 		          <span aria-hidden="true">&times;</span>
 		        </button>
@@ -411,30 +306,18 @@ table tr.zoomHighlighted{
 		      <div class="modal-body">
 					<input type="hidden" name="id" id="id" />
 				<p>
-					<label for="naziv">Naziv</label> <input type="text" name="name"
-						id="naziv" />
+					<label>Ime</label> <input type="text" name="ime"
+						id="ime" />
 				</p>
 				<p>
-					<label>Tip </label><select id="tipSelect" name="tipSelect">
-						<option value="KUPAC">KUPAC</option>
-						<option value="DOBAVLJAC">DOBAVLJAC</option>
-						<option value="KUPACIDOBAVLJAC">KUPACIDOBAVLJAC</option>
-					</select>
-				</p>
-				<p>
-					<label>PIB</label> <input type="text" name="pib"
-						id="pib" />
+						<label >Prezime</label> <input type="text" name="prezime"
+							id="prezime"/>
 				</p>
 				<p>
 					<label >Adresa</label> <input type="text" name="adresa"
 						id="adresa" />
 				</p>
-				<p>
-					<label for="naziv">Mesto</label> 
-					<select name="mestoSelect" id="mestoSelect">
-					</select>
-					<button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#mestoModal">...	</button>
-				</p>	
+		
 		      </div>
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
@@ -449,7 +332,7 @@ table tr.zoomHighlighted{
 		 <div class="modal-dialog" role="document">
 		    <div class="modal-content">
 		      <div class="modal-header">
-		        <h5 class="modal-title" id="exampleModalLabel">Izmeni poslovnog partnera</h5>
+		        <h5 class="modal-title" id="exampleModalLabel">Izmeni radnika</h5>
 		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 		          <span aria-hidden="true">&times;</span>
 		        </button>
@@ -458,30 +341,18 @@ table tr.zoomHighlighted{
 		      <div class="modal-body">
 					<input type="hidden" name="idEdit" id="idEdit" />
 				<p>
-					<label for="naziv">Naziv</label> <input type="text" name="nameEdit"
-						id="nazivEdit" />
+					<label>Ime</label> <input type="text" name="imeEdit"
+						id="imeEdit" />
 				</p>
 				<p>
-					<label>Tip </label><select id="tipSelectEdit" name="tipSelectEdit">
-						<option value="KUPAC">KUPAC</option>
-						<option value="DOBAVLJAC">DOBAVLJAC</option>
-						<option value="KUPACIDOBAVLJAC">KUPACIDOBAVLJAC</option>
-					</select>
+					<label>Prezime</label> <input type="text" name="prezimeEdit"
+						id="prezimeEdit" />
 				</p>
 				<p>
-					<label for="naziv">PIB</label> <input type="text" name="pibEdit"
-						id="pibEdit" />
-				</p>
-				<p>
-					<label for="naziv">Adresa</label> <input type="text" name="adresaEdit"
+					<label>Adresa</label> <input type="text" name="adresaEdit"
 						id="adresaEdit" />
 				</p>
-				<p>
-					<label >Mesto</label> 
-					<select name="mestoSelectEdit" id="mestoSelectEdit">
-					</select>
-					<button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#mestoModalEdit">...	</button>
-				</p>
+			
 		      </div>
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
@@ -496,7 +367,7 @@ table tr.zoomHighlighted{
 		 <div class="modal-dialog" role="document">
 		    <div class="modal-content">
 		      <div class="modal-header">
-		        <h5 class="modal-title" id="exampleModalLabel">Pretraga poslovnih partnera</h5>
+		        <h5 class="modal-title" id="exampleModalLabel">Pretraga radnika</h5>
 		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 		          <span aria-hidden="true">&times;</span>
 		        </button>
@@ -505,34 +376,19 @@ table tr.zoomHighlighted{
 		      <div class="modal-body">
 					<input type="hidden" name="idSearch" id="idSearch" />
 				<p>
-					<label for="naziv">Naziv</label> <input type="text" name="nazivSearch"
-						id="nazivSearch" />
+					<label>Ime</label> <input type="text" name="imeSearch"
+						id="imeSearch" />
 				</p>	
-				<p>
-					<label>Tip </label><select id="tipSelectSearch" name="tipSelectSearch">
-						<option value=""></option>
-						<option value="KUPAC">KUPAC</option>
-						<option value="DOBAVLJAC">DOBAVLJAC</option>
-						<option value="KUPACIDOBAVLJAC">KUPACIDOBAVLJAC</option>
-					</select>
-					
-				</p>
 				
 				<p>
-					<label for="naziv">PIB</label> <input type="text" name="pibSearch"
-						id="pibSearch" />
+					<label>Prezime</label> <input type="text" name="prezimeSearch"
+						id="prezimeSearch" />
 				</p>
 				<p>
-					<label for="naziv">Adresa</label> <input type="text" name="adresaSearch"
+					<label>Adresa</label> <input type="text" name="adresaSearch"
 						id="adresaSearch" />
 				</p>
-				<p>
-					<label >Mesto</label> 
-					<select name="mestoSelectSearch" id="mestoSelectSearch">
-					<option value=""></option>
-					</select>
-					<button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#mestoModalEdit">...	</button>
-				</p>
+			
 		      </div>
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
@@ -543,12 +399,12 @@ table tr.zoomHighlighted{
 		  </div>
 		</div>
 		
-  		<div class="modal fade" id="mestoModal" role="dialog">
+  	<!--	<div class="modal fade" id="magacinModal" role="dialog">
     		<div class="modal-dialog">
-		      <!-- Modal content-->
+		   
 		      <div class="modal-content">
 		      <div class="modal-header">
-		      	mesto
+		      	magacin
 		      </div>
 		      <div class="modal-body">
 			    <table style = "padding:2em" id = "zoomTable">
@@ -558,19 +414,19 @@ table tr.zoomHighlighted{
 		
 				</table>
 				<div class="modal-footer">
-				<input id = "mestoPickup" type = "button" value = "izbor"/>
+				<input id = "magacinPickup" type = "button" value = "izbor"/>
 			</div>
 			</div>
 	      </div>
 	    </div>
 	   </div>
 	  	   
-  		<div class="modal fade" id="mestoModalEdit" role="dialog">
+  		<div class="modal fade" id="magacinModalEdit" role="dialog">
     		<div class="modal-dialog">
 		      <!-- Modal content-->
 		      <div class="modal-content">
 		      <div class="modal-header">
-		      	Mesto
+		      	Magacin
 		      </div>
 		      <div class="modal-body">
 			    <table style = "padding:2em" id = "zoomTableEdit">
@@ -580,19 +436,19 @@ table tr.zoomHighlighted{
 		
 				</table>
 				<div class="modal-footer">
-				<input id = "mestoPickupEdit" type = "button" value = "izbor"/>
+				<input id = "magacinPickupEdit" type = "button" value = "izbor"/>
 			</div>
 			</div>
 	      </div>
 	    </div>
 	   </div>
 	   	   
-	   <div class="modal fade" id="mestoModalSelect" role="dialog">
+	    <div class="modal fade" id="magacinModalSelect" role="dialog">
     		<div class="modal-dialog">
-		      <!-- Modal content-->
+		      
 		      <div class="modal-content">
 		      <div class="modal-header">
-		      	Mesto
+		      	Magacin
 		      </div>
 		      <div class="modal-body">
 			    <table style = "padding:2em" id = "zoomTableSelect">
@@ -604,8 +460,9 @@ table tr.zoomHighlighted{
 			</div>
 	      </div>
 	    </div>
-	   </div>
+	   </div>  -->
 </div>
+
 
 </body>
 </html>
