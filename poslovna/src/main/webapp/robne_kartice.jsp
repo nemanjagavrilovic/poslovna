@@ -87,7 +87,7 @@
                                 }));
 
                                 //dodaj magacine u zoom tablu
-                                $("#magacinZoomTable").append('<tr><td class="naziv">' + magacin.naziv +'</td><td class="preduzece">' + magacin.preduzece.naziv + '</td><td class="idCell">'+ magacin.id +'</td></tr>')
+                                $("#magacinZoomTable").append('<tr><td class="naziv">' + magacin.naziv +'</td><td class="idCell">'+ magacin.id +'</td></tr>')
                             })
                         }
                     });
@@ -120,7 +120,10 @@
                 dataType: 'json',
                 data: JSON.stringify(data),
                 success: function (data) {
-                    alert("Dodata robna kartica!")
+                    alert(data.responseText);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    alert(jqXHR.responseText);
                 }
             });
         }
@@ -129,17 +132,6 @@
             highlightRow(this)
         });
 
-        function convertDate(stamp){
-            var a=new Date(stamp);
-            var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-            var year = a.getFullYear();
-            var month = months[a.getMonth()];
-            var date = a.getDate();
-
-            var time = date + '.' + month + '.' + year+'.' ;
-            return time;
-
-        }
 
         $(document).on("click", '#magacinZoomTable tr', function(event) {
             if(!$(this).hasClass("header")){
@@ -167,16 +159,30 @@
         }
 
         function sync(item){
+            let godina = item.find(".godina").html();
             let roba = item.find(".roba").html();
             let magacin = item.find(".magacin").html();
             let pocetnoStanjeVred = item.find(".pocetno-stanje-vred").html();
             let pocetnoStanjeKol = item.find(".pocetno-stanje-kol").html();
+            let prometUlazaVred = item.find(".promet-ulaza-vr").html();
+            let prometIzlazaVred = item.find(".promet-izlaza-vr").html();
+            let prometUlazaKol = item.find(".promet-ulaza-kol").html();
+            let prometIzlazaKol = item.find(".promet-izlaza-kol").html();
+            let ukupnoKol = item.find(".ukupna-kol").html();
+            let ukupnoVred = item.find(".ukupna-vr").html();
             let cena = item.find(".cena").html();
 
+            $("#godinaPanel").val(godina);
             $("#magacinPanel").val(magacin);
             $("#robaPanel").val(roba);
             $("#pocetnoStanjeVrPanel").val(pocetnoStanjeVred);
             $("#pocetnoStanjeKolPanel").val(pocetnoStanjeKol);
+            $("#prometUlazaVrPanel").val(prometUlazaVred);
+            $("#prometIzlazaVrPanel").val(prometIzlazaVred);
+            $("#prometUlazaKolPanel").val(prometUlazaKol);
+            $("#prometIzlazaKolPanel").val(prometIzlazaKol);
+            $("#ukupnaVrPanel").val(ukupnoVred);
+            $("#ukupnaKolPanel").val(ukupnoKol);
             $("#cenaPanel").val(cena);
         }
 
@@ -195,8 +201,24 @@
             })
             $("#robaSelection").css("display","none");
             $("#form").css("display","block");
-        })
+        });
 
+        $(document).on('click','.izvestaj',function(e){
+		e.preventDefault();
+		var confirmed=confirm("Da li zelite da kreirate izvestaj");
+		var url=$(this).attr('href')
+		var item=$(this)
+		if(confirmed){
+			$.ajax({
+				url:url,
+				type:'POST',
+				success:function(){
+					alert("Kreiran izvestaj");
+				}
+			})
+		}
+	})
+        
         function highlightRow(row){
             //ne reagujemo na klik na header tabele, samo obicne redove
             //this sadrzi red na koji se kliknulo
@@ -269,6 +291,39 @@
             item.addClass("highlighted");
             sync(item);
         }
+
+        function otvoriIzmeniModal(id, cena) {
+            $("#izmeniKarticuButton").attr('onclick', 'izmeniKarticu(' + id + ')');
+            $("#cenaIzmeniInput").val(cena);
+            $("#izmeniModal").modal('toggle');
+        }
+
+        function izmeniKarticu(id) {
+            let data = {
+                cena: $("#cenaIzmeniInput").val()
+            }
+
+            $.ajax({
+                url: '/robnaKartica/' + id,
+                type: 'PATCH',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: function (data) {
+                    alert("Izmenjena robna kartica!");
+                    $('#izmeniModal').modal('toggle');
+                }
+            });
+        }
+            function nivelacija(id){
+            	$.ajax({
+            		url:'/robnaKartica/'+id+'/nivelacija',
+            		type:'GET',
+            		success:function(data){
+            			alert('Uradjena nivelacija!')
+            		}
+            	})
+            }
+        
     </script>
 </head>
 <body onload="init()">
@@ -288,23 +343,39 @@
     <table id="dokumenti" border="1">
 
         <tr class="header">
+        	<th>Godina</th>
             <th>Magacin</th>
             <th>Roba</th>
             <th>Cena</th>
             <th>Pocetno stanje kolicinski</th>
             <th>Pocetno stanje vrednosno</th>
+            <th>Promet ulaza (kol.)</th>
+            <th>Promet izlaza (kol.)</th>
+            <th>Promet ulaza (vr.)</th>
+            <th>Promet izlaza (vr.)</th>
+            <th>Ukupna kol.</th>
+            <th>Ukupna vr.</th>
         </tr>
 
         <tbody>
         <c:forEach items="${ robneKartice }" var="robnaKartica">
             <tr>
+                <td class="godina">${ robnaKartica.poslovnaGodina.godina }</td>
                 <td class="magacin">${ robnaKartica.magacin.naziv }</td>
                 <td class="roba">${ robnaKartica.roba.naziv }</td>
                 <td class="cena">${ robnaKartica.cena }</td>
                 <td class="pocetno-stanje-kol">${ robnaKartica.pocetnoStanjeKol }</td>
                 <td class="pocetno-stanje-vred">${ robnaKartica.pocetnoStanjeVr }</td>
+                <td class="promet-ulaza-kol">${ robnaKartica.prometUlazaKol }</td>
+                <td class="promet-izlaza-kol">${ robnaKartica.prometIzlazaKol }</td>
+                <td class="promet-ulaza-vr">${ robnaKartica.prometUlazaVr }</td>
+                <td class="promet-izlaza-vr">${ robnaKartica.prometIzlazaVr }</td>
+                <td class="ukupna-kol">${ robnaKartica.ukupnaKol }</td>
+                <td class="ukupna-vr">${ robnaKartica.ukupnaVr }</td>
+                <td><a onclick="otvoriIzmeniModal(${ robnaKartica.id }, ${ robnaKartica.cena })">Izmeni</a></td>
                 <td><a href="/robnaKartica/${ robnaKartica.id }/analitika">Analitika</a></td>
-                <td><a href="/robnaKartica/${ robnaKartica.id }/nivelacija">Nivelacija</a></td>
+                <td><a href="#" onclick="nivelacija(${robnaKartica.id})">Nivelacija</a></td>
+                <td><a class="izvestaj" href="/robnaKartica/${ robnaKartica.id }/izvestaj">Izvestaj</a></td>
                 
             </tr>
         </c:forEach>
@@ -337,6 +408,34 @@
                 <td><label for="pocetnoStanjeVrPanel">Pocetno stanje (vr.)</label></td>
                 <td><input type="text" name="pocetnoStanjeVrPanel" id="pocetnoStanjeVrPanel" disabled /></td>
             </tr>
+            <tr>
+                <td><label for="prometUlazaKolPanel">Promet ulaza (kol.)</label></td>
+                <td><input type="text" name="prometUlazaKolPanel" id="prometUlazaKolPanel" disabled /></td>
+            </tr>
+            <tr>
+                <td><label for="prometIzlazaKolPanel">Promet izlaza (kol.)</label></td>
+                <td><input type="text" name="prometIzlazaKolPanel" id="prometIzlazaKolPanel" disabled /></td>
+            </tr>
+            <tr>
+                <td><label for="prometUlazaVrPanel">Promet ulaza (vr.)</label></td>
+                <td><input type="text" name="prometUlazaVrPanel" id="prometUlazaVrPanel" disabled /></td>
+            </tr>
+            <tr>
+                <td><label for="prometIzlazaVrPanel">Promet izlaza (vr.)</label></td>
+                <td><input type="text" name="prometIzlazaVrPanel" id="prometIzlazaVrPanel" disabled /></td>
+            </tr>
+            <tr>
+                <td><label for="ukupnaKolPanel">Ukupna kol.</label></td>
+                <td><input type="text" name="ukupnaKolPanel" id="ukupnaKolPanel" disabled /></td>
+            </tr>
+            <tr>
+                <td><label for="ukupnaVrPanel">Ukupna vr.</label></td>
+                <td><input type="text" name="ukupnaVrPanel" id="ukupnaVrPanel" disabled /></td>
+            </tr>
+            <tr>
+                <td><label for="godinaPanel">Poslovna godina</label></td>
+                <td><input type="text" name="godinaPanel" id="godinaPanel" disabled /></td>
+            </tr>
         </table>
     </div>
 </div>
@@ -344,7 +443,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-
+                <h3>Nova magacinska kartica</h3>
             </div>
             <div id="form">
                 <form id="inputForm" style="display:block;">
@@ -399,7 +498,7 @@
                 <table style = "padding:2em" id = "magacinZoomTable">
                     <tr class = "header">
                         <th>Naziv</th>
-                        <th>Firma</th>
+                       
                     </tr>
 
                 </table>
@@ -415,7 +514,7 @@
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-                Magacini
+                Roba
             </div>
             <div class="modal-body">
                 <table style = "padding:2em" id = "robaZoomTable">
@@ -428,6 +527,29 @@
                 <div class="modal-footer">
                     <input id="izaberiRobuZoom" onclick="izaberiRobuZoom()" type = "button" value = "Izaberi"/>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="izmeniModal" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                Izmeni robnu karticu
+            </div>
+            <div class="modal-body">
+                <table>
+                    <tr>
+                        <td>Cena:</td>
+                        <td><input type="text" id="cenaIzmeniInput"></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="modal-footer">
+                <input id="izmeniKarticuButton" type = "button" value = "Izaberi"/>
             </div>
         </div>
     </div>

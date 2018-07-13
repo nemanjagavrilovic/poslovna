@@ -63,7 +63,7 @@ public class Magacin {
 	public void setDokumenti(List<PopisniDokument> dokumenti) {
 		this.dokumenti = dokumenti;
 	}
-
+	@JsonIgnore
 	public Preduzece getPreduzece() {
 		return preduzece;
 	}

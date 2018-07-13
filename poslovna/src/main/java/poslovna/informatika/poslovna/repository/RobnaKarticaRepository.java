@@ -15,11 +15,13 @@ public interface RobnaKarticaRepository extends PagingAndSortingRepository<Robna
 
 	List<RobnaKartica> findAll();
 
-	RobnaKartica save(RobnaKartica robnaKartica);
+	//RobnaKartica save(RobnaKartica robnaKartica);
 
-	RobnaKartica findByMagacinAndRoba(Magacin magacin, Roba roba);
+	RobnaKartica findByMagacinAndRobaAndPoslovnaGodina(Magacin magacin, Roba roba,PoslovnaGodina poslovnaGodina);
 
 	List<RobnaKartica> findByMagacinId(Long id);
 
 	List<RobnaKartica> findByMagacinAndPoslovnaGodina(Magacin magacin, PoslovnaGodina pg);
+
+	RobnaKartica findByMagacinAndRoba(Magacin magacin, Roba roba);
 }

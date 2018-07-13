@@ -61,6 +61,11 @@ public class PrometniDokumentDTOtoPrometniDokument implements Converter<Prometni
 				prometniDokument.getStavkeDokumenta().add(stavkaDokumentaService.findById(id));
 			}
 		}
+		if(source.getMagacin2()!=null){
+			System.out.println("Magacin 2"+source.getMagacin2());
+			
+			prometniDokument.setMagacin2(magacinService.findOne(source.getMagacin2()));
+		}
 		return prometniDokument;
 	}
 

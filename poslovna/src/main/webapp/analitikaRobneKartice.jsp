@@ -5,7 +5,9 @@
 <head>
 </head>
 <body>
-
+	<h2>Analitike robne kartice</h2>
+	<h4>Preduzece: ${ robnaKartica.magacin.preduzece.naziv }</h4>
+	<h4>Magacin: ${ robnaKartica.magacin.naziv }</h4>
 	<table border="1">
 		<thead>
 			<tr>
@@ -14,19 +16,21 @@
 				<th>Smer</th>
 				<th>Količina</th>
 				<th>Jedinična cena</th>
+				<th>Saldo</th>
 				<th>Vrednost ulaza</th>
 				<th>Vrednost izlaza</th>
 				<th>Ukupna vrednost</th>
 			</tr>
 		</thead>
 		<tbody>
-			<c:forEach items="${robnaKartica.analitike}" var="analitika">
+			<c:forEach items="${ analitikeSortirane }" var="analitika">
 				<tr>
 					<td>${analitika.rbr }</td>
 					<td>${analitika.vrstaPrometa}</td>
 					<td>${analitika.smerPrometa}</td>
 					<td>${analitika.stavkaDokumenta.kolicina }</td>
 					<td>${analitika.stavkaDokumenta.cena}</td>
+					<td>${analitika.ukupnaKol}</td>
 					<c:if test="${analitika.smerPrometa=='U' }">
 						<td>${analitika.stavkaDokumenta.vrednost }</td>
 						<td></td>

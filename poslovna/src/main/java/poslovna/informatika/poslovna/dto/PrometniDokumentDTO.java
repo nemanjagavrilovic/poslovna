@@ -13,6 +13,7 @@ public class PrometniDokumentDTO {
 	private Date datumKnjizenja;
 	private Date datumFormiranja;
 	private int redniBr;
+	private Long magacin2;
 	public int getRedniBr() {
 		return redniBr;
 	}
@@ -60,6 +61,12 @@ public class PrometniDokumentDTO {
 	}
 	public void setStatus(String status) {
 		this.status = status;
+	}
+	public Long getMagacin2() {
+		return magacin2;
+	}
+	public void setMagacin2(Long magacin2) {
+		this.magacin2 = magacin2;
 	}
 	
 	

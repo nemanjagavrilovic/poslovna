@@ -21,6 +21,7 @@ import poslovna.informatika.poslovna.model.Radnik;
 import poslovna.informatika.poslovna.model.Roba;
 import poslovna.informatika.poslovna.model.RobnaKartica;
 import poslovna.informatika.poslovna.service.MagacinService;
+import poslovna.informatika.poslovna.service.PreduzeceService;
 import poslovna.informatika.poslovna.service.RadniciService;
 
 @Repository
@@ -35,10 +36,13 @@ public class MagacinController {
 	@Autowired
 	private MagacinDTOtoMagacin magacinDTOtoMagacin;
 	
+	@Autowired
+	private PreduzeceService preduzeceService;
 	@RequestMapping(value="/save",method=RequestMethod.POST)
 	public ResponseEntity<Magacin> save(@RequestBody MagacinDTO magacinDTO){
 	
 		Magacin magacin=magacinDTOtoMagacin.convert(magacinDTO);
+		magacin.setPreduzece(preduzeceService.findById(1L));
 		magacin=magacinService.save(magacin);
 		for(Radnik radnik:magacin.getRadnici()){
 			radniciService.update(magacin, radnik.getId());
@@ -62,10 +66,15 @@ public class MagacinController {
 		Magacin newMagacin=magacinService.findOne(magacin.getId());
 		newMagacin.setNaziv(magacin.getNaziv());
 		newMagacin.setRadnici(magacin.getRadnici());
+		for(Radnik radnik:magacin.getRadnici()){
+			radniciService.update(null, radnik.getId());
+			
+		}
 		for(Radnik radnik:newMagacin.getRadnici()){
 			radniciService.update(newMagacin, radnik.getId());
 			
 		}
+		
 		magacinService.save(newMagacin);
 		return new ResponseEntity<Magacin>(newMagacin,HttpStatus.OK);
 	}
@@ -99,5 +108,26 @@ public class MagacinController {
 		
 		return new ResponseEntity<List<Roba>>(roba,HttpStatus.OK);
 	}
-
+/*
+	@RequestMapping(value="/izvestaj/{id}",method=RequestMethod.POST)
+	public ResponseEntity<String> izvestaj(@PathVariable("id") Long id){
+		try {
+			Connection conn;
+			conn =
+				       DriverManager.getConnection("jdbc:mysql://localhost:3306/poslovna?useSSL=false&" +
+				                                   "user=root&password=admin");
+			HashMap map = new HashMap();
+			map.put("idMagacina", id);
+            JasperReport jasReport = (JasperReport) JRLoader.loadObjectFromFile("C:/Users/nenad/git/poslovna/poslovna/src/main/resources/listaLagera.jasper");
+            JasperPrint jasPrint = JasperFillManager.fillReport(jasReport, map, conn);
+            File pdf = File.createTempFile("output.", ".pdf");
+			JasperExportManager.exportReportToPdfStream(jasPrint, new FileOutputStream(pdf));
+			System.out.println("Temp file : " + pdf.getAbsolutePath());
+		}catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		return new ResponseEntity<String>("ok",HttpStatus.OK);
+		}
+	*/
+	
 }

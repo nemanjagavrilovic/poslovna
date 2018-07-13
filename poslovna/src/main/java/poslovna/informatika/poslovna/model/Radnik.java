@@ -79,7 +79,7 @@ public class Radnik implements Serializable{
 		this.preduzece = preduzece;
 	}
 */
-
+	@JsonIgnore
 	public Magacin getMagacin() {
 		return magacin;
 	}

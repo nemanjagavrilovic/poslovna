@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="listaLagera" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="fe9db5a8-3252-4d74-a0ac-6cef4ee7714d">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="idMagacina" class="java.lang.Long"/>
+	<queryString>
+		<![CDATA[SELECT
+     magacin.`id` AS magacin_id,
+     magacin.`naziv` AS magacin_naziv,
+     magacin.`preduzece_id` AS magacin_preduzece_id,
+     robna_kartica.`id` AS robna_kartica_id,
+     robna_kartica.`cena` AS robna_kartica_cena,
+     robna_kartica.`pocetno_stanje_kol` AS robna_kartica_pocetno_stanje_kol,
+     robna_kartica.`pocetno_stanje_vr` AS robna_kartica_pocetno_stanje_vr,
+     robna_kartica.`promet_izlaza_kol` AS robna_kartica_promet_izlaza_kol,
+     robna_kartica.`promet_izlaza_vr` AS robna_kartica_promet_izlaza_vr,
+     robna_kartica.`promet_ulaza_kol` AS robna_kartica_promet_ulaza_kol,
+     robna_kartica.`promet_ulaza_vr` AS robna_kartica_promet_ulaza_vr,
+     robna_kartica.`ukupna_kol` AS robna_kartica_ukupna_kol,
+     robna_kartica.`ukupna_vr` AS robna_kartica_ukupna_vr,
+     robna_kartica.`magacin_id` AS robna_kartica_magacin_id,
+     robna_kartica.`poslovna_godina_id` AS robna_kartica_poslovna_godina_id,
+     robna_kartica.`roba_id` AS robna_kartica_roba_id,
+     roba.`id` AS roba_id,
+     roba.`naziv` AS roba_naziv,
+     roba.`grupa_id` AS roba_grupa_id,
+     roba.`jedinica_mere_id` AS roba_jedinica_mere_id,
+     jedinica_mere.`id` AS jedinica_mere_id,
+     jedinica_mere.`naziv` AS jedinica_mere_naziv
+FROM
+     `magacin` magacin INNER JOIN `robna_kartica` robna_kartica ON magacin.`id` = robna_kartica.`magacin_id`
+     INNER JOIN `roba` roba ON robna_kartica.`roba_id` = roba.`id`
+     INNER JOIN `jedinica_mere` jedinica_mere ON roba.`jedinica_mere_id` = jedinica_mere.`id`
+WHERE
+     magacin.`id` = $P{idMagacina}]]>
+	</queryString>
+	<field name="magacin_id" class="java.lang.Long"/>
+	<field name="magacin_naziv" class="java.lang.String"/>
+	<field name="magacin_preduzece_id" class="java.lang.Long"/>
+	<field name="robna_kartica_id" class="java.lang.Long"/>
+	<field name="robna_kartica_cena" class="java.lang.Float"/>
+	<field name="robna_kartica_pocetno_stanje_kol" class="java.lang.Float"/>
+	<field name="robna_kartica_pocetno_stanje_vr" class="java.lang.Float"/>
+	<field name="robna_kartica_promet_izlaza_kol" class="java.lang.Float"/>
+	<field name="robna_kartica_promet_izlaza_vr" class="java.lang.Float"/>
+	<field name="robna_kartica_promet_ulaza_kol" class="java.lang.Float"/>
+	<field name="robna_kartica_promet_ulaza_vr" class="java.lang.Float"/>
+	<field name="robna_kartica_ukupna_kol" class="java.lang.Float"/>
+	<field name="robna_kartica_ukupna_vr" class="java.lang.Float"/>
+	<field name="robna_kartica_magacin_id" class="java.lang.Long"/>
+	<field name="robna_kartica_poslovna_godina_id" class="java.lang.Long"/>
+	<field name="robna_kartica_roba_id" class="java.lang.Long"/>
+	<field name="roba_id" class="java.lang.Long"/>
+	<field name="roba_naziv" class="java.lang.String"/>
+	<field name="roba_grupa_id" class="java.lang.Long"/>
+	<field name="roba_jedinica_mere_id" class="java.lang.Long"/>
+	<field name="jedinica_mere_id" class="java.lang.Long"/>
+	<field name="jedinica_mere_naziv" class="java.lang.String"/>
+	<pageHeader>
+		<band height="123" splitType="Stretch">
+			<textField>
+				<reportElement x="513" y="0" width="42" height="20" uuid="f9281ab3-465b-4fe3-afca-3aefb381a858"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="455" y="20" width="100" height="20" uuid="f2911f0e-69e2-4266-9618-bed18940a9e5"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="413" y="0" width="100" height="20" uuid="5e9c8570-5f7b-4fe4-933c-7ef0a2f8f263"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Strana:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="355" y="20" width="100" height="20" uuid="01e09f12-d189-4779-a5ee-d33c4729be64"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Datum:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="216" y="10" width="110" height="30" uuid="945c0782-f8c3-4e1f-9f2e-7649703682d6"/>
+				<textElement textAlignment="Center">
+					<font size="18"/>
+				</textElement>
+				<text><![CDATA[Lager lista]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="53" width="53" height="20" uuid="223aa781-6b1f-4942-8b48-1c351f286e32"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Magacin:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="53" y="53" width="100" height="20" uuid="2b9a0149-f6b3-40da-8588-5fe12021df0c"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{magacin_naziv}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="73" width="555" height="1" uuid="77ddc94e-05d6-4165-9f0b-553b917296df"/>
+			</line>
+			<staticText>
+				<reportElement x="0" y="84" width="53" height="20" uuid="23e5a8c0-528e-442e-917a-252241e7adb5"/>
+				<text><![CDATA[Sifra robe]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="53" y="84" width="78" height="20" uuid="929ccdbc-73bb-4c77-b056-062be3b75b32"/>
+				<text><![CDATA[Naziv]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="131" y="84" width="35" height="20" uuid="0159b3e4-e829-483f-aea4-f558ccb1b1d4"/>
+				<text><![CDATA[Cena]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="166" y="84" width="71" height="20" uuid="bee7e132-0b33-490f-a857-67f2075bbb89"/>
+				<text><![CDATA[Jedinica mere]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="237" y="84" width="71" height="20" uuid="8330f235-843d-4723-9993-bec063038895"/>
+				<text><![CDATA[Pocetno stanje]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="308" y="84" width="88" height="20" uuid="d551b196-da1b-4f56-84d1-81ecdef5cf42"/>
+				<text><![CDATA[Pocetna vrednost]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="396" y="84" width="77" height="20" uuid="521fd9c5-1c13-4023-b85e-9d8a6d7cae2b"/>
+				<text><![CDATA[Ukupna kolicina]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="473" y="84" width="82" height="20" uuid="439fa9d0-feeb-4c83-a186-518c6bfcadd6"/>
+				<text><![CDATA[Ukupna vrednost]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="110" width="555" height="1" uuid="f9bfd22a-57a5-4d79-99b5-b720620f7cc8"/>
+			</line>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="31" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="3" width="53" height="20" uuid="4beb00a7-cb0a-45e8-b70b-fa4f561c0288"/>
+				<textFieldExpression><![CDATA[$F{robna_kartica_roba_id}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="131" y="3" width="35" height="20" uuid="4289ec5c-f763-48ef-957e-3de2cb0c05ea"/>
+				<textFieldExpression><![CDATA[$F{robna_kartica_cena}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="53" y="3" width="78" height="20" uuid="c28b910f-ac51-4605-af47-7801c4a5e9f6"/>
+				<textFieldExpression><![CDATA[$F{roba_naziv}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="396" y="3" width="77" height="20" uuid="e63d1159-96b6-44a7-b576-fbbbba66a3b6"/>
+				<textFieldExpression><![CDATA[$F{robna_kartica_ukupna_kol}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="473" y="3" width="82" height="20" uuid="c42b576c-a29d-4825-9f05-2b87ba346d94"/>
+				<textFieldExpression><![CDATA[$F{robna_kartica_ukupna_vr}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="237" y="3" width="71" height="20" uuid="ae97c629-511c-41f7-acbd-067d8c22e419"/>
+				<textFieldExpression><![CDATA[$F{robna_kartica_pocetno_stanje_kol}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="308" y="3" width="88" height="20" uuid="b9eb123c-8072-4834-a848-93f73f70264d"/>
+				<textFieldExpression><![CDATA[$F{robna_kartica_pocetno_stanje_vr}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="166" y="3" width="71" height="20" uuid="a7ff59e6-1339-4e2b-9553-fb31bf883ac2"/>
+				<textFieldExpression><![CDATA[$F{jedinica_mere_naziv}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

@@ -19,7 +19,7 @@ public class PopisnaKomisija {
 	protected Long id;
 	
 	@ManyToMany
-	@JsonIgnore
+	
 	protected List<Radnik> komisija;
 	
 	@OneToOne

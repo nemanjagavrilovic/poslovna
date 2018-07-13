@@ -23,7 +23,7 @@ $(document).on('click','#novi',function(){
 	$("#searchButton").css("display","none");
 	$("#add").css("display","block");
 	$.ajax({
-		url:'/radnici/unemployed',
+		url:'/api/radnici/unemployed',
 		type:'GET',
 		contentType:'application/json',
 		success:function(data){
@@ -62,7 +62,7 @@ $(document).on('click','#select',function(event){
 	$("izabraniRadnici option").each(function(){
 		if($(this).attr('id')==id){
 			postoji=true;
-			break;
+			return;
 		}
 	})
 	if(postoji==false){
@@ -119,8 +119,8 @@ $(document).on('click','#add',function(event){
 		data:data,
 		success:function(data){
 			let row='<tr><td class="idCell">'+data.id+'</td><td class="naziv">'+data.naziv+'</td><td><a class="edit" href="../magacin/'+data.id+'">Edit</a>'
-			+'</td><td><a class="delete" href="../magacin/delete/'+data.id+'">Delete</a></td>'
-			+'<td><a href="../prometniDokument/all/'+data.id+'">Dokumenti</a></td><td><a href="/robnaKartica/index/'+data.id+'">Robne kartice</a></td></tr>'
+			+'</td>'
+			+'<td><a href="../prometniDokument/all/'+data.id+'">Dokumenti</a></td><td><a href="/robnaKartica/index/'+data.id+'">Robne kartice</a></td><td><a class="izvestaj" href="/magacin/izvestaj/'+data.id+'">Izvestaj</a></td></tr>'
 			
 			$("#magacini").append(row)
 		}
@@ -130,6 +130,18 @@ $(document).on('click','#add',function(event){
 $(document).on("click", ".edit", function(event){
 				
 					event.preventDefault(); 
+					$.ajax({
+						url:'/api/radnici/unemployed',
+						type:'GET',
+						contentType:'application/json',
+						success:function(data){
+							$("#radnici").empty();
+							$.each(data,function(index,radnik){
+								$("#radnici").append('<option id="'+radnik.id+'">'+radnik.ime+" "+radnik.prezime+'</option>')
+								
+							})
+						}
+					})
 					$("#editButton").css("display","block");
 					$("#searchButton").css("display","none");
 					$("#add").css("display","none");
@@ -277,7 +289,7 @@ $(document).on('click','#searchButton',function(e){
 		success:function(data){
 			$("#magacini").find("tr:not(:first)").remove();
 			$.each(data,function(index,magacin){
-				let row='<tr><td class="naziv">'+magacin.naziv+'</td><td><a class="edit" href="../magacin/'+magacin.id+'">Edit</a></td><td><a class="delete" href="../magacin/delete/'+magacin.id+'">Delete</a></td><td><a href="../prometniDokument/all/'+magacin.id+'">Dokumenti</a></td></tr>'
+				let row='<tr><td class="naziv">'+magacin.naziv+'</td><td><a class="edit" href="../magacin/'+magacin.id+'">Edit</a></td><td><a href="../prometniDokument/all/'+magacin.id+'">Dokumenti</a></td><td><a class="izvestaj" href="/magacin/izvestaj/'+magacin.id+'">Izvestaj</a></td></tr>'
 					$("#magacini").append(row)
 		
 			})
@@ -290,17 +302,18 @@ $(document).on('click','#nextform',function(e){
 	url=url+'/'+$('#id').val()
 			window.location.href = url;
 	})
-$(document).on('click','.delete',function(e){
+
+$(document).on('click','.izvestaj',function(e){
 	e.preventDefault();
-	var confirmed=confirm("Da li zelite da obrisete magacin");
+	var confirmed=confirm("Da li zelite da kreirate izvestaj");
 	var url=$(this).attr('href')
 	var item=$(this)
 	if(confirmed){
 		$.ajax({
 			url:url,
-			type:'DELETE',
+			type:'POST',
 			success:function(){
-				item.parent().parent().remove();
+				alert("Kreiran izvestaj");
 			}
 		})
 	}

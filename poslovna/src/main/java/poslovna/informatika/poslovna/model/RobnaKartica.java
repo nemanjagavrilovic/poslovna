@@ -179,7 +179,7 @@ public class RobnaKartica implements Serializable {
 	public void setUkupnaVr(float ukupnaVr) {
 		this.ukupnaVr = ukupnaVr;
 	}
-
+	
 	public void obradiTransfer(float kolicina, float vrednost, float prosecnaCena, VrstaPrDokumenta vrstaPrDokumenta) {
 		if(vrstaPrDokumenta == null) {
 			ukupnaKol = kolicina;
@@ -195,10 +195,7 @@ public class RobnaKartica implements Serializable {
 			prometUlazaVr += kolicina*prosecnaCena;
 			izracunajUkupno();
 		}
-		else if(vrstaPrDokumenta.toString().equals("MM")) {
-			//TODO
-			izracunajUkupno();
-		}
+		
 		
 
 	}
@@ -215,5 +212,37 @@ public class RobnaKartica implements Serializable {
 	public void addAnalitika(AnalitikaMagKartice analitikaMagKartice) {
 		analitike.add(analitikaMagKartice);
 	}
-	
+	public void manjak(float kolicina){
+		prometIzlazaKol += kolicina;
+		prometIzlazaVr += kolicina*cena;
+		izracunajUkupno();
+	}
+	public void visak(float kolicina){
+		prometUlazaKol += kolicina;
+		prometUlazaVr += kolicina*cena;
+		izracunajUkupno();
+	}
+	public void storno(float kolicina, float vrednost, float prosecnaCena, VrstaPrDokumenta vrstaPrDokumenta) {
+		if(vrstaPrDokumenta.toString().equals("OT")) {
+			prometIzlazaKol -= kolicina;
+			prometIzlazaVr -= kolicina*prosecnaCena;
+			izracunajUkupno();
+		}
+		else if(vrstaPrDokumenta.toString().equals("PR")){
+			prometUlazaKol -= kolicina;
+			prometUlazaVr -= kolicina*prosecnaCena;
+			izracunajUkupno();
+		}
+
+	}
+	public void smanjenjeMM(float kolicina, float vrednost, float prosecnaCena, VrstaPrDokumenta vrstaPrDokumenta){
+		
+		ukupnaKol-=kolicina;
+		ukupnaVr-=prosecnaCena*kolicina;
+	}
+	public void povecanjeMM(float kolicina, float vrednost, float prosecnaCena, VrstaPrDokumenta vrstaPrDokumenta){
+		
+		ukupnaKol+=kolicina;
+		ukupnaVr+=prosecnaCena*kolicina;
+	}
 }

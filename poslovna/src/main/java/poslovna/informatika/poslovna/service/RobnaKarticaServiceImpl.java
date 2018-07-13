@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import poslovna.informatika.poslovna.model.Magacin;
 import poslovna.informatika.poslovna.model.PoslovnaGodina;
@@ -22,7 +23,9 @@ public class RobnaKarticaServiceImpl implements RobnaKarticaService {
 		return robnaKarticaRepository.findAll();
 	}
 
+	
 	@Override
+	@Transactional
 	public RobnaKartica save(RobnaKartica robnaKartica) {
 		return robnaKarticaRepository.save(robnaKartica);
 	}
@@ -34,8 +37,8 @@ public class RobnaKarticaServiceImpl implements RobnaKarticaService {
 	}
 
 	@Override
-	public RobnaKartica findByMagacinAndRoba(Magacin magacin, Roba roba) {
-		return robnaKarticaRepository.findByMagacinAndRoba(magacin, roba);
+	public RobnaKartica findByMagacinAndRobaAndPoslovnaGodina(Magacin magacin, Roba roba,PoslovnaGodina poslovnaGodina) {
+		return robnaKarticaRepository.findByMagacinAndRobaAndPoslovnaGodina(magacin, roba,poslovnaGodina);
 	}
 
 	@Override
@@ -48,6 +51,11 @@ public class RobnaKarticaServiceImpl implements RobnaKarticaService {
 	public List<RobnaKartica> findByMagacinAndPoslovnaGodina(Magacin magacin, PoslovnaGodina pg) {
 		// TODO Auto-generated method stub
 		return robnaKarticaRepository.findByMagacinAndPoslovnaGodina(magacin,pg);
+	}
+
+	@Override
+	public RobnaKartica findByMagacinAndRoba(Magacin magacin, Roba roba) {
+		return robnaKarticaRepository.findByMagacinAndRoba(magacin, roba);
 	}
 
 }
