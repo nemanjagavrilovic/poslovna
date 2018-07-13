@@ -335,6 +335,7 @@
     </script>
 </head>
 <body onload="init()">
+<c:import url = "./navbar.jsp"/>
 <div>
     <ul>
         <li class="group-start"><a href="searchModal" data-toggle="modal" data-target="#searchModal"><img src="../../images/search.gif" /></a></li>

@@ -19,7 +19,7 @@
 	
 </head>
 <body>
-
+<c:import url = "./navbar.jsp"/>
 	<div>
 	<ul>
 			<ul>
