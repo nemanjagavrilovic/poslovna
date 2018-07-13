@@ -19,4 +19,5 @@ public interface RobnaKarticaService {
 	RobnaKartica findByMagacinAndRoba(Magacin magacin, Roba roba);
 
 	List<RobnaKartica> findByPoslovnaGodina(PoslovnaGodina poslovnaGodina);
+	List<RobnaKartica> findByMagacinNameAndRobaName(String magacinIme, String robaIme);
 }
